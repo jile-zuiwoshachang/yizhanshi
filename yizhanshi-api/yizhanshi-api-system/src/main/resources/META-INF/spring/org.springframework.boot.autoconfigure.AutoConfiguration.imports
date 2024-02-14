@@ -1,0 +1,3 @@
+com.yizhanshi.system.api.factory.RemoteUserFallbackFactory
+com.yizhanshi.system.api.factory.RemoteLogFallbackFactory
+com.yizhanshi.system.api.factory.RemoteFileFallbackFactory

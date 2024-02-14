@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.bishe</groupId>
+        <artifactId>bishe</artifactId>
+        <version>3.6.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>yizhanshi-common-log</module>
+        <module>yizhanshi-common-core</module>
+        <module>yizhanshi-common-redis</module>
+        <module>yizhanshi-common-seata</module>
+        <module>yizhanshi-common-swagger</module>
+        <module>yizhanshi-common-security</module>
+        <module>yizhanshi-common-datascope</module>
+        <module>yizhanshi-common-datasource</module>
+    </modules>
+
+    <artifactId>bishe-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        yizhanshi-common通用模块
+    </description>
+
+</project>

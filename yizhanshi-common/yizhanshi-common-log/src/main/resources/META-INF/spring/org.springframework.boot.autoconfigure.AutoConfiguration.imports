@@ -1,0 +1,2 @@
+com.yizhanshi.common.log.service.AsyncLogService
+com.yizhanshi.common.log.aspect.LogAspect
