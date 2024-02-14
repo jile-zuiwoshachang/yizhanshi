@@ -25,5 +25,5 @@ public interface ISysPermissionService
      * @param userId 用户Id
      * @return 菜单权限信息
      */
-    public Set<String> getMenuPermission(SysUser user);
+    public Set<String> getResourcePermission(SysUser user);
 }

@@ -55,8 +55,8 @@ public class SysRole extends BaseEntity
     /** 用户是否存在此角色标识 默认不存在 */
     private boolean flag = false;
 
-    /** 菜单组 */
-    private Long[] menuIds;
+    /** 资源组 */
+    private Long[] resourceIds;
 
     /** 部门组（数据权限） */
     private Long[] deptIds;
@@ -189,14 +189,14 @@ public class SysRole extends BaseEntity
         this.flag = flag;
     }
 
-    public Long[] getMenuIds()
+    public Long[] getResourceIds()
     {
-        return menuIds;
+        return resourceIds;
     }
 
-    public void setMenuIds(Long[] menuIds)
+    public void setResourceIds(Long[] resourceIds)
     {
-        this.menuIds = menuIds;
+        this.resourceIds = resourceIds;
     }
 
     public Long[] getDeptIds()

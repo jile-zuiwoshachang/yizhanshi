@@ -17,11 +17,11 @@ import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.system.api.domain.SysRole;
 import com.yizhanshi.system.api.domain.SysUser;
 import com.yizhanshi.system.domain.SysRoleDept;
-import com.yizhanshi.system.domain.SysRoleMenu;
+import com.yizhanshi.system.domain.SysRoleResource;
 import com.yizhanshi.system.domain.SysUserRole;
 import com.yizhanshi.system.mapper.SysRoleDeptMapper;
 import com.yizhanshi.system.mapper.SysRoleMapper;
-import com.yizhanshi.system.mapper.SysRoleMenuMapper;
+import com.yizhanshi.system.mapper.SysRoleResourceMapper;
 import com.yizhanshi.system.mapper.SysUserRoleMapper;
 import com.yizhanshi.system.service.ISysRoleService;
 
@@ -37,7 +37,7 @@ public class SysRoleServiceImpl implements ISysRoleService
     private SysRoleMapper roleMapper;
 
     @Autowired
-    private SysRoleMenuMapper roleMenuMapper;
+    private SysRoleResourceMapper roleMenuMapper;
 
     @Autowired
     private SysUserRoleMapper userRoleMapper;
@@ -292,12 +292,12 @@ public class SysRoleServiceImpl implements ISysRoleService
     {
         int rows = 1;
         // 新增用户与角色管理
-        List<SysRoleMenu> list = new ArrayList<SysRoleMenu>();
-        for (Long menuId : role.getMenuIds())
+        List<SysRoleResource> list = new ArrayList<SysRoleResource>();
+        for (Long menuId : role.getResourceIds())
         {
-            SysRoleMenu rm = new SysRoleMenu();
+            SysRoleResource rm = new SysRoleResource();
             rm.setRoleId(role.getRoleId());
-            rm.setMenuId(menuId);
+            rm.setResourceId(menuId);
             list.add(rm);
         }
         if (list.size() > 0)

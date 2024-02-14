@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import com.yizhanshi.system.api.domain.SysRole;
 import com.yizhanshi.system.api.domain.SysUser;
-import com.yizhanshi.system.service.ISysMenuService;
+import com.yizhanshi.system.service.ISysResourceService;
 import com.yizhanshi.system.service.ISysPermissionService;
 import com.yizhanshi.system.service.ISysRoleService;
 
@@ -24,7 +24,7 @@ public class SysPermissionServiceImpl implements ISysPermissionService
     private ISysRoleService roleService;
 
     @Autowired
-    private ISysMenuService menuService;
+    private ISysResourceService menuService;
 
     /**
      * 获取角色数据权限
@@ -55,7 +55,7 @@ public class SysPermissionServiceImpl implements ISysPermissionService
      * @return 菜单权限信息
      */
     @Override
-    public Set<String> getMenuPermission(SysUser user)
+    public Set<String> getResourcePermission(SysUser user)
     {
         Set<String> perms = new HashSet<String>();
         // 管理员拥有所有权限
@@ -71,14 +71,14 @@ public class SysPermissionServiceImpl implements ISysPermissionService
                 // 多角色设置permissions属性，以便数据权限匹配权限
                 for (SysRole role : roles)
                 {
-                    Set<String> rolePerms = menuService.selectMenuPermsByRoleId(role.getRoleId());
+                    Set<String> rolePerms = menuService.selectResourcePermsByRoleId(role.getRoleId());
                     role.setPermissions(rolePerms);
                     perms.addAll(rolePerms);
                 }
             }
             else
             {
-                perms.addAll(menuService.selectMenuPermsByUserId(user.getUserId()));
+                perms.addAll(menuService.selectResourcePermsByUserId(user.getUserId()));
             }
         }
         return perms;

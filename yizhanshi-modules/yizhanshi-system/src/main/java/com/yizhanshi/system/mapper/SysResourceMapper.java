@@ -5,34 +5,34 @@ import org.apache.ibatis.annotations.Param;
 import com.yizhanshi.system.domain.SysResource;
 
 /**
- * 菜单表 数据层
+ * 资源表 数据层
  * 
  * @author hejiale
  */
-public interface SysMenuMapper
+public interface SysResourceMapper
 {
     /**
      * 查询系统菜单列表
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 菜单列表
      */
-    public List<SysResource> selectMenuList(SysResource menu);
+    public List<SysResource> selectResourceList(SysResource resource);
 
     /**
      * 根据用户所有权限
      * 
      * @return 权限列表
      */
-    public List<String> selectMenuPerms();
+    public List<String> selectResourcePerms();
 
     /**
      * 根据用户查询系统菜单列表
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 菜单列表
      */
-    public List<SysResource> selectMenuListByUserId(SysResource menu);
+    public List<SysResource> selectResourceListByUserId(SysResource resource);
 
     /**
      * 根据角色ID查询权限
@@ -40,7 +40,7 @@ public interface SysMenuMapper
      * @param roleId 角色ID
      * @return 权限列表
      */
-    public List<String> selectMenuPermsByRoleId(Long roleId);
+    public List<String> selectResourcePermsByRoleId(Long roleId);
 
     /**
      * 根据用户ID查询权限
@@ -48,14 +48,14 @@ public interface SysMenuMapper
      * @param userId 用户ID
      * @return 权限列表
      */
-    public List<String> selectMenuPermsByUserId(Long userId);
+    public List<String> selectResourcePermsByUserId(Long userId);
 
     /**
      * 根据用户ID查询菜单
      * 
      * @return 菜单列表
      */
-    public List<SysResource> selectMenuTreeAll();
+    public List<SysResource> selectResourceTreeAll();
 
     /**
      * 根据用户ID查询菜单
@@ -63,63 +63,63 @@ public interface SysMenuMapper
      * @param userId 用户ID
      * @return 菜单列表
      */
-    public List<SysResource> selectMenuTreeByUserId(Long userId);
+    public List<SysResource> selectResourceTreeByUserId(Long userId);
 
     /**
      * 根据角色ID查询菜单树信息
      * 
      * @param roleId 角色ID
-     * @param menuCheckStrictly 菜单树选择项是否关联显示
+     * @param resourceCheckStrictly 菜单树选择项是否关联显示
      * @return 选中菜单列表
      */
-    public List<Long> selectMenuListByRoleId(@Param("roleId") Long roleId, @Param("menuCheckStrictly") boolean menuCheckStrictly);
+    public List<Long> selectResourceListByRoleId(@Param("roleId") Long roleId, @Param("resourceCheckStrictly") boolean resourceCheckStrictly);
 
     /**
      * 根据菜单ID查询信息
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 菜单信息
      */
-    public SysResource selectMenuById(Long menuId);
+    public SysResource selectResourceById(Long resourceId);
 
     /**
      * 是否存在菜单子节点
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 结果
      */
-    public int hasChildByMenuId(Long menuId);
+    public int hasChildByResourceId(Long resourceId);
 
     /**
      * 新增菜单信息
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
-    public int insertMenu(SysResource menu);
+    public int insertResource(SysResource resource);
 
     /**
      * 修改菜单信息
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
-    public int updateMenu(SysResource menu);
+    public int updateResource(SysResource resource);
 
     /**
      * 删除菜单管理信息
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 结果
      */
-    public int deleteMenuById(Long menuId);
+    public int deleteResourceById(Long resourceId);
 
     /**
      * 校验菜单名称是否唯一
      * 
-     * @param menuName 菜单名称
+     * @param resourceName 菜单名称
      * @param parentId 父菜单ID
      * @return 结果
      */
-    public SysResource checkMenuNameUnique(@Param("menuName") String menuName, @Param("parentId") Long parentId);
+    public SysResource checkResourceNameUnique(@Param("resourceName") String resourceName, @Param("parentId") Long parentId);
 }

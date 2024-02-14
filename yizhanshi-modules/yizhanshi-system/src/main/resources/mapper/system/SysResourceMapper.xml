@@ -2,11 +2,11 @@
 <!DOCTYPE mapper
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yizhanshi.system.mapper.SysMenuMapper">
+<mapper namespace="com.yizhanshi.system.mapper.SysResourceMapper">
 
-	<resultMap type="SysMenu" id="SysMenuResult">
-		<id     property="menuId"         column="menu_id"        />
-		<result property="menuName"       column="menu_name"      />
+	<resultMap type="com.yizhanshi.system.domain.SysResource" id="SysResourceResult">
+		<id     property="resourceId"         column="resource_id"        />
+		<result property="resourceName"       column="resource_name"      />
 		<result property="parentName"     column="parent_name"    />
 		<result property="parentId"       column="parent_id"      />
 		<result property="orderNum"       column="order_num"      />
@@ -15,7 +15,7 @@
 		<result property="query"          column="query"          />
 		<result property="isFrame"        column="is_frame"       />
 		<result property="isCache"        column="is_cache"       />
-		<result property="menuType"       column="menu_type"      />
+		<result property="resourceType"       column="resource_type"      />
 		<result property="visible"        column="visible"        />
 		<result property="status"         column="status"         />
 		<result property="perms"          column="perms"          />
@@ -27,16 +27,16 @@
 		<result property="remark"         column="remark"         />
 	</resultMap>
 
-	<sql id="selectMenuVo">
-        select menu_id, menu_name, parent_id, order_num, path, component, `query`, is_frame, is_cache, menu_type, visible, status, ifnull(perms,'') as perms, icon, create_time 
-		from sys_menu
+	<sql id="selectResourceVo">
+        select resource_id, resource_name, parent_id, order_num, path, component, `query`, is_frame, is_cache, resource_type, visible, status, ifnull(perms,'') as perms, icon, create_time 
+		from sys_resource
     </sql>
     
-    <select id="selectMenuList" parameterType="SysMenu" resultMap="SysMenuResult">
-		<include refid="selectMenuVo"/>
+    <select id="selectResourceList" parameterType="com.yizhanshi.system.domain.SysResource" resultMap="SysResourceResult">
+		<include refid="selectResourceVo"/>
 		<where>
-			<if test="menuName != null and menuName != ''">
-				AND menu_name like concat('%', #{menuName}, '%')
+			<if test="resourceName != null and resourceName != ''">
+				AND resource_name like concat('%', #{resourceName}, '%')
 			</if>
 			<if test="visible != null and visible != ''">
 				AND visible = #{visible}
@@ -48,21 +48,23 @@
 		order by parent_id, order_num
 	</select>
 	
-	<select id="selectMenuTreeAll" resultMap="SysMenuResult">
-		select distinct m.menu_id, m.parent_id, m.menu_name, m.path, m.component, m.`query`, m.visible, m.status, ifnull(m.perms,'') as perms, m.is_frame, m.is_cache, m.menu_type, m.icon, m.order_num, m.create_time
-		from sys_menu m where m.menu_type in ('M', 'C') and m.status = 0
+	<select id="selectResourceTreeAll" resultMap="SysResourceResult">
+		select distinct m.resource_id, m.parent_id, m.resource_name, m.path, m.component,
+		m.`query`, m.visible, m.status, ifnull(m.perms,'') as perms, m.is_frame, m.is_cache,
+		m.resource_type, m.icon, m.order_num, m.create_time
+		from sys_resource m where m.resource_type in ('M', 'C') and m.status = 0
 		order by m.parent_id, m.order_num
 	</select>
 	
-	<select id="selectMenuListByUserId" parameterType="SysMenu" resultMap="SysMenuResult">
-		select distinct m.menu_id, m.parent_id, m.menu_name, m.path, m.component, m.`query`, m.visible, m.status, ifnull(m.perms,'') as perms, m.is_frame, m.is_cache, m.menu_type, m.icon, m.order_num, m.create_time
-		from sys_menu m
-		left join sys_role_menu rm on m.menu_id = rm.menu_id
+	<select id="selectResourceListByUserId" parameterType="com.yizhanshi.system.domain.SysResource" resultMap="SysResourceResult">
+		select distinct m.resource_id, m.parent_id, m.resource_name, m.path, m.component, m.`query`, m.visible, m.status, ifnull(m.perms,'') as perms, m.is_frame, m.is_cache, m.resource_type, m.icon, m.order_num, m.create_time
+		from sys_resource m
+		left join sys_role_resource rm on m.resource_id = rm.resource_id
 		left join sys_user_role ur on rm.role_id = ur.role_id
 		left join sys_role ro on ur.role_id = ro.role_id
 		where ur.user_id = #{params.userId}
-		<if test="menuName != null and menuName != ''">
-            AND m.menu_name like concat('%', #{menuName}, '%')
+		<if test="resourceName != null and resourceName != ''">
+            AND m.resource_name like concat('%', #{resourceName}, '%')
 		</if>
 		<if test="visible != null and visible != ''">
             AND m.visible = #{visible}
@@ -73,69 +75,70 @@
 		order by m.parent_id, m.order_num
 	</select>
     
-    <select id="selectMenuTreeByUserId" parameterType="Long" resultMap="SysMenuResult">
-		select distinct m.menu_id, m.parent_id, m.menu_name, m.path, m.component, m.`query`, m.visible, m.status, ifnull(m.perms,'') as perms, m.is_frame, m.is_cache, m.menu_type, m.icon, m.order_num, m.create_time
-		from sys_menu m
-			 left join sys_role_menu rm on m.menu_id = rm.menu_id
+    <select id="selectResourceTreeByUserId" parameterType="Long" resultMap="SysResourceResult">
+		select distinct m.resource_id, m.parent_id, m.resource_name, m.path, m.component, m.`query`,
+		m.visible, m.status, ifnull(m.perms,'') as perms, m.is_frame, m.is_cache, m.resource_type, m.icon, m.order_num, m.create_time
+		from sys_resource m
+			 left join sys_role_resource rm on m.resource_id = rm.resource_id
 			 left join sys_user_role ur on rm.role_id = ur.role_id
 			 left join sys_role ro on ur.role_id = ro.role_id
 			 left join sys_user u on ur.user_id = u.user_id
-		where u.user_id = #{userId} and m.menu_type in ('M', 'C') and m.status = 0  AND ro.status = 0
+		where u.user_id = #{userId} and m.resource_type in ('M', 'C') and m.status = 0  AND ro.status = 0
 		order by m.parent_id, m.order_num
 	</select>
 	
-	<select id="selectMenuListByRoleId" resultType="Long">
-		select m.menu_id
-		from sys_menu m
-            left join sys_role_menu rm on m.menu_id = rm.menu_id
+	<select id="selectResourceListByRoleId" resultType="Long">
+		select m.resource_id
+		from sys_resource m
+            left join sys_role_resource rm on m.resource_id = rm.resource_id
         where rm.role_id = #{roleId}
-            <if test="menuCheckStrictly">
-              and m.menu_id not in (select m.parent_id from sys_menu m inner join sys_role_menu rm on m.menu_id = rm.menu_id and rm.role_id = #{roleId})
+            <if test="resourceCheckStrictly">
+              and m.resource_id not in (select m.parent_id from sys_resource m inner join sys_role_resource rm on m.resource_id = rm.resource_id and rm.role_id = #{roleId})
             </if>
 		order by m.parent_id, m.order_num
 	</select>
 	
-	<select id="selectMenuPerms" resultType="String">
+	<select id="selectResourcePerms" resultType="String">
 		select distinct m.perms
-		from sys_menu m
-			 left join sys_role_menu rm on m.menu_id = rm.menu_id
+		from sys_resource m
+			 left join sys_role_resource rm on m.resource_id = rm.resource_id
 			 left join sys_user_role ur on rm.role_id = ur.role_id
 	</select>
 
-	<select id="selectMenuPermsByUserId" parameterType="Long" resultType="String">
+	<select id="selectResourcePermsByUserId" parameterType="Long" resultType="String">
 		select distinct m.perms
-		from sys_menu m
-			 left join sys_role_menu rm on m.menu_id = rm.menu_id
+		from sys_resource m
+			 left join sys_role_resource rm on m.resource_id = rm.resource_id
 			 left join sys_user_role ur on rm.role_id = ur.role_id
 			 left join sys_role r on r.role_id = ur.role_id
 		where m.status = '0' and r.status = '0' and ur.user_id = #{userId}
 	</select>
 	
-	<select id="selectMenuPermsByRoleId" parameterType="Long" resultType="String">
+	<select id="selectResourcePermsByRoleId" parameterType="Long" resultType="String">
 		select distinct m.perms
-		from sys_menu m
-			 left join sys_role_menu rm on m.menu_id = rm.menu_id
+		from sys_resource m
+			 left join sys_role_resource rm on m.resource_id = rm.resource_id
 		where m.status = '0' and rm.role_id = #{roleId}
 	</select>
 	
-	<select id="selectMenuById" parameterType="Long" resultMap="SysMenuResult">
-		<include refid="selectMenuVo"/>
-		where menu_id = #{menuId}
+	<select id="selectResourceById" parameterType="Long" resultMap="SysResourceResult">
+		<include refid="selectResourceVo"/>
+		where resource_id = #{resourceId}
 	</select>
 	
-	<select id="hasChildByMenuId" resultType="Integer">
-	    select count(1) from sys_menu where parent_id = #{menuId}  
+	<select id="hasChildByResourceId" resultType="Integer">
+	    select count(1) from sys_resource where parent_id = #{resourceId}  
 	</select>
 	
-	<select id="checkMenuNameUnique" parameterType="SysMenu" resultMap="SysMenuResult">
-		<include refid="selectMenuVo"/>
-		where menu_name=#{menuName} and parent_id = #{parentId} limit 1
+	<select id="checkResourceNameUnique" parameterType="com.yizhanshi.system.domain.SysResource" resultMap="SysResourceResult">
+		<include refid="selectResourceVo"/>
+		where resource_name=#{resourceName} and parent_id = #{parentId} limit 1
 	</select>
 	
-	<update id="updateMenu" parameterType="SysMenu">
-		update sys_menu
+	<update id="updateResource" parameterType="com.yizhanshi.system.domain.SysResource">
+		update sys_resource
 		<set>
-			<if test="menuName != null and menuName != ''">menu_name = #{menuName},</if>
+			<if test="resourceName != null and resourceName != ''">resource_name = #{resourceName},</if>
 			<if test="parentId != null">parent_id = #{parentId},</if>
 			<if test="orderNum != null">order_num = #{orderNum},</if>
 			<if test="path != null and path != ''">path = #{path},</if>
@@ -143,7 +146,7 @@
 			<if test="query != null">`query` = #{query},</if>
 			<if test="isFrame != null and isFrame != ''">is_frame = #{isFrame},</if>
 			<if test="isCache != null and isCache != ''">is_cache = #{isCache},</if>
-			<if test="menuType != null and menuType != ''">menu_type = #{menuType},</if>
+			<if test="resourceType != null and resourceType != ''">resource_type = #{resourceType},</if>
 			<if test="visible != null">visible = #{visible},</if>
 			<if test="status != null">status = #{status},</if>
 			<if test="perms !=null">perms = #{perms},</if>
@@ -152,21 +155,21 @@
 			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
 			update_time = sysdate()
 		</set>
-		where menu_id = #{menuId}
+		where resource_id = #{resourceId}
 	</update>
 
-	<insert id="insertMenu" parameterType="SysMenu">
-		insert into sys_menu(
-		<if test="menuId != null and menuId != 0">menu_id,</if>
+	<insert id="insertResource" parameterType="com.yizhanshi.system.domain.SysResource">
+		insert into sys_resource(
+		<if test="resourceId != null and resourceId != 0">resource_id,</if>
 		<if test="parentId != null and parentId != 0">parent_id,</if>
-		<if test="menuName != null and menuName != ''">menu_name,</if>
+		<if test="resourceName != null and resourceName != ''">resource_name,</if>
 		<if test="orderNum != null">order_num,</if>
 		<if test="path != null and path != ''">path,</if>
 		<if test="component != null and component != ''">component,</if>
 		<if test="query != null and query != ''">`query`,</if>
 		<if test="isFrame != null and isFrame != ''">is_frame,</if>
 		<if test="isCache != null and isCache != ''">is_cache,</if>
-		<if test="menuType != null and menuType != ''">menu_type,</if>
+		<if test="resourceType != null and resourceType != ''">resource_type,</if>
 		<if test="visible != null">visible,</if>
 		<if test="status != null">status,</if>
 		<if test="perms !=null and perms != ''">perms,</if>
@@ -175,16 +178,16 @@
 		<if test="createBy != null and createBy != ''">create_by,</if>
 		create_time
 		)values(
-		<if test="menuId != null and menuId != 0">#{menuId},</if>
+		<if test="resourceId != null and resourceId != 0">#{resourceId},</if>
 		<if test="parentId != null and parentId != 0">#{parentId},</if>
-		<if test="menuName != null and menuName != ''">#{menuName},</if>
+		<if test="resourceName != null and resourceName != ''">#{resourceName},</if>
 		<if test="orderNum != null">#{orderNum},</if>
 		<if test="path != null and path != ''">#{path},</if>
 		<if test="component != null and component != ''">#{component},</if>
 		<if test="query != null and query != ''">#{query},</if>
 		<if test="isFrame != null and isFrame != ''">#{isFrame},</if>
 		<if test="isCache != null and isCache != ''">#{isCache},</if>
-		<if test="menuType != null and menuType != ''">#{menuType},</if>
+		<if test="resourceType != null and resourceType != ''">#{resourceType},</if>
 		<if test="visible != null">#{visible},</if>
 		<if test="status != null">#{status},</if>
 		<if test="perms !=null and perms != ''">#{perms},</if>
@@ -195,8 +198,8 @@
 		)
 	</insert>
 	
-	<delete id="deleteMenuById" parameterType="Long">
-	    delete from sys_menu where menu_id = #{menuId}
+	<delete id="deleteResourceById" parameterType="Long">
+	    delete from sys_resource where resource_id = #{resourceId}
 	</delete>
 
 </mapper> 

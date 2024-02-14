@@ -20,10 +20,10 @@ import com.yizhanshi.system.domain.SysResource;
 import com.yizhanshi.system.domain.vo.MetaVo;
 import com.yizhanshi.system.domain.vo.RouterVo;
 import com.yizhanshi.system.domain.vo.TreeSelect;
-import com.yizhanshi.system.mapper.SysMenuMapper;
+import com.yizhanshi.system.mapper.SysResourceMapper;
 import com.yizhanshi.system.mapper.SysRoleMapper;
-import com.yizhanshi.system.mapper.SysRoleMenuMapper;
-import com.yizhanshi.system.service.ISysMenuService;
+import com.yizhanshi.system.mapper.SysRoleResourceMapper;
+import com.yizhanshi.system.service.ISysResourceService;
 
 /**
  * 菜单 业务层处理
@@ -31,18 +31,18 @@ import com.yizhanshi.system.service.ISysMenuService;
  * @author hejiale
  */
 @Service
-public class SysMenuServiceImpl implements ISysMenuService
+public class SysResourceServiceImpl implements ISysResourceService
 {
     public static final String PREMISSION_STRING = "perms[\"{0}\"]";
 
     @Autowired
-    private SysMenuMapper menuMapper;
+    private SysResourceMapper resourceMapper;
 
     @Autowired
     private SysRoleMapper roleMapper;
 
     @Autowired
-    private SysRoleMenuMapper roleMenuMapper;
+    private SysRoleResourceMapper roleResourceMapper;
 
     /**
      * 根据用户查询系统菜单列表
@@ -51,32 +51,32 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @return 菜单列表
      */
     @Override
-    public List<SysResource> selectMenuList(Long userId)
+    public List<SysResource> selectResourceList(Long userId)
     {
-        return selectMenuList(new SysResource(), userId);
+        return selectResourceList(new SysResource(), userId);
     }
 
     /**
      * 查询系统菜单列表
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 菜单列表
      */
     @Override
-    public List<SysResource> selectMenuList(SysResource menu, Long userId)
+    public List<SysResource> selectResourceList(SysResource resource, Long userId)
     {
-        List<SysResource> menuList = null;
+        List<SysResource> resourceList = null;
         // 管理员显示所有菜单信息
         if (SysUser.isAdmin(userId))
         {
-            menuList = menuMapper.selectMenuList(menu);
+            resourceList = resourceMapper.selectResourceList(resource);
         }
         else
         {
-            menu.getParams().put("userId", userId);
-            menuList = menuMapper.selectMenuListByUserId(menu);
+            resource.getParams().put("userId", userId);
+            resourceList = resourceMapper.selectResourceListByUserId(resource);
         }
-        return menuList;
+        return resourceList;
     }
 
     /**
@@ -86,9 +86,9 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @return 权限列表
      */
     @Override
-    public Set<String> selectMenuPermsByUserId(Long userId)
+    public Set<String> selectResourcePermsByUserId(Long userId)
     {
-        List<String> perms = menuMapper.selectMenuPermsByUserId(userId);
+        List<String> perms = resourceMapper.selectResourcePermsByUserId(userId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms)
         {
@@ -107,9 +107,9 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @return 权限列表
      */
     @Override
-    public Set<String> selectMenuPermsByRoleId(Long roleId)
+    public Set<String> selectResourcePermsByRoleId(Long roleId)
     {
-        List<String> perms = menuMapper.selectMenuPermsByRoleId(roleId);
+        List<String> perms = resourceMapper.selectResourcePermsByRoleId(roleId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms)
         {
@@ -128,18 +128,18 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @return 菜单列表
      */
     @Override
-    public List<SysResource> selectMenuTreeByUserId(Long userId)
+    public List<SysResource> selectResourceTreeByUserId(Long userId)
     {
-        List<SysResource> menus = null;
+        List<SysResource> resources = null;
         if (SecurityUtils.isAdmin(userId))
         {
-            menus = menuMapper.selectMenuTreeAll();
+            resources = resourceMapper.selectResourceTreeAll();
         }
         else
         {
-            menus = menuMapper.selectMenuTreeByUserId(userId);
+            resources = resourceMapper.selectResourceTreeByUserId(userId);
         }
-        return getChildPerms(menus, 0);
+        return getChildPerms(resources, 0);
     }
 
     /**
@@ -149,62 +149,62 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @return 选中菜单列表
      */
     @Override
-    public List<Long> selectMenuListByRoleId(Long roleId)
+    public List<Long> selectResourceListByRoleId(Long roleId)
     {
         SysRole role = roleMapper.selectRoleById(roleId);
-        return menuMapper.selectMenuListByRoleId(roleId, role.isMenuCheckStrictly());
+        return resourceMapper.selectResourceListByRoleId(roleId, role.isMenuCheckStrictly());
     }
 
     /**
      * 构建前端路由所需要的菜单
      * 
-     * @param menus 菜单列表
+     * @param resources 菜单列表
      * @return 路由列表
      */
     @Override
-    public List<RouterVo> buildMenus(List<SysResource> menus)
+    public List<RouterVo> buildResources(List<SysResource> resources)
     {
         List<RouterVo> routers = new LinkedList<RouterVo>();
-        for (SysResource menu : menus)
+        for (SysResource resource : resources)
         {
             RouterVo router = new RouterVo();
-            router.setHidden("1".equals(menu.getVisible()));
-            router.setName(getRouteName(menu));
-            router.setPath(getRouterPath(menu));
-            router.setComponent(getComponent(menu));
-            router.setQuery(menu.getQuery());
-            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
-            List<SysResource> cMenus = menu.getChildren();
-            if (StringUtils.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getMenuType()))
+            router.setHidden("1".equals(resource.getVisible()));
+            router.setName(getRouteName(resource));
+            router.setPath(getRouterPath(resource));
+            router.setComponent(getComponent(resource));
+            router.setQuery(resource.getQuery());
+            router.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon(), StringUtils.equals("1", resource.getIsCache()), resource.getPath()));
+            List<SysResource> cResources = resource.getChildren();
+            if (StringUtils.isNotEmpty(cResources) && UserConstants.TYPE_DIR.equals(resource.getResourceType()))
             {
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
-                router.setChildren(buildMenus(cMenus));
+                router.setChildren(buildResources(cResources));
             }
-            else if (isMenuFrame(menu))
+            else if (isResourceFrame(resource))
             {
                 router.setMeta(null);
                 List<RouterVo> childrenList = new ArrayList<RouterVo>();
                 RouterVo children = new RouterVo();
-                children.setPath(menu.getPath());
-                children.setComponent(menu.getComponent());
-                children.setName(StringUtils.capitalize(menu.getPath()));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
-                children.setQuery(menu.getQuery());
+                children.setPath(resource.getPath());
+                children.setComponent(resource.getComponent());
+                children.setName(StringUtils.capitalize(resource.getPath()));
+                children.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon(), StringUtils.equals("1", resource.getIsCache()), resource.getPath()));
+                children.setQuery(resource.getQuery());
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
-            else if (menu.getParentId().intValue() == 0 && isInnerLink(menu))
+            else if (resource.getParentId().intValue() == 0 && isInnerLink(resource))
             {
-                router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
+                router.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon()));
                 router.setPath("/");
                 List<RouterVo> childrenList = new ArrayList<RouterVo>();
                 RouterVo children = new RouterVo();
-                String routerPath = innerLinkReplaceEach(menu.getPath());
+                String routerPath = innerLinkReplaceEach(resource.getPath());
                 children.setPath(routerPath);
                 children.setComponent(UserConstants.INNER_LINK);
                 children.setName(StringUtils.capitalize(routerPath));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
+                children.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon(), resource.getPath()));
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
@@ -216,27 +216,27 @@ public class SysMenuServiceImpl implements ISysMenuService
     /**
      * 构建前端所需要树结构
      * 
-     * @param menus 菜单列表
+     * @param resources 菜单列表
      * @return 树结构列表
      */
     @Override
-    public List<SysResource> buildMenuTree(List<SysResource> menus)
+    public List<SysResource> buildResourceTree(List<SysResource> resources)
     {
         List<SysResource> returnList = new ArrayList<SysResource>();
-        List<Long> tempList = menus.stream().map(SysResource::getMenuId).collect(Collectors.toList());
-        for (Iterator<SysResource> iterator = menus.iterator(); iterator.hasNext();)
+        List<Long> tempList = resources.stream().map(SysResource::getResourceId).collect(Collectors.toList());
+        for (Iterator<SysResource> iterator = resources.iterator(); iterator.hasNext();)
         {
-            SysResource menu = (SysResource) iterator.next();
+            SysResource resource = (SysResource) iterator.next();
             // 如果是顶级节点, 遍历该父节点的所有子节点
-            if (!tempList.contains(menu.getParentId()))
+            if (!tempList.contains(resource.getParentId()))
             {
-                recursionFn(menus, menu);
-                returnList.add(menu);
+                recursionFn(resources, resource);
+                returnList.add(resource);
             }
         }
         if (returnList.isEmpty())
         {
-            returnList = menus;
+            returnList = resources;
         }
         return returnList;
     }
@@ -244,102 +244,102 @@ public class SysMenuServiceImpl implements ISysMenuService
     /**
      * 构建前端所需要下拉树结构
      * 
-     * @param menus 菜单列表
+     * @param resources 菜单列表
      * @return 下拉树结构列表
      */
     @Override
-    public List<TreeSelect> buildMenuTreeSelect(List<SysResource> menus)
+    public List<TreeSelect> buildResourceTreeSelect(List<SysResource> resources)
     {
-        List<SysResource> menuTrees = buildMenuTree(menus);
-        return menuTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
+        List<SysResource> resourceTrees = buildResourceTree(resources);
+        return resourceTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 
     /**
      * 根据菜单ID查询信息
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 菜单信息
      */
     @Override
-    public SysResource selectMenuById(Long menuId)
+    public SysResource selectResourceById(Long resourceId)
     {
-        return menuMapper.selectMenuById(menuId);
+        return resourceMapper.selectResourceById(resourceId);
     }
 
     /**
      * 是否存在菜单子节点
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 结果
      */
     @Override
-    public boolean hasChildByMenuId(Long menuId)
+    public boolean hasChildByResourceId(Long resourceId)
     {
-        int result = menuMapper.hasChildByMenuId(menuId);
+        int result = resourceMapper.hasChildByResourceId(resourceId);
         return result > 0;
     }
 
     /**
      * 查询菜单使用数量
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 结果
      */
     @Override
-    public boolean checkMenuExistRole(Long menuId)
+    public boolean checkResourceExistRole(Long resourceId)
     {
-        int result = roleMenuMapper.checkMenuExistRole(menuId);
+        int result = roleResourceMapper.checkResourceExistRole(resourceId);
         return result > 0;
     }
 
     /**
      * 新增保存菜单信息
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
     @Override
-    public int insertMenu(SysResource menu)
+    public int insertResource(SysResource resource)
     {
-        return menuMapper.insertMenu(menu);
+        return resourceMapper.insertResource(resource);
     }
 
     /**
      * 修改保存菜单信息
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
     @Override
-    public int updateMenu(SysResource menu)
+    public int updateResource(SysResource resource)
     {
-        return menuMapper.updateMenu(menu);
+        return resourceMapper.updateResource(resource);
     }
 
     /**
      * 删除菜单管理信息
      * 
-     * @param menuId 菜单ID
+     * @param resourceId 菜单ID
      * @return 结果
      */
     @Override
-    public int deleteMenuById(Long menuId)
+    public int deleteResourceById(Long resourceId)
     {
-        return menuMapper.deleteMenuById(menuId);
+        return resourceMapper.deleteResourceById(resourceId);
     }
 
     /**
      * 校验菜单名称是否唯一
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
     @Override
-    public boolean checkMenuNameUnique(SysResource menu)
+    public boolean checkResourceNameUnique(SysResource resource)
     {
-        Long menuId = StringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
-        SysResource info = menuMapper.checkMenuNameUnique(menu.getMenuName(), menu.getParentId());
-        if (StringUtils.isNotNull(info) && info.getMenuId().longValue() != menuId.longValue())
+        Long resourceId = StringUtils.isNull(resource.getResourceId()) ? -1L : resource.getResourceId();
+        SysResource info = resourceMapper.checkResourceNameUnique(resource.getResourceName(), resource.getParentId());
+        if (StringUtils.isNotNull(info) && info.getResourceId().longValue() != resourceId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -349,14 +349,14 @@ public class SysMenuServiceImpl implements ISysMenuService
     /**
      * 获取路由名称
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 路由名称
      */
-    public String getRouteName(SysResource menu)
+    public String getRouteName(SysResource resource)
     {
-        String routerName = StringUtils.capitalize(menu.getPath());
+        String routerName = StringUtils.capitalize(resource.getPath());
         // 非外链并且是一级目录（类型为目录）
-        if (isMenuFrame(menu))
+        if (isResourceFrame(resource))
         {
             routerName = StringUtils.EMPTY;
         }
@@ -366,25 +366,25 @@ public class SysMenuServiceImpl implements ISysMenuService
     /**
      * 获取路由地址
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 路由地址
      */
-    public String getRouterPath(SysResource menu)
+    public String getRouterPath(SysResource resource)
     {
-        String routerPath = menu.getPath();
+        String routerPath = resource.getPath();
         // 内链打开外网方式
-        if (menu.getParentId().intValue() != 0 && isInnerLink(menu))
+        if (resource.getParentId().intValue() != 0 && isInnerLink(resource))
         {
             routerPath = innerLinkReplaceEach(routerPath);
         }
         // 非外链并且是一级目录（类型为目录）
-        if (0 == menu.getParentId().intValue() && UserConstants.TYPE_DIR.equals(menu.getMenuType())
-                && UserConstants.NO_FRAME.equals(menu.getIsFrame()))
+        if (0 == resource.getParentId().intValue() && UserConstants.TYPE_DIR.equals(resource.getResourceType())
+                && UserConstants.NO_FRAME.equals(resource.getIsFrame()))
         {
-            routerPath = "/" + menu.getPath();
+            routerPath = "/" + resource.getPath();
         }
         // 非外链并且是一级目录（类型为菜单）
-        else if (isMenuFrame(menu))
+        else if (isResourceFrame(resource))
         {
             routerPath = "/";
         }
@@ -394,21 +394,21 @@ public class SysMenuServiceImpl implements ISysMenuService
     /**
      * 获取组件信息
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 组件信息
      */
-    public String getComponent(SysResource menu)
+    public String getComponent(SysResource resource)
     {
         String component = UserConstants.LAYOUT;
-        if (StringUtils.isNotEmpty(menu.getComponent()) && !isMenuFrame(menu))
+        if (StringUtils.isNotEmpty(resource.getComponent()) && !isResourceFrame(resource))
         {
-            component = menu.getComponent();
+            component = resource.getComponent();
         }
-        else if (StringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu))
+        else if (StringUtils.isEmpty(resource.getComponent()) && resource.getParentId().intValue() != 0 && isInnerLink(resource))
         {
             component = UserConstants.INNER_LINK;
         }
-        else if (StringUtils.isEmpty(menu.getComponent()) && isParentView(menu))
+        else if (StringUtils.isEmpty(resource.getComponent()) && isParentView(resource))
         {
             component = UserConstants.PARENT_VIEW;
         }
@@ -418,35 +418,35 @@ public class SysMenuServiceImpl implements ISysMenuService
     /**
      * 是否为菜单内部跳转
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
-    public boolean isMenuFrame(SysResource menu)
+    public boolean isResourceFrame(SysResource resource)
     {
-        return menu.getParentId().intValue() == 0 && UserConstants.TYPE_MENU.equals(menu.getMenuType())
-                && menu.getIsFrame().equals(UserConstants.NO_FRAME);
+        return resource.getParentId().intValue() == 0 && UserConstants.TYPE_MENU.equals(resource.getResourceType())
+                && resource.getIsFrame().equals(UserConstants.NO_FRAME);
     }
 
     /**
      * 是否为内链组件
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
-    public boolean isInnerLink(SysResource menu)
+    public boolean isInnerLink(SysResource resource)
     {
-        return menu.getIsFrame().equals(UserConstants.NO_FRAME) && StringUtils.ishttp(menu.getPath());
+        return resource.getIsFrame().equals(UserConstants.NO_FRAME) && StringUtils.ishttp(resource.getPath());
     }
 
     /**
      * 是否为parent_view组件
      * 
-     * @param menu 菜单信息
+     * @param resource 菜单信息
      * @return 结果
      */
-    public boolean isParentView(SysResource menu)
+    public boolean isParentView(SysResource resource)
     {
-        return menu.getParentId().intValue() != 0 && UserConstants.TYPE_DIR.equals(menu.getMenuType());
+        return resource.getParentId().intValue() != 0 && UserConstants.TYPE_DIR.equals(resource.getResourceType());
     }
 
     /**
@@ -502,7 +502,7 @@ public class SysMenuServiceImpl implements ISysMenuService
         while (it.hasNext())
         {
             SysResource n = (SysResource) it.next();
-            if (n.getParentId().longValue() == t.getMenuId().longValue())
+            if (n.getParentId().longValue() == t.getResourceId().longValue())
             {
                 tlist.add(n);
             }

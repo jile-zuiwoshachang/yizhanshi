@@ -75,14 +75,7 @@ public interface SysUserMapper
      */
     public int updateUser(SysUser user);
 
-    /**
-     * 修改用户头像
-     * 
-     * @param userName 用户名
-     * @param avatar 头像地址
-     * @return 结果
-     */
-    public int updateUserAvatar(@Param("userName") String userName, @Param("avatar") String avatar);
+
 
     /**
      * 重置用户密码
@@ -92,7 +85,14 @@ public interface SysUserMapper
      * @return 结果
      */
     public int resetUserPwd(@Param("userName") String userName, @Param("password") String password);
-
+    /**
+     * 修改用户状态
+     *
+     * @param userId 用户名
+     * @param status 状态位
+     * @return 结果
+     */
+    public int updateUserStatus(@Param("userId") String userId, @Param("status") String status);
     /**
      * 通过用户ID删除用户
      * 
