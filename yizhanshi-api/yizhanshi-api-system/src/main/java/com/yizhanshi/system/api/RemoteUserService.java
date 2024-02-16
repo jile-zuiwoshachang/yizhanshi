@@ -22,14 +22,14 @@ import com.yizhanshi.system.api.model.LoginUser;
 public interface RemoteUserService
 {
     /**
-     * 通过用户名查询用户信息
+     * 通过学号查询用户信息
      *
-     * @param username 用户名
+     * @param userStudentid 学号
      * @param source 请求来源
      * @return 结果
      */
-    @GetMapping("/user/info/{username}")
-    public R<LoginUser> getUserInfo(@PathVariable("username") String username, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    @GetMapping("/user/info/{userStudentid}")
+    public R<LoginUser> getUserInfo(@PathVariable("userStudentid") String userStudentid, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 
     /**
      * 注册用户信息

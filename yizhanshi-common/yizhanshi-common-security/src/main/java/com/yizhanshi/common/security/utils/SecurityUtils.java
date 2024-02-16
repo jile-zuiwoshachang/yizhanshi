@@ -94,7 +94,7 @@ public class SecurityUtils
      */
     public static boolean isAdmin(Long userId)
     {
-        return userId != null && 1L == userId;
+        return userId != null && 123456789L == userId;
     }
     /**
      * 是否为管理员

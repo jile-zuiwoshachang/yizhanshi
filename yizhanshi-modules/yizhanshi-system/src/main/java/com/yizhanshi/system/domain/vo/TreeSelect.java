@@ -40,8 +40,8 @@ public class TreeSelect implements Serializable
 
     public TreeSelect(SysResource menu)
     {
-        this.id = menu.getMenuId();
-        this.label = menu.getMenuName();
+        this.id = menu.getResourceId();
+        this.label = menu.getResourceName();
         this.children = menu.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 

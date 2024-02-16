@@ -40,7 +40,7 @@ public class SysRole extends BaseEntity
     private String dataScope;
 
     /** 菜单树选择项是否关联显示（ 0：父子不互相关联显示 1：父子互相关联显示） */
-    private boolean menuCheckStrictly;
+    private boolean resourceCheckStrictly;
 
     /** 部门树选择项是否关联显示（0：父子不互相关联显示 1：父子互相关联显示 ） */
     private boolean deptCheckStrictly;
@@ -91,7 +91,7 @@ public class SysRole extends BaseEntity
 
     public static boolean isAdmin(Long roleId)
     {
-        return roleId != null && 1L == roleId;
+        return roleId != null && 987654321L == roleId;
     }
 
     @NotBlank(message = "角色名称不能为空")
@@ -141,12 +141,12 @@ public class SysRole extends BaseEntity
 
     public boolean isMenuCheckStrictly()
     {
-        return menuCheckStrictly;
+        return resourceCheckStrictly;
     }
 
-    public void setMenuCheckStrictly(boolean menuCheckStrictly)
+    public void setMenuCheckStrictly(boolean resourceCheckStrictly)
     {
-        this.menuCheckStrictly = menuCheckStrictly;
+        this.resourceCheckStrictly = resourceCheckStrictly;
     }
 
     public boolean isDeptCheckStrictly()
@@ -227,7 +227,7 @@ public class SysRole extends BaseEntity
             .append("roleKey", getRoleKey())
             .append("roleSort", getRoleSort())
             .append("dataScope", getDataScope())
-            .append("menuCheckStrictly", isMenuCheckStrictly())
+            .append("resourceCheckStrictly", isMenuCheckStrictly())
             .append("deptCheckStrictly", isDeptCheckStrictly())
             .append("status", getStatus())
             .append("delFlag", getDelFlag())

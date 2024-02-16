@@ -20,7 +20,7 @@ public class SysLogininfor extends BaseEntity
     private Long infoId;
 
     /** 用户账号 */
-    @Excel(name = "用户账号")
+    @Excel(name = "用户学号")
     private String userName;
 
     /** 状态 0成功 1失败 */

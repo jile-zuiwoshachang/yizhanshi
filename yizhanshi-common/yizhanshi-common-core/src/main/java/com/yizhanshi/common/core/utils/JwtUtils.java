@@ -25,7 +25,8 @@ public class JwtUtils
      */
     public static String createToken(Map<String, Object> claims)
     {
-        String token = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
+        String token = Jwts.builder().setClaims(claims)
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
         return token;
     }
 
@@ -85,7 +86,28 @@ public class JwtUtils
     {
         return getValue(claims, SecurityConstants.DETAILS_USER_ID);
     }
+    /**
+     * 根据令牌获取学号
+     *
+     * @param token 令牌
+     * @return 学号
+     */
+    public static String getUserStudentid(String token)
+    {
+        Claims claims = parseToken(token);
+        return getValue(claims, SecurityConstants.DETAILS_USERSTUDENTID);
+    }
 
+    /**
+     * 根据身份信息获取学号
+     *
+     * @param claims 身份信息
+     * @return 学号
+     */
+    public static String getUserStudentid(Claims claims)
+    {
+        return getValue(claims, SecurityConstants.DETAILS_USERSTUDENTID);
+    }
     /**
      * 根据令牌获取用户名
      * 

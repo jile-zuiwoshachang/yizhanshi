@@ -35,7 +35,7 @@ public class TokenController
     public R<?> login(@RequestBody LoginBody form)
     {
         // 用户登录
-        LoginUser userInfo = sysLoginService.login(form.getUsername(), form.getPassword());
+        LoginUser userInfo = sysLoginService.login(form.getStudentid(),form.getUsername(), form.getPassword());
         // 获取登录token
         return R.ok(tokenService.createToken(userInfo));
     }
@@ -47,6 +47,7 @@ public class TokenController
         if (StringUtils.isNotEmpty(token))
         {
             String username = JwtUtils.getUserName(token);
+
             // 删除用户缓存记录
             AuthUtil.logoutByToken(token);
             // 记录用户退出日志

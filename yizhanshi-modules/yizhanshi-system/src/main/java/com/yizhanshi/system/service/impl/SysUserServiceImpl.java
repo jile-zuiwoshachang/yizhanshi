@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
+
+import com.yizhanshi.common.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,7 +188,23 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return UserConstants.UNIQUE;
     }
-
+    /**
+     * 校验学号是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkUserStudentidUnique(SysUser user)
+    {
+        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        SysUser info = userMapper.checkUserStudentidUnique(user.getUserStudentid());
+        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        {
+            return UserConstants.NOT_UNIQUE;
+        }
+        return UserConstants.UNIQUE;
+    }
     /**
      * 校验手机号码是否唯一
      *
@@ -245,6 +263,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public void checkUserDataScope(Long userId)
     {
+        //传参为null也返回false
         if (!SysUser.isAdmin(SecurityUtils.getUserId()))
         {
             SysUser user = new SysUser();
@@ -301,8 +320,6 @@ public class SysUserServiceImpl implements ISysUserService
         userRoleMapper.deleteUserRoleByUserId(userId);
         // 新增用户与角色管理
         insertUserRole(user);
-        // 删除用户与岗位关联
-        userPostMapper.deleteUserPostByUserId(userId);
         return userMapper.updateUser(user);
     }
 
@@ -434,13 +451,12 @@ public class SysUserServiceImpl implements ISysUserService
     {
         for (Long userId : userIds)
         {
+            //模板范式
             checkUserAllowed(new SysUser(userId));
             checkUserDataScope(userId);
         }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRole(userIds);
-        // 删除用户与岗位关联
-        userPostMapper.deleteUserPost(userIds);
         return userMapper.deleteUserByIds(userIds);
     }
 
@@ -469,7 +485,7 @@ public class SysUserServiceImpl implements ISysUserService
             try
             {
                 // 验证是否存在这个用户
-                SysUser u = userMapper.selectUserByUserName(user.getUserName());
+                SysUser u = userMapper.selectUserByUserStudentid(user.getUserStudentid());
                 if (StringUtils.isNull(u))
                 {
                     BeanValidators.validateWithException(validator, user);
@@ -477,7 +493,7 @@ public class SysUserServiceImpl implements ISysUserService
                     user.setCreateBy(operName);
                     userMapper.insertUser(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 导入成功");
+                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserStudentid() + " 导入成功");
                 }
                 else if (isUpdateSupport)
                 {
@@ -488,18 +504,18 @@ public class SysUserServiceImpl implements ISysUserService
                     user.setUpdateBy(operName);
                     userMapper.updateUser(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 更新成功");
+                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserStudentid() + " 更新成功");
                 }
                 else
                 {
                     failureNum++;
-                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getUserName() + " 已存在");
+                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getUserStudentid() + " 已存在");
                 }
             }
             catch (Exception e)
             {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、账号 " + user.getUserName() + " 导入失败：";
+                String msg = "<br/>" + failureNum + "、账号 " + user.getUserStudentid() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }

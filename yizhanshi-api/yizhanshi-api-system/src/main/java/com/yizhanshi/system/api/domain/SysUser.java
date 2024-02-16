@@ -42,6 +42,9 @@ public class SysUser extends BaseEntity
     /** 用户学院 */
     @Excel(name = "用户学院")
     private String userOrganization;
+    /** 用户学院 */
+    @Excel(name = "所在校区",readConverterExp = "北校区 南校区")
+    private String userCampus;
     /** 用户类型 */
     @Excel(name = "用户类型", readConverterExp = "01=普通,02=管理,03=系统")
     private String userType;
@@ -55,10 +58,10 @@ public class SysUser extends BaseEntity
     private String userPhone;
 
     /** 用户评价分数*/
-    @Excel(name = "用户评价分数")
+    @Excel(name = "用户评价分数(满分100)")
     private int userScore;
-
     /** 用户简介 */
+    @Excel(name = "用户简介")
     private String userDescription;
     /** 用户图片1 */
     private String userPicture1;
@@ -83,8 +86,6 @@ public class SysUser extends BaseEntity
     /** 角色组 */
     private Long[] roleIds;
 
-    /** 岗位组 */
-    private Long[] postIds;
     /** 角色ID */
     private Long roleId;
 
@@ -108,13 +109,6 @@ public class SysUser extends BaseEntity
         this.userId = userId;
     }
 
-    public Long[] getPostIds() {
-        return postIds;
-    }
-
-    public void setPostIds(Long[] postIds) {
-        this.postIds = postIds;
-    }
 
     public String getUserSex() {
         return userSex;
@@ -131,7 +125,7 @@ public class SysUser extends BaseEntity
     public void setDeptId(Long deptId) {
         this.deptId = deptId;
     }
-
+    //is开头的方法，后端会进行处理，去掉is并认为这是一个布尔值并返回给前端，即adminByType和admin字段，哪怕你没有定义他们
     public boolean isAdminByType()
     {
         return isAdminByType(this.userType);
@@ -208,6 +202,14 @@ public class SysUser extends BaseEntity
 
     public void setUserOrganization(String userOrganization) {
         this.userOrganization = userOrganization;
+    }
+
+    public String getUserCampus() {
+        return userCampus;
+    }
+
+    public void setUserCampus(String userCampus) {
+        this.userCampus = userCampus;
     }
 
     public int getUserScore() {
@@ -318,6 +320,7 @@ public class SysUser extends BaseEntity
                 .append("deptId", getDeptId())
                 .append("userPassword", getUserPassword())
                 .append("userOrganization", getUserOrganization())
+                .append("userCampus", getUserCampus())
                 .append("userName", getUserName())
                 .append("userType", getUserType())
                 .append("userEmail", getUserEmail())

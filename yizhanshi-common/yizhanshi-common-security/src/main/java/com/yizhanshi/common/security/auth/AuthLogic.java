@@ -360,7 +360,8 @@ public class AuthLogic
 
     /**
      * 判断是否包含角色
-     * 
+     * 判断给定的角色列表中是否包含特定的角色 SUPER_ADMIN，或者是否存在与给定的 role 模式匹配的角色。
+     * 如果存在任何一个角色满足这两个条件中的任意一个，anyMatch 方法返回 true，否则返回 false。
      * @param roles 角色列表
      * @param role 角色
      * @return 用户是否具备某角色权限

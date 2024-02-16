@@ -79,6 +79,13 @@ public interface ISysUserService
      * @return 结果
      */
     public boolean checkUserNameUnique(SysUser user);
+    /**
+     * 校验学号是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    public boolean checkUserStudentidUnique(SysUser user);
 
     /**
      * 校验手机号码是否唯一

@@ -8,6 +8,10 @@ package com.yizhanshi.auth.form;
 public class LoginBody
 {
     /**
+     * 学号
+     */
+    private String studentid;
+    /**
      * 用户名
      */
     private String username;
@@ -17,13 +21,19 @@ public class LoginBody
      */
     private String password;
 
-    public String getUsername()
-    {
+    public String getStudentid() {
+        return studentid;
+    }
+
+    public void setStudentid(String studentid) {
+        this.studentid = studentid;
+    }
+
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 

@@ -111,18 +111,18 @@ public class SysUserController extends BaseController
      * 获取当前用户信息
      */
     @InnerAuth
-    @GetMapping("/info/{username}")
-    public R<LoginUser> info(@PathVariable("username") String username)
+    @GetMapping("/info/{userStudentid}")
+    public R<LoginUser> info(@PathVariable("userStudentid") String userStudentid)
     {
-        SysUser sysUser = userService.selectUserByUserName(username);
+        SysUser sysUser = userService.selectUserByUserStudentid(userStudentid);
         if (StringUtils.isNull(sysUser))
         {
-            return R.fail("用户名或密码错误");
+            return R.fail("学号或密码错误");
         }
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(sysUser);
         // 权限集合
-        Set<String> permissions = permissionService.getMenuPermission(sysUser);
+        Set<String> permissions = permissionService.getResourcePermission(sysUser);
         LoginUser sysUserVo = new LoginUser();
         sysUserVo.setSysUser(sysUser);
         sysUserVo.setRoles(roles);
@@ -161,7 +161,7 @@ public class SysUserController extends BaseController
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
-        Set<String> permissions = permissionService.getMenuPermission(user);
+        Set<String> permissions = permissionService.getResourcePermission(user);
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", user);
         ajax.put("roles", roles);
@@ -179,14 +179,16 @@ public class SysUserController extends BaseController
         userService.checkUserDataScope(userId);
         AjaxResult ajax = AjaxResult.success();
         List<SysRole> roles = roleService.selectRoleAll();
-        ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
-        ajax.put("posts", postService.selectPostAll());
+        //如果当前用户是管理员（SysUser.isAdmin(userId) 返回 true），则将所有角色信息放入；否则，过滤掉管理员角色后再放入。
+        ajax.put("roles", SysUser.isAdmin(userId) ? roles :
+                roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         if (StringUtils.isNotNull(userId))
         {
             SysUser sysUser = userService.selectUserById(userId);
             ajax.put(AjaxResult.DATA_TAG, sysUser);
-            ajax.put("postIds", postService.selectPostListByUserId(userId));
-            ajax.put("roleIds", sysUser.getRoles().stream().map(SysRole::getRoleId).collect(Collectors.toList()));
+            //只收集sysUser对象中的角色列表转换为一个角色ID的列表，并返回该列表。
+            ajax.put("roleIds", sysUser.getRoles().stream().map(SysRole::getRoleId)
+                    .collect(Collectors.toList()));
         }
         return ajax;
     }
@@ -199,9 +201,9 @@ public class SysUserController extends BaseController
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysUser user)
     {
-        if (!userService.checkUserNameUnique(user))
+        if (!userService.checkUserStudentidUnique(user))
         {
-            return error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
+            return error("新增用户'" + user.getUserStudentid() + "'失败，学号已存在");
         }
         else if (StringUtils.isNotEmpty(user.getUserPhone()) && !userService.checkPhoneUnique(user))
         {
@@ -224,11 +226,14 @@ public class SysUserController extends BaseController
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysUser user)
     {
+        //判断用户是否允许修改数据，防止修改系统管理员
         userService.checkUserAllowed(user);
+        //再进行一次安全处理
+        //判断用户的角色有无数据权限，且进行拼接，只可访问自己权限下的数据
         userService.checkUserDataScope(user.getUserId());
-        if (!userService.checkUserNameUnique(user))
+        if (!userService.checkUserStudentidUnique(user))
         {
-            return error("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
+            return error("修改用户'" + user.getUserStudentid() + "'失败，学号已存在");
         }
         else if (StringUtils.isNotEmpty(user.getUserPhone()) && !userService.checkPhoneUnique(user))
         {
@@ -267,7 +272,8 @@ public class SysUserController extends BaseController
     {
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getUserId());
-        user.setUserPassword(SecurityUtils.encryptPassword(user.getUserPassword()));
+        String initialPassword="123456";
+        user.setUserPassword(SecurityUtils.encryptPassword(initialPassword));
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.resetPwd(user));
     }
@@ -289,7 +295,7 @@ public class SysUserController extends BaseController
     /**
      * 根据用户编号获取授权角色
      */
-    @RequiresPermissions("system:user:query")
+   @RequiresPermissions("system:user:query")
     @GetMapping("/authRole/{userId}")
     public AjaxResult authRole(@PathVariable("userId") Long userId)
     {
@@ -297,6 +303,7 @@ public class SysUserController extends BaseController
         SysUser user = userService.selectUserById(userId);
         List<SysRole> roles = roleService.selectRolesByUserId(userId);
         ajax.put("user", user);
+        //如果该用户是系统管理员，则显示所有角色和自己的角色，如果不是，就不把系统管理员传给前端
         ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         return ajax;
     }

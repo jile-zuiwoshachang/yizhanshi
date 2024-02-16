@@ -24,7 +24,7 @@ public class SysPermissionServiceImpl implements ISysPermissionService
     private ISysRoleService roleService;
 
     @Autowired
-    private ISysResourceService menuService;
+    private ISysResourceService resourceService;
 
     /**
      * 获取角色数据权限
@@ -71,14 +71,14 @@ public class SysPermissionServiceImpl implements ISysPermissionService
                 // 多角色设置permissions属性，以便数据权限匹配权限
                 for (SysRole role : roles)
                 {
-                    Set<String> rolePerms = menuService.selectResourcePermsByRoleId(role.getRoleId());
+                    Set<String> rolePerms = resourceService.selectResourcePermsByRoleId(role.getRoleId());
                     role.setPermissions(rolePerms);
                     perms.addAll(rolePerms);
                 }
             }
             else
             {
-                perms.addAll(menuService.selectResourcePermsByUserId(user.getUserId()));
+                perms.addAll(resourceService.selectResourcePermsByUserId(user.getUserId()));
             }
         }
         return perms;

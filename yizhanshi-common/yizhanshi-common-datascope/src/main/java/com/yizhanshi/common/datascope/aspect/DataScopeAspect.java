@@ -58,6 +58,7 @@ public class DataScopeAspect
     @Before("@annotation(controllerDataScope)")
     public void doBefore(JoinPoint point, DataScope controllerDataScope) throws Throwable
     {
+        //先清空已有的scope，防止注入
         clearDataScope(point);
         handleDataScope(point, controllerDataScope);
     }
@@ -96,6 +97,7 @@ public class DataScopeAspect
         for (SysRole role : user.getRoles())
         {
             String dataScope = role.getDataScope();
+            //如果是自定数据权限，跳过
             if (!DATA_SCOPE_CUSTOM.equals(dataScope) && conditions.contains(dataScope))
             {
                 continue;
@@ -105,28 +107,33 @@ public class DataScopeAspect
             {
                 continue;
             }
+            //如果是全部数据权限，拼接加上条件并跳过
             if (DATA_SCOPE_ALL.equals(dataScope))
             {
                 sqlString = new StringBuilder();
                 conditions.add(dataScope);
                 break;
             }
+            //如果是自定数据权限，加上后面这句sql。OR不影响，@DataScope(deptAlias = "d", userAlias = "u")这个注解已经指定好了
             else if (DATA_SCOPE_CUSTOM.equals(dataScope))
             {
                 sqlString.append(StringUtils.format(
                         " OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias,
                         role.getRoleId()));
             }
+            //部门数据与权限，拼接该用户所在部门
             else if (DATA_SCOPE_DEPT.equals(dataScope))
             {
                 sqlString.append(StringUtils.format(" OR {}.dept_id = {} ", deptAlias, user.getDeptId()));
             }
+            //部门数据与权限，拼接该用户所在部门及它的子部门
             else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope))
             {
                 sqlString.append(StringUtils.format(
                         " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )",
                         deptAlias, user.getDeptId(), user.getDeptId()));
             }
+            //仅本人数据权限，最安全
             else if (DATA_SCOPE_SELF.equals(dataScope))
             {
                 if (StringUtils.isNotBlank(userAlias))
@@ -142,7 +149,8 @@ public class DataScopeAspect
             conditions.add(dataScope);
         }
 
-        // 多角色情况下，所有角色都不包含传递过来的权限字符，这个时候sqlString也会为空，所以要限制一下,不查询任何数据
+        // 多角色情况下，且所有角色都不包含传递过来的权限字符，这个时候sqlString也会为空，所以要限制一下,不查询任何数据
+        // 即角色是失效角色
         if (StringUtils.isEmpty(conditions))
         {
             sqlString.append(StringUtils.format(" OR {}.dept_id = 0 ", deptAlias));
@@ -160,7 +168,7 @@ public class DataScopeAspect
     }
 
     /**
-     * 拼接权限sql前先清空params.dataScope参数防止注入
+     * 拼接权限sql前先清空params.dataScope参数  防止注入
      */
     private void clearDataScope(final JoinPoint joinPoint)
     {

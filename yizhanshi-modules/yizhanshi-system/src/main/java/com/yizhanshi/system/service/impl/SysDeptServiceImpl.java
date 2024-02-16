@@ -71,6 +71,7 @@ public class SysDeptServiceImpl implements ISysDeptService
     public List<SysDept> buildDeptTree(List<SysDept> depts)
     {
         List<SysDept> returnList = new ArrayList<SysDept>();
+        //获取部门id集合
         List<Long> tempList = depts.stream().map(SysDept::getDeptId).collect(Collectors.toList());
         for (SysDept dept : depts)
         {
@@ -83,6 +84,7 @@ public class SysDeptServiceImpl implements ISysDeptService
         }
         if (returnList.isEmpty())
         {
+            //都是顶级节点
             returnList = depts;
         }
         return returnList;
@@ -97,6 +99,7 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts)
     {
+        //将给定的 depts 列表转换为一个部门树的列表，并且将每个部门树节点转换为 TreeSelect 对象，最终返回一个新的列表
         List<SysDept> deptTrees = buildDeptTree(depts);
         return deptTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
     }
@@ -303,11 +306,13 @@ public class SysDeptServiceImpl implements ISysDeptService
         t.setChildren(childList);
         for (SysDept tChild : childList)
         {
+            //如果子节点列表还有子节点那就再递归得到子节点的子节点
             if (hasChild(list, tChild))
             {
                 recursionFn(list, tChild);
             }
         }
+        //最后list已经变成有了children的list
     }
 
     /**

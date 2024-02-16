@@ -116,7 +116,13 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkUserNameUnique(String userName);
-
+    /**
+     * 校验学号是否唯一
+     *
+     * @param userStudentid 学号
+     * @return 结果
+     */
+    public SysUser checkUserStudentidUnique(String userStudentid);
     /**
      * 校验手机号码是否唯一
      *

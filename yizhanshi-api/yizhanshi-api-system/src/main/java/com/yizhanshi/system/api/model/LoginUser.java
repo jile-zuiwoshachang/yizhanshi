@@ -22,6 +22,10 @@ public class LoginUser implements Serializable
      * 用户名id
      */
     private Long userid;
+    /**
+     * 学号
+     */
+    private String userStudentid;
 
     /**
      * 用户名
@@ -76,6 +80,14 @@ public class LoginUser implements Serializable
     public void setUserid(Long userid)
     {
         this.userid = userid;
+    }
+
+    public String getUserStudentid() {
+        return userStudentid;
+    }
+
+    public void setUserStudentid(String userStudentid) {
+        this.userStudentid = userStudentid;
     }
 
     public String getUsername()

@@ -50,9 +50,11 @@ public class TokenService
         String token = IdUtils.fastUUID();
         Long userId = loginUser.getSysUser().getUserId();
         String userName = loginUser.getSysUser().getUserName();
+        String userStudentid = loginUser.getSysUser().getUserStudentid();
         loginUser.setToken(token);
         loginUser.setUserid(userId);
         loginUser.setUsername(userName);
+        loginUser.setUserStudentid(userStudentid);
         loginUser.setIpaddr(IpUtils.getIpAddr());
         refreshToken(loginUser);
 
@@ -61,6 +63,7 @@ public class TokenService
         claimsMap.put(SecurityConstants.USER_KEY, token);
         claimsMap.put(SecurityConstants.DETAILS_USER_ID, userId);
         claimsMap.put(SecurityConstants.DETAILS_USERNAME, userName);
+        claimsMap.put(SecurityConstants.DETAILS_USERSTUDENTID, userStudentid);
 
         // 接口返回信息
         Map<String, Object> rspMap = new HashMap<String, Object>();

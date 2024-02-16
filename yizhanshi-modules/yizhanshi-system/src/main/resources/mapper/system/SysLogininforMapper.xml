@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yizhanshi.system.mapper.SysLogininforMapper">
 
-	<resultMap type="SysLogininfor" id="SysLogininforResult">
+	<resultMap type="com.yizhanshi.system.api.domain.SysLogininfor" id="SysLogininforResult">
 		<id     property="infoId"        column="info_id"           />
 		<result property="userName"      column="user_name"         />
 		<result property="status"        column="status"            />
@@ -13,13 +13,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="accessTime"    column="access_time"       />
 	</resultMap>
 
-	<insert id="insertLogininfor" parameterType="SysLogininfor">
-		insert into sys_logininfor (user_name, status, ipaddr, msg, access_time)
+	<insert id="insertLogininfor" parameterType="com.yizhanshi.system.api.domain.SysLogininfor">
+		insert into system_logininfor (user_name, status, ipaddr, msg, access_time)
 		values (#{userName}, #{status}, #{ipaddr}, #{msg}, sysdate())
 	</insert>
 	
-	<select id="selectLogininforList" parameterType="SysLogininfor" resultMap="SysLogininforResult">
-		select info_id, user_name, ipaddr, status, msg, access_time from sys_logininfor
+	<select id="selectLogininforList" parameterType="com.yizhanshi.system.api.domain.SysLogininfor" resultMap="SysLogininforResult">
+		select info_id, user_name, ipaddr, status, msg, access_time from system_logininfor
 		<where>
 			<if test="ipaddr != null and ipaddr != ''">
 				AND ipaddr like concat('%', #{ipaddr}, '%')
@@ -41,14 +41,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<delete id="deleteLogininforByIds" parameterType="Long">
- 		delete from sys_logininfor where info_id in
+ 		delete from system_logininfor where info_id in
  		<foreach collection="array" item="infoId" open="(" separator="," close=")">
  			#{infoId}
         </foreach> 
  	</delete>
     
     <update id="cleanLogininfor">
-        truncate table sys_logininfor
+        truncate table system_logininfor
     </update>
     
 </mapper> 

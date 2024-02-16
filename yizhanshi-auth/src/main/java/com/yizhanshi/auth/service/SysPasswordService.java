@@ -31,19 +31,20 @@ public class SysPasswordService
     /**
      * 登录账户密码错误次数缓存键名
      * 
-     * @param username 用户名
+     * @param userStudentid 学号
      * @return 缓存键key
      */
-    private String getCacheKey(String username)
+    private String getCacheKey(String userStudentid)
     {
-        return CacheConstants.PWD_ERR_CNT_KEY + username;
+        return CacheConstants.PWD_ERR_CNT_KEY + userStudentid;
     }
 
     public void validate(SysUser user, String password)
     {
+        String userStudentid = user.getUserStudentid();
         String username = user.getUserName();
 
-        Integer retryCount = redisService.getCacheObject(getCacheKey(username));
+        Integer retryCount = redisService.getCacheObject(getCacheKey(userStudentid));
 
         if (retryCount == null)
         {
@@ -56,17 +57,17 @@ public class SysPasswordService
             recordLogService.recordLogininfor(username, Constants.LOGIN_FAIL,errMsg);
             throw new ServiceException(errMsg);
         }
-
+        // 判断输入的密码和真实密码是否相同
         if (!matches(user, password))
         {
             retryCount = retryCount + 1;
             recordLogService.recordLogininfor(username, Constants.LOGIN_FAIL, String.format("密码输入错误%s次", retryCount));
-            redisService.setCacheObject(getCacheKey(username), retryCount, lockTime, TimeUnit.MINUTES);
+            redisService.setCacheObject(getCacheKey(userStudentid), retryCount, lockTime, TimeUnit.MINUTES);
             throw new ServiceException("用户不存在/密码错误");
         }
         else
         {
-            clearLoginRecordCache(username);
+            clearLoginRecordCache(userStudentid);
         }
     }
 
