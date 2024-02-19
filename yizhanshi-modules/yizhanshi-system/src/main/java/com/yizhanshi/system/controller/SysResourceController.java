@@ -23,7 +23,7 @@ import com.yizhanshi.system.domain.SysResource;
 import com.yizhanshi.system.service.ISysResourceService;
 
 /**
- * 菜单信息
+ * 资源信息
  * 
  * @author hejiale
  */
@@ -35,7 +35,7 @@ public class SysResourceController extends BaseController
     private ISysResourceService resourceService;
 
     /**
-     * 获取菜单列表
+     * 获取资源列表
      */
     @RequiresPermissions("system:resource:list")
     @GetMapping("/list")
@@ -47,7 +47,7 @@ public class SysResourceController extends BaseController
     }
 
     /**
-     * 根据菜单编号获取详细信息
+     * 根据资源编号获取详细信息
      */
     @RequiresPermissions("system:resource:query")
     @GetMapping(value = "/{resourceId}")
@@ -57,7 +57,7 @@ public class SysResourceController extends BaseController
     }
 
     /**
-     * 获取菜单下拉树列表
+     * 获取资源下拉树列表
      */
     @GetMapping("/treeselect")
     public AjaxResult treeselect(SysResource resource)
@@ -68,7 +68,7 @@ public class SysResourceController extends BaseController
     }
 
     /**
-     * 加载对应角色菜单列表树
+     * 加载对应角色资源列表树
      */
     @GetMapping(value = "/roleResourceTreeselect/{roleId}")
     public AjaxResult roleResourceTreeselect(@PathVariable("roleId") Long roleId)
@@ -82,64 +82,64 @@ public class SysResourceController extends BaseController
     }
 
     /**
-     * 新增菜单
+     * 新增资源
      */
     @RequiresPermissions("system:resource:add")
-    @Log(title = "菜单管理", businessType = BusinessType.INSERT)
+    @Log(title = "资源管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysResource resource)
     {
         if (!resourceService.checkResourceNameUnique(resource))
         {
-            return error("新增菜单'" + resource.getResourceName() + "'失败，菜单名称已存在");
+            return error("新增资源'" + resource.getResourceName() + "'失败，资源名称已存在");
         }
         else if (UserConstants.YES_FRAME.equals(resource.getIsFrame()) && !StringUtils.ishttp(resource.getPath()))
         {
-            return error("新增菜单'" + resource.getResourceName() + "'失败，地址必须以http(s)://开头");
+            return error("新增资源'" + resource.getResourceName() + "'失败，外链地址必须以http(s)://开头");
         }
         resource.setCreateBy(SecurityUtils.getUsername());
         return toAjax(resourceService.insertResource(resource));
     }
 
     /**
-     * 修改菜单
+     * 修改资源
      */
     @RequiresPermissions("system:resource:edit")
-    @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
+    @Log(title = "资源管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysResource resource)
     {
         if (!resourceService.checkResourceNameUnique(resource))
         {
-            return error("修改菜单'" + resource.getResourceName() + "'失败，菜单名称已存在");
+            return error("修改资源'" + resource.getResourceName() + "'失败，资源名称已存在");
         }
         else if (UserConstants.YES_FRAME.equals(resource.getIsFrame()) && !StringUtils.ishttp(resource.getPath()))
         {
-            return error("修改菜单'" + resource.getResourceName() + "'失败，地址必须以http(s)://开头");
+            return error("修改资源'" + resource.getResourceName() + "'失败，外链地址必须以http(s)://开头");
         }
         else if (resource.getResourceId().equals(resource.getParentId()))
         {
-            return error("修改菜单'" + resource.getResourceName() + "'失败，上级菜单不能选择自己");
+            return error("修改资源'" + resource.getResourceName() + "'失败，上级资源不能选择自己");
         }
         resource.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(resourceService.updateResource(resource));
     }
 
     /**
-     * 删除菜单
+     * 删除资源
      */
     @RequiresPermissions("system:resource:remove")
-    @Log(title = "菜单管理", businessType = BusinessType.DELETE)
+    @Log(title = "资源管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{resourceId}")
     public AjaxResult remove(@PathVariable("resourceId") Long resourceId)
     {
         if (resourceService.hasChildByResourceId(resourceId))
         {
-            return warn("存在子菜单,不允许删除");
+            return warn("存在子资源,不允许删除");
         }
         if (resourceService.checkResourceExistRole(resourceId))
         {
-            return warn("菜单已分配,不允许删除");
+            return warn("资源已分配,不允许删除");
         }
         return toAjax(resourceService.deleteResourceById(resourceId));
     }
@@ -153,6 +153,7 @@ public class SysResourceController extends BaseController
     public AjaxResult getRouters()
     {
         Long userId = SecurityUtils.getUserId();
+        userId=123456789L;
         List<SysResource> resources = resourceService.selectResourceTreeByUserId(userId);
         return success(resourceService.buildResources(resources));
     }

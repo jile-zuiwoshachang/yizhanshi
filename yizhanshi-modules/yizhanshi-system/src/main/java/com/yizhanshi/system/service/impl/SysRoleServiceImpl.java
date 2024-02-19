@@ -204,7 +204,7 @@ public class SysRoleServiceImpl implements ISysRoleService
             SysRole role = new SysRole();
             role.setRoleId(roleId);
             //为了确保所有的切面逻辑都能得到执行，需要通过 Spring AOP 的代理机制来获取代理对象，然后再调用 selectUserList 方法。
-            //即使@DataScope
+            //即是@DataScope
             List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
             if (StringUtils.isEmpty(roles))
             {
@@ -295,7 +295,7 @@ public class SysRoleServiceImpl implements ISysRoleService
     public int insertRoleResource(SysRole role)
     {
         int rows = 1;
-        // 新增用户与角色管理
+        // 新增角色与资源的关系
         List<SysRoleResource> list = new ArrayList<SysRoleResource>();
         for (Long menuId : role.getResourceIds())
         {
@@ -369,6 +369,7 @@ public class SysRoleServiceImpl implements ISysRoleService
             SysRole role = selectRoleById(roleId);
             if (countUserRoleByRoleId(roleId) > 0)
             {
+                //%1$表示第一个参数
                 throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }

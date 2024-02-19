@@ -169,8 +169,11 @@ public class SysResourceServiceImpl implements ISysResourceService
         {
             RouterVo router = new RouterVo();
             router.setHidden("1".equals(resource.getVisible()));
+            // 非外链并且是一级目录
             router.setName(getRouteName(resource));
+            // 根据外链内链生成不同的路由地址
             router.setPath(getRouterPath(resource));
+            //
             router.setComponent(getComponent(resource));
             router.setQuery(resource.getQuery());
             router.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon(), StringUtils.equals("1", resource.getIsCache()), resource.getPath()));
@@ -181,6 +184,7 @@ public class SysResourceServiceImpl implements ISysResourceService
                 router.setRedirect("noRedirect");
                 router.setChildren(buildResources(cResources));
             }
+            //内链且为菜单
             else if (isResourceFrame(resource))
             {
                 router.setMeta(null);
@@ -194,6 +198,7 @@ public class SysResourceServiceImpl implements ISysResourceService
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
+            //是顶级菜单且为内链
             else if (resource.getParentId().intValue() == 0 && isInnerLink(resource))
             {
                 router.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon()));

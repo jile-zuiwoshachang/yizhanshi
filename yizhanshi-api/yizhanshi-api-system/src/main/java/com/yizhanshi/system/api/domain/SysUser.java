@@ -86,7 +86,7 @@ public class SysUser extends BaseEntity
     /** 角色组 */
     private Long[] roleIds;
 
-    /** 角色ID */
+    /** 角色ID  用于查询数据和/authUser/allocatedList使用 */
     private Long roleId;
 
     public SysUser()
