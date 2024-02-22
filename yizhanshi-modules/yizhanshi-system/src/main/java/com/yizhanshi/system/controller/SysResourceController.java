@@ -39,7 +39,7 @@ public class SysResourceController extends BaseController
      */
     @RequiresPermissions("system:resource:list")
     @GetMapping("/list")
-    public AjaxResult list(SysResource resource)
+    public AjaxResult list(@RequestBody SysResource resource)
     {
         Long userId = SecurityUtils.getUserId();
         List<SysResource> resources = resourceService.selectResourceList(resource, userId);
@@ -153,7 +153,6 @@ public class SysResourceController extends BaseController
     public AjaxResult getRouters()
     {
         Long userId = SecurityUtils.getUserId();
-        userId=123456789L;
         List<SysResource> resources = resourceService.selectResourceTreeByUserId(userId);
         return success(resourceService.buildResources(resources));
     }

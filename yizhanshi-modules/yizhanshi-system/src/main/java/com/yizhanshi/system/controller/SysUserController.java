@@ -71,7 +71,7 @@ public class SysUserController extends BaseController
      */
     @RequiresPermissions("system:user:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysUser user)
+    public TableDataInfo list(@RequestBody SysUser user)
     {
         startPage();
         List<SysUser> list = userService.selectUserList(user);

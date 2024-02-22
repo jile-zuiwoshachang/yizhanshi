@@ -40,7 +40,7 @@ public class SysDeptController extends BaseController
      */
     @RequiresPermissions("system:dept:list")
     @GetMapping("/list")
-    public AjaxResult list(SysDept dept)
+    public AjaxResult list(@RequestBody SysDept dept)
     {
         List<SysDept> depts = deptService.selectDeptList(dept);
         return success(depts);
@@ -48,6 +48,7 @@ public class SysDeptController extends BaseController
 
     /**
      * 查询部门列表（排除节点）
+     * 从部门列表中移除具有特定 deptId 值或者祖先中包含特定 deptId 值的部门，然后返回剩余的部门列表。
      */
     @RequiresPermissions("system:dept:list")
     @GetMapping("/list/exclude/{deptId}")

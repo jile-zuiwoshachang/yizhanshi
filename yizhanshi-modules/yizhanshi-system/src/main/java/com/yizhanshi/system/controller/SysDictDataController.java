@@ -43,7 +43,7 @@ public class SysDictDataController extends BaseController
 
     @RequiresPermissions("system:dict:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictData dictData)
+    public TableDataInfo list(@RequestBody SysDictData dictData)
     {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);

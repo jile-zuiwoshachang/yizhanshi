@@ -169,12 +169,13 @@ public class SysResourceServiceImpl implements ISysResourceService
         {
             RouterVo router = new RouterVo();
             router.setHidden("1".equals(resource.getVisible()));
-            // 非外链并且是一级目录
+            // 内链并且是顶级菜单设置为空
             router.setName(getRouteName(resource));
-            // 根据外链内链生成不同的路由地址
+            // 内链根据资源类型生成不同的路由地址前缀
             router.setPath(getRouterPath(resource));
-            //
+            // 根据内外链产生layout，innnerLink,parentView
             router.setComponent(getComponent(resource));
+            // 路由参数
             router.setQuery(resource.getQuery());
             router.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon(), StringUtils.equals("1", resource.getIsCache()), resource.getPath()));
             List<SysResource> cResources = resource.getChildren();
@@ -184,7 +185,7 @@ public class SysResourceServiceImpl implements ISysResourceService
                 router.setRedirect("noRedirect");
                 router.setChildren(buildResources(cResources));
             }
-            //内链且为菜单
+            //内链且为顶级菜单
             else if (isResourceFrame(resource))
             {
                 router.setMeta(null);
@@ -198,7 +199,7 @@ public class SysResourceServiceImpl implements ISysResourceService
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
-            //是顶级菜单且为内链
+            // 内链且顶级且为http(s)开头
             else if (resource.getParentId().intValue() == 0 && isInnerLink(resource))
             {
                 router.setMeta(new MetaVo(resource.getResourceName(), resource.getIcon()));
@@ -360,7 +361,7 @@ public class SysResourceServiceImpl implements ISysResourceService
     public String getRouteName(SysResource resource)
     {
         String routerName = StringUtils.capitalize(resource.getPath());
-        // 非外链并且是一级目录（类型为目录）
+        // 内链并且是顶级菜单（类型为菜单）
         if (isResourceFrame(resource))
         {
             routerName = StringUtils.EMPTY;
@@ -377,18 +378,18 @@ public class SysResourceServiceImpl implements ISysResourceService
     public String getRouterPath(SysResource resource)
     {
         String routerPath = resource.getPath();
-        // 内链打开外网方式
+        // 内链并且是菜单和按钮
         if (resource.getParentId().intValue() != 0 && isInnerLink(resource))
         {
             routerPath = innerLinkReplaceEach(routerPath);
         }
-        // 非外链并且是一级目录（类型为目录）
+        // 内链并且是顶级目录（类型为目录）
         if (0 == resource.getParentId().intValue() && UserConstants.TYPE_DIR.equals(resource.getResourceType())
                 && UserConstants.NO_FRAME.equals(resource.getIsFrame()))
         {
             routerPath = "/" + resource.getPath();
         }
-        // 非外链并且是一级目录（类型为菜单）
+        // 内链并且是顶级菜单（类型为菜单）
         else if (isResourceFrame(resource))
         {
             routerPath = "/";
@@ -398,23 +399,29 @@ public class SysResourceServiceImpl implements ISysResourceService
 
     /**
      * 获取组件信息
-     * 
+     * InnerLink 是用于在应用内部导航的链接或路径。
+     * Layout 是用于定义网页布局的组件或模板，通常包含在整个应用的页面中，确保页面的一致性。
+     * ParentView 是在视图层级中用来管理路由视图的父组件，它可能是整个视图层级的根节点。
      * @param resource 菜单信息
      * @return 组件信息
      */
     public String getComponent(SysResource resource)
     {
+        // 默认 layout
         String component = UserConstants.LAYOUT;
         if (StringUtils.isNotEmpty(resource.getComponent()) && !isResourceFrame(resource))
         {
+            // 菜单且不为顶级 或者 菜单且不为内链
             component = resource.getComponent();
         }
         else if (StringUtils.isEmpty(resource.getComponent()) && resource.getParentId().intValue() != 0 && isInnerLink(resource))
         {
+            // 内链且不为顶级且为htpp(s)开头
             component = UserConstants.INNER_LINK;
         }
         else if (StringUtils.isEmpty(resource.getComponent()) && isParentView(resource))
         {
+            // 不是顶级且为目录
             component = UserConstants.PARENT_VIEW;
         }
         return component;
@@ -422,7 +429,7 @@ public class SysResourceServiceImpl implements ISysResourceService
 
     /**
      * 是否为菜单内部跳转
-     * 
+     * 顶级，内链，菜单
      * @param resource 菜单信息
      * @return 结果
      */

@@ -37,7 +37,7 @@ public class SysDictTypeController extends BaseController
 
     @RequiresPermissions("system:dict:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictType dictType)
+    public TableDataInfo list(@RequestBody SysDictType dictType)
     {
         startPage();
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
