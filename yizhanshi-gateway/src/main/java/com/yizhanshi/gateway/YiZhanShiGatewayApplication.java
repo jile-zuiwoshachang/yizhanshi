@@ -1,26 +1,21 @@
-package com.yizhanshi.system;
+package com.yizhanshi.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.yizhanshi.common.security.annotation.EnableCustomConfig;
-import com.yizhanshi.common.security.annotation.EnableRyFeignClients;
-import com.yizhanshi.common.swagger.annotation.EnableCustomSwagger2;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
- * 系统模块
+ * 网关启动程序
  * 
  * @author hejiale
  */
-@EnableCustomConfig
-@EnableCustomSwagger2
-@EnableRyFeignClients
-@SpringBootApplication
-public class RuoYiSystemApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+public class YiZhanShiGatewayApplication
 {
     public static void main(String[] args)
     {
-        SpringApplication.run(RuoYiSystemApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  系统模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
+        SpringApplication.run(YiZhanShiGatewayApplication.class, args);
+        System.out.println("(♥◠‿◠)ﾉﾞ  若依网关启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +

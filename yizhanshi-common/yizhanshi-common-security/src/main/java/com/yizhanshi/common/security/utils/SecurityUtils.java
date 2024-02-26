@@ -32,13 +32,19 @@ public class SecurityUtils
         return SecurityContextHolder.getUserName();
     }
     /**
-     * 获取用户key
+     * 获取用户Type
      */
     public static String getUserType()
     {
         return SecurityContextHolder.getUserType();
     }
-
+    /**
+     * 获取学号
+     */
+    public static String getUserStudentid()
+    {
+        return SecurityContextHolder.getUserStudentid();
+    }
     /**
      * 获取用户key
      */

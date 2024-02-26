@@ -70,6 +70,15 @@ public class SecurityContextHolder
     {
         set(SecurityConstants.DETAILS_USERNAME, username);
     }
+    public static String getUserStudentid()
+    {
+        return get(SecurityConstants.DETAILS_USERSTUDENTID);
+    }
+
+    public static void setUserStudentid(String userStudentid)
+    {
+        set(SecurityConstants.DETAILS_USERSTUDENTID, userStudentid);
+    }
     public static String getUserType()
     {
         return get(SecurityConstants.USER_TYPE);

@@ -13,6 +13,7 @@
         <module>yizhanshi-gen</module>
         <module>yizhanshi-job</module>
         <module>yizhanshi-file</module>
+        <module>yizhanshi-place</module>
     </modules>
 
     <artifactId>bishe-modules</artifactId>

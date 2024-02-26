@@ -231,11 +231,12 @@ public class SysUserController extends BaseController
         //再进行一次安全处理
         //判断用户的角色有无数据权限，且进行拼接，只可访问自己权限下的数据
         userService.checkUserDataScope(user.getUserId());
-        if (!userService.checkUserStudentidUnique(user))
-        {
-            return error("修改用户'" + user.getUserStudentid() + "'失败，学号已存在");
-        }
-        else if (StringUtils.isNotEmpty(user.getUserPhone()) && !userService.checkPhoneUnique(user))
+// 不修改学号，用户名。通过CAS已经得到
+//        if (!userService.checkUserStudentidUnique(user))
+//        {
+//            return error("修改用户'" + user.getUserStudentid() + "'失败，学号已存在");
+//        }
+        if (StringUtils.isNotEmpty(user.getUserPhone()) && !userService.checkPhoneUnique(user))
         {
             return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }

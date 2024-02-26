@@ -40,7 +40,7 @@ public class SysLogininforController extends BaseController
 
     @RequiresPermissions("system:logininfor:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysLogininfor logininfor)
+    public TableDataInfo list(@RequestBody SysLogininfor logininfor)
     {
         startPage();
         List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);

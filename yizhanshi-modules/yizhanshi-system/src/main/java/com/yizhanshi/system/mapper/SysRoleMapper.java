@@ -42,7 +42,7 @@ public interface SysRoleMapper
     public List<Long> selectRoleListByUserId(Long userId);
 
     /**
-     * 通过角色ID查询角色
+     * 通过角色id查询角色
      * 
      * @param roleId 角色ID
      * @return 角色对象信息
@@ -50,13 +50,19 @@ public interface SysRoleMapper
     public SysRole selectRoleById(Long roleId);
 
     /**
-     * 根据用户ID查询角色
+     * 根据用户名称查询角色
      * 
      * @param userName 用户名
      * @return 角色列表
      */
     public List<SysRole> selectRolesByUserName(String userName);
-
+    /**
+     * 根据用户ID查询角色
+     *
+     * @param studentid 用户学号
+     * @return 角色列表
+     */
+    public List<SysRole> selectRolesByStudentid(String studentid);
 
     /**
      * 校验角色名称是否唯一

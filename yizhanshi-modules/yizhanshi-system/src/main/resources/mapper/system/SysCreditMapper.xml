@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.system.mapper.SysCreditMapper">
+
+	<resultMap type="com.yizhanshi.system.api.domain.SysCredit" id="SysCreditResult">
+		<id     property="creditId"       column="credit_id"      />
+		<result property="creditContent"     column="credit_content"    />
+		<result property="creditSource"     column="credit_source"    />
+		<result property="userStudentid"     column="user_studentid"    />
+		<result property="creditNumber"     column="credit_number"    />
+		<result property="adminName"     column="admin_name"    />
+		<result property="status"       column="status"       />
+		<result property="delFlag"      column="del_flag"     />
+		<result property="createBy"     column="create_by"    />
+		<result property="createTime"   column="create_time"  />
+		<result property="updateBy"     column="update_by"    />
+		<result property="updateTime"   column="update_time"  />
+		<result property="remark"       column="remark"       />
+	</resultMap>
+	
+	
+	<sql id="selectCreditVo">
+		select c.credit_id,c.credit_content,c.credit_source,credit_source, c.user_studentid, c.credit_number, c.admin_name,
+		c.status, c.del_flag, c.create_by, c.create_time, c.remark,
+        from system_credit c
+    </sql>
+    
+    <select id="selectCreditList" parameterType="com.yizhanshi.system.api.domain.SysCredit" resultMap="SysCreditResult">
+		select c.credit_id,c.credit_content,c.credit_source,credit_source, c.user_studentid, c.credit_number, c.admin_name,
+		c.status, c.create_by, c.create_time, c.remark
+		where c.del_flag = '0'
+		<if test="creditId != null and creditId != 0">
+			AND c.credit_id = #{creditId}
+		</if>
+		<if test="creditContent != null and creditContent != ''">
+			AND c.credit_content like concat('%', #{creditContent}, '%')
+		</if>
+		<if test="creditSource != null and creditSource != ''">
+			AND c.credit_source = #{creditSource}
+		</if>
+		<if test="userStudentid != null and userStudentid != ''">
+			AND c.user_studentid = #{userStudentid}
+		</if>
+		<if test="adminName != null and adminName != ''">
+			AND c.admin_name = #{adminName}
+		</if>
+		<if test="status != null and status != ''">
+			AND c.status = #{status}
+		</if>
+		<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(c.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+		</if>
+		<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(c.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
+		</if>
+	</select>
+
+	<insert id="insertCredit" parameterType="com.yizhanshi.system.api.domain.SysCredit" useGeneratedKeys="true" keyProperty="userId">
+	insert into system_credit(
+	<if test="creditId != null and creditId != 0">credit_id,</if>
+	<if test="creditContent != null and creditContent != ''">credit_content,</if>
+	<if test="creditSource != null and creditSource != ''">credit_source,</if>
+	<if test="userStudentid != null and userStudentid != ''">user_studentid,</if>
+	<if test="creditNumber != null and creditNumber != 0">credit_number,</if>
+	<if test="adminName != null and adminName != ''">admin_name,</if>
+	<if test="status != null and status != ''">status,</if>
+	<if test="createBy != null and createBy != ''">create_by,</if>
+	<if test="remark != null and remark != ''">remark,</if>
+	create_time
+	)values(
+	<if test="creditId != null and creditId != 0">#{creditId},</if>
+	<if test="creditContent != null and creditContent != ''">#{creditContent},</if>
+	<if test="creditSource != null and creditSource != ''">#{creditSource},</if>
+	<if test="userStudentid != null and userStudentid != ''">#{userStudentid},</if>
+	<if test="creditNumber != null and creditNumber != 0">#{creditNumber},</if>
+	<if test="adminName != null and adminName != ''">#{adminName},</if>
+	<if test="status != null and status != ''">#{status},</if>
+	<if test="createBy != null and createBy != ''">#{createBy},</if>
+	<if test="remark != null and remark != ''">#{remark},</if>
+	sysdate()
+	)
+	</insert>
+
+	<delete id="deleteCreditByIds" parameterType="Long">
+		update system_credit set del_flag = '2' where credit_id in
+		<foreach collection="array" item="creditId" open="(" separator="," close=")">
+			#{creditId}
+		</foreach>
+	</delete>
+</mapper> 

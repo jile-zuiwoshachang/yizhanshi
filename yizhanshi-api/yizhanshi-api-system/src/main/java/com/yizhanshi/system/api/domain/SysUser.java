@@ -26,7 +26,7 @@ public class SysUser extends BaseEntity
     private Long userId;
 
     /** 学号 */
-    @Excel(name = "用户学号", type = Type.IMPORT)
+    @Excel(name = "用户学号", type = Type.EXPORT)
     private String userStudentid;
     /** 学号 */
     @Excel(name = "用户性别，0男 1女 2未知")
@@ -77,7 +77,7 @@ public class SysUser extends BaseEntity
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
-    /** 删除标志（0代表存在 1代表删除） */
+    /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
     /** 角色对象 */

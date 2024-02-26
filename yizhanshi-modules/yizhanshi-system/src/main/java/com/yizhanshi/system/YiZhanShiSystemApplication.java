@@ -1,23 +1,26 @@
-package com.yizhanshi.auth;
+package com.yizhanshi.system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import com.yizhanshi.common.security.annotation.EnableCustomConfig;
 import com.yizhanshi.common.security.annotation.EnableRyFeignClients;
+import com.yizhanshi.common.swagger.annotation.EnableCustomSwagger2;
 
 /**
- * 认证授权中心
+ * 系统模块
  * 
  * @author hejiale
  */
+@EnableCustomConfig
+@EnableCustomSwagger2
 @EnableRyFeignClients
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
-public class RuoYiAuthApplication
+@SpringBootApplication
+public class YiZhanShiSystemApplication
 {
     public static void main(String[] args)
     {
-        SpringApplication.run(RuoYiAuthApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  认证授权中心启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
+        SpringApplication.run(YiZhanShiSystemApplication.class, args);
+        System.out.println("(♥◠‿◠)ﾉﾞ  系统模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +

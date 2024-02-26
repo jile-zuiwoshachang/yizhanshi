@@ -50,11 +50,10 @@ public class SysProfileController extends BaseController
     @GetMapping
     public AjaxResult profile()
     {
-        String username = SecurityUtils.getUsername();
-        SysUser user = userService.selectUserByUserName(username);
+        String userStudentid= SecurityUtils.getUserStudentid();
+        SysUser user = userService.selectUserByUserStudentid(userStudentid);
         AjaxResult ajax = AjaxResult.success(user);
-        ajax.put("roleGroup", userService.selectUserRoleGroup(username));
-        ajax.put("postGroup", userService.selectUserPostGroup(username));
+        ajax.put("roleGroup", userService.selectUserRoleGroup(userStudentid));
         return ajax;
     }
 
@@ -67,7 +66,12 @@ public class SysProfileController extends BaseController
     {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         SysUser currentUser = loginUser.getSysUser();
-
+        currentUser.setUserSex(user.getUserSex());
+        currentUser.setUserCampus(user.getUserCampus());
+        currentUser.setUserDescription(user.getUserDescription());
+        currentUser.setUserPicture1(user.getUserPicture1());
+        currentUser.setUserPicture2(user.getUserPicture2());
+        currentUser.setUserPicture3(user.getUserPicture3());
         currentUser.setUserEmail(user.getUserEmail());
         currentUser.setUserPhone(user.getUserPhone());
         currentUser.setUserOrganization(user.getUserOrganization());

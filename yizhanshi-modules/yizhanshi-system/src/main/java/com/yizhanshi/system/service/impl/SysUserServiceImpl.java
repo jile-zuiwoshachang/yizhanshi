@@ -140,13 +140,13 @@ public class SysUserServiceImpl implements ISysUserService
     /**
      * 查询用户所属角色组
      * 
-     * @param userName 用户名
+     * @param userStudentid 用户学号
      * @return 结果
      */
     @Override
-    public String selectUserRoleGroup(String userName)
+    public String selectUserRoleGroup(String userStudentid)
     {
-        List<SysRole> list = roleMapper.selectRolesByUserName(userName);
+        List<SysRole> list = roleMapper.selectRolesByStudentid(userStudentid);
         if (CollectionUtils.isEmpty(list))
         {
             return StringUtils.EMPTY;

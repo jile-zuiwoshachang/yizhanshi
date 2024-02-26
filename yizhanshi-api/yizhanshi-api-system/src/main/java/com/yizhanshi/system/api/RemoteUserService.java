@@ -15,7 +15,7 @@ import com.yizhanshi.system.api.model.LoginUser;
 
 /**
  * 用户服务
- * 
+ * 方便任何模块调用用户服务
  * @author hejiale
  */
 @FeignClient(contextId = "remoteUserService", value = ServiceNameConstants.SYSTEM_SERVICE, fallbackFactory = RemoteUserFallbackFactory.class)

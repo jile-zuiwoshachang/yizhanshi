@@ -35,7 +35,7 @@ public class SysOperlogController extends BaseController
 
     @RequiresPermissions("system:operlog:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysOperLog operLog)
+    public TableDataInfo list(@RequestBody SysOperLog operLog)
     {
         startPage();
         List<SysOperLog> list = operLogService.selectOperLogList(operLog);

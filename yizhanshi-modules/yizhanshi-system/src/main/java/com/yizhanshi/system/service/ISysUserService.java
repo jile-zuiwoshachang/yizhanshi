@@ -57,12 +57,12 @@ public interface ISysUserService
     public SysUser selectUserById(Long userId);
 
     /**
-     * 根据用户ID查询用户所属角色组
+     * 根据用户学号查询用户所属角色组
      * 
-     * @param userName 用户名
+     * @param userStudentid 用户学号
      * @return 结果
      */
-    public String selectUserRoleGroup(String userName);
+    public String selectUserRoleGroup(String userStudentid);
 
     /**
      * 根据用户ID查询用户所属岗位组

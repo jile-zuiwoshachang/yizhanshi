@@ -138,4 +138,11 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 修改用户信誉分
+     * @param number
+     * @return
+     */
+    public int updateUserScore(int number,String userStudentid);
 }

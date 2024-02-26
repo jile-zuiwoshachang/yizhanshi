@@ -19,7 +19,7 @@ import com.yizhanshi.common.core.utils.uuid.Seq;
 /**
  * 文件上传工具类
  * 
- * @author ruoyi
+ * @author hejaile
  */
 public class FileUploadUtils
 {

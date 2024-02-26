@@ -40,7 +40,7 @@ public class SysConfigController extends BaseController
      */
     @RequiresPermissions("system:config:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysConfig config)
+    public TableDataInfo list(@RequestBody SysConfig config)
     {
         startPage();
         List<SysConfig> list = configService.selectConfigList(config);

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.place.mapper.PlaceMapper">
+
+    <resultMap type="com.yizhanshi.place.domain.Place" id="PlaceResult">
+        <id     property="placeId"       column="place_id"      />
+        <result property="placeName"       column="place_name"      />
+        <result property="placeCampus"     column="place_campus"    />
+        <result property="placeDescription"     column="place_description"    />
+        <result property="placeCapacity"     column="place_capacity"    />
+        <result property="managerName"     column="manager_name"    />
+        <result property="managerPhone"     column="manager_phone"    />
+        <result property="placePicture1"     column="place_picture1"    />
+        <result property="placePicture2"     column="place_picture2"    />
+        <result property="placePicture3"        column="place_picture3"        />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+    </resultMap>
+
+    <sql id="selectPlaceVo">
+        select p.place_id, p.place_name, p.place_campus, p.place_description, p.place_capacity,
+        p.manager_name, p.manager_phone, p.place_picture1, p.place_picture2, p.place_picture3,
+        p.status, p.del_flag,p.create_by, p.create_time, p.remark
+        from business_place p 
+    </sql>
+    <select id="selectPlaceList" parameterType="com.yizhanshi.place.domain.Place" resultMap="PlaceResult">
+        select p.place_id, p.place_name, p.place_campus, p.place_description, p.place_capacity,
+        p.manager_name, p.manager_phone, p.place_picture1, p.place_picture2, p.place_picture3,
+        p.status, p.create_by, p.create_time, p.remark from business_place p
+        where p.del_flag = '0'
+        <if test="placeId != null and placeId != 0">
+            AND p.place_id = #{placeId}
+        </if>
+        <if test="placeName != null and placeName != ''">
+            AND p.place_name like concat('%', #{placeName}, '%')
+        </if>
+        <if test="placeCampus != null and placeCampus != ''">
+            AND p.place_campus like concat('%', #{placeCampus}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND p.status = #{status}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(p.create_time,'%y%m%d') >= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(p.create_time,'%y%m%d') <= date_format(#{params.endTime},'%y%m%d')
+        </if>
+    </select>
+
+    <insert id="insertPlace" parameterType="com.yizhanshi.place.domain.Place" useGeneratedKeys="true" keyProperty="placeId">
+        insert into business_place (
+        <if test="placeId != null and placeId != 0">place_id,</if>
+        <if test="placeName != null and placeName != 0">place_name,</if>
+        <if test="placeCampus != null and placeCampus != ''">place_campus,</if>
+        <if test="placeDescription != null and placeDescription != ''">place_description,</if>
+        <if test="placeCapacity != null and placeCapacity != ''">place_capacity,</if>
+        <if test="managerName != null and managerName != ''">manager_name,</if>
+        <if test="managerPhone != null and managerPhone != ''">manager_phone,</if>
+        <if test="placePicture1 != null and placePicture1 != ''">place_picture1,</if>
+        <if test="placePicture2 != null and placePicture2 != ''">place_picture2,</if>
+        <if test="placePicture3 != null and placePicture3 != ''">place_picture3,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="placeId != null and placeId != 0">#{placeId},</if>
+        <if test="placeName != null and placeName != 0">#{placeName},</if>
+        <if test="placeCampus != null and placeCampus != ''">#{placeCampus},</if>
+        <if test="placeDescription != null and placeDescription != ''">#{placeDescription},</if>
+        <if test="placeCapacity != null and placeCapacity != ''">#{placeCapacity},</if>
+        <if test="managerName != null and managerName != ''">#{managerName},</if>
+        <if test="managerPhone != null and managerPhone != ''">#{managerPhone},</if>
+        <if test="placePicture1 != null and placePicture1 != ''">#{placePicture1},</if>
+        <if test="placePicture2 != null and placePicture2 != ''">#{placePicture2},</if>
+        <if test="placePicture3 != null and placePicture3 != ''">#{placePicture3},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+
+
+
+</mapper>

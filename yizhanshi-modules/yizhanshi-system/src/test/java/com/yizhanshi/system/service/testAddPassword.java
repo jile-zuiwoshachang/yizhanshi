@@ -14,4 +14,9 @@ public class testAddPassword {
         String pass= SecurityUtils.encryptPassword("123456");
         System.out.println(pass);
     }
+    @Test
+    public void testzengjianNumber(){
+        String pass= SecurityUtils.encryptPassword("123456");
+        System.out.println(pass);
+    }
 }
