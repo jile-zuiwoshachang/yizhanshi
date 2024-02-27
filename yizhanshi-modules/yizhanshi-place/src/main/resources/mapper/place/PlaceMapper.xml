@@ -48,11 +48,16 @@
             AND p.status = #{status}
         </if>
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(p.create_time,'%y%m%d') >= date_format(#{params.beginTime},'%y%m%d')
+            AND date_format(p.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
         </if>
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(p.create_time,'%y%m%d') <= date_format(#{params.endTime},'%y%m%d')
+            AND date_format(p.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
+    </select>
+    <select id="selectPlaceById">
+        <include refid="selectPlaceVo">
+        </include>
+        where p.place_id=#{placeId}
     </select>
 
     <insert id="insertPlace" parameterType="com.yizhanshi.place.domain.Place" useGeneratedKeys="true" keyProperty="placeId">
@@ -89,6 +94,31 @@
         )
     </insert>
 
+    <update id="updatePlace" parameterType="com.yizhanshi.place.domain.Place">
+    update business_place
+    <set>
+        <if test="placeName != null and placeName != 0">place_name=#{placeName},</if>
+        <if test="placeCampus != null and placeCampus != ''">place_campus=#{placeCampus},</if>
+        <if test="placeDescription != null and placeDescription != ''">place_description=#{placeDescription},</if>
+        <if test="placeCapacity != null and placeCapacity != ''">place_capacity=#{placeCapacity},</if>
+        <if test="managerName != null and managerName != ''">manager_name=#{managerName},</if>
+        <if test="managerPhone != null and managerPhone != ''">manager_phone=#{managerPhone},</if>
+        <if test="placePicture1 != null and placePicture1 != ''">place_picture1=#{placePicture1},</if>
+        <if test="placePicture2 != null and placePicture2 != ''">place_picture2=#{placePicture2},</if>
+        <if test="placePicture3 != null and placePicture3 != ''">place_picture3=#{placePicture3},</if>
+        <if test="status != null and status != ''">status=#{status},</if>
+        <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+        <if test="remark != null and remark != ''">remark=#{remark},</if>
+        update_time = sysdate()
+    </set>
+        where place_id = #{placeId}
+    </update>
+    <delete id="deletePlace" parameterType="Long">
+        update business_place set del_flag = '2' where place_id in
+        <foreach collection="array" item="placeId" open="(" separator="," close=")">
+            #{placeId}
+        </foreach>
+    </delete>
 
 
 

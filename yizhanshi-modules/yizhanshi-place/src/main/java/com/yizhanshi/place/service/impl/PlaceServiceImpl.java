@@ -36,11 +36,29 @@ public class PlaceServiceImpl  implements IPlaceService {
         return placeMapper.selectPlaceList(place);
     }
     @Override
+    public Place selectPlaceById(Long placeId)
+    {
+        return placeMapper.selectPlaceById(placeId);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public int insertPlace(Place place){
         String userName= SecurityUtils.getUsername();
         place.setCreateBy(userName);
         int rows = placeMapper.insertPlace(place);
+        return rows;
+    }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updatePlace(Place place){
+        int rows = placeMapper.updatePlace(place);
+        return rows;
+    }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int  deletePlace(Long[] placeIds){
+        int rows = placeMapper.deletePlace(placeIds);
         return rows;
     }
 

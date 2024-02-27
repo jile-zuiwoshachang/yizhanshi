@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.place.mapper.TimeMapper">
+
+    <resultMap type="com.yizhanshi.place.domain.Time" id="TimeResult">
+        <id     property="timeId"       column="time_id"      />
+        <result property="timeName"       column="time_name"      />
+        <result property="timeType"     column="time_type"    />
+        <result property="status"     column="status"    />
+    </resultMap>
+
+
+    <select id="selectTimeList" parameterType="com.yizhanshi.place.domain.Time" resultMap="TimeResult">
+        select t.time_id,t.time_name,t.time_type,t.status
+        from business_time t
+       <where>
+        <if test="timeId != null and timeId != 0">
+            AND t.time_id = #{timeId}
+        </if>
+        <if test="timeName != null and timeName != ''">
+            AND t.time_name like concat('%', #{timeName}, '%')
+        </if>
+        <if test="timeType != null and timeType != ''">
+            AND t.time_type like concat('%', #{timeType}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND t.status = #{status}
+        </if>
+        </where>
+    </select>
+    <select id="selectTimeByType" parameterType="java.lang.String" resultMap="TimeResult">
+        select t.time_id,t.time_name,t.time_type,t.status
+        from business_time t
+        where t.time_type=#{timeType}
+    </select>
+    <select id="selectTrueTime" resultMap="TimeResult">
+        select t.time_id,t.time_name,t.time_type
+        from business_time t
+        where t.status='0'
+    </select>
+
+    <insert id="insertTime" parameterType="com.yizhanshi.place.domain.Time" useGeneratedKeys="true" keyProperty="timeId">
+        insert into business_time (
+        <if test="timeId != null and timeId != 0">time_id,</if>
+        <if test="timeName != null and timeName != ''">time_name,</if>
+        <if test="timeType != null and timeType != ''">time_type,</if>
+        <if test="status != null and status != ''">status,</if>
+        )values(
+        <if test="timeId != null and timeId != 0">#{timeId},</if>
+        <if test="timeName != null and timeName != ''">#{timeName},</if>
+        <if test="timeType != null and timeType != ''">#{timeType},</if>
+        <if test="status != null and status != ''">#{status}</if>
+        )
+    </insert>
+
+    <update id="updateTime" parameterType="com.yizhanshi.place.domain.Time">
+        update business_time
+        <set>
+            <if test="timeName != null and timeName != 0">time_name=#{timeName},</if>
+            <if test="timeType != null and timeType != ''">time_type=#{timeType},</if>
+            <if test="status != null and status != ''">status=#{status}</if>
+        </set>
+        where time_id = #{timeId}
+    </update>
+    <delete id="deleteTime" parameterType="String">
+        delete  from business_time  where time_type=#{timeType}
+    </delete>
+    <update id="updateStatus" parameterType="com.yizhanshi.place.domain.Time">
+    update business_time
+        set status=#{status}  where time_type=#{timeType}
+    </update>
+
+
+</mapper>

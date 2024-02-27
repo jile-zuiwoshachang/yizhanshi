@@ -2,6 +2,12 @@ package com.yizhanshi.place.domain;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.annotation.Excel.ColumnType;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
+import com.yizhanshi.common.core.xss.Xss;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 场地信息表
@@ -18,8 +24,8 @@ public class Place extends BaseEntity {
     @Excel(name = "场地名称")
     private String placeName;
 
-    /** 场地位置（校区-楼宇） */
-    @Excel(name = "场地位置（校区-楼宇）")
+    /** 场地位置（校区） */
+    @Excel(name = "场地位置（校区）")
     private String placeCampus;
     @Excel(name = "场地描述")
     private String placeDescription;
@@ -41,8 +47,7 @@ public class Place extends BaseEntity {
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    /** true可预约 false 不可预约 **/
-    private Boolean flag;
+
 
     public Long getPlaceId() {
         return placeId;
@@ -51,7 +56,9 @@ public class Place extends BaseEntity {
     public void setPlaceId(Long placeId) {
         this.placeId = placeId;
     }
-
+    @Xss(message = "场地名称不能包含脚本字符")
+    @NotBlank(message = "场地名称不能为空")
+    @Size(min = 0, max = 100, message = "场地名称长度不能超过100个字符")
     public String getPlaceName() {
         return placeName;
     }
@@ -91,7 +98,7 @@ public class Place extends BaseEntity {
     public void setManagerName(String managerName) {
         this.managerName = managerName;
     }
-
+    @Size(min = 0, max = 11, message = "用户电话长度不能超过11个字符")
     public String getManagerPhone() {
         return managerPhone;
     }
@@ -138,5 +145,28 @@ public class Place extends BaseEntity {
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("placeId", placeId)
+                .append("placeName", placeName)
+                .append("placeCampus", placeCampus)
+                .append("placeDescription", placeDescription)
+                .append("placeCapacity", placeCapacity)
+                .append("managerName", managerName)
+                .append("managerPhone", managerPhone)
+                .append("placePicture1", placePicture1)
+                .append("placePicture2", placePicture2)
+                .append("placePicture3", placePicture3)
+                .append("status", status)
+                .append("delFlag", delFlag)
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .toString();
     }
 }

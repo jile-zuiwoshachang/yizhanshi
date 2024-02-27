@@ -1,0 +1,62 @@
+package com.yizhanshi.place.mapper;
+
+import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.domain.PlaceApply;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 场地申请表 数据层
+ *
+ * @author  hejiale
+ */
+public  interface PlaceApplyMapper {
+    /**
+     * 根据条件分页查询场地申请列表
+     *
+     * @param placeApply 场地申请信息
+     * @return 场地申请信息集合信息
+     */
+    public List<PlaceApply> selectPlaceApplyList(PlaceApply placeApply);
+
+    /**
+     * 新增场地信息
+     * @param place
+     * @return
+     */
+    public int insertPlace(Place place);
+    /**
+     * 修改场地申请息
+     * @param placeApply
+     * @return
+     */
+    public int updatePlaceApply(PlaceApply placeApply);
+    /**
+     * 删除场地申请息
+     * @param placeApplyIds
+     * @return
+     */
+    public int deletePlaceApply(Long[] placeApplyIds);
+    /**
+     * 新增场地申请息
+     * @param placeApply
+     * @return
+     */
+    public int insertPlaceApply(PlaceApply placeApply);
+    /**
+     * 查看该场地有多少个被预约记录
+     */
+    public List<PlaceApply> selectByPlaceIds(Long[] placeIds);
+    /**
+     * 根据id查询具体信息
+     */
+    public List<PlaceApply> selectByApplyIds(Long[] placeApplyIds);
+    /**
+     * 根据查询条件，获得当天的场地申请记录
+     */
+    public List<PlaceApply> selectAllPlace(Long placeId, Date chooseDay);
+
+
+}

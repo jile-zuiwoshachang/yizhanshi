@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.place.mapper.PlaceApplyMapper">
+
+    <resultMap type="com.yizhanshi.place.domain.PlaceApply" id="PlaceApplyResult">
+        <id     property="applyId"       column="apply_id"      />
+        <result property="applyName"       column="apply_name"      />
+        <result property="userStudentid"       column="user_studentid"      />
+        <result property="placeId"     column="place_id"    />
+        <result property="instructorName"     column="instructor_name"    />
+        <result property="instructorOrgnization"     column="instructor_orgnization"    />
+        <result property="instructorPhone"     column="instructor_phone"    />
+        <result property="instructorStudentid"     column="instructor_studentid"    />
+        <result property="applyDay"     column="apply_day"    />
+        <result property="applyStartTime"     column="apply_start_time"    />
+        <result property="applyEndTime"        column="apply_end_time"        />
+        <result property="applyNumber"        column="apply_number"        />
+        <result property="reasonId"        column="reason_id"        />
+        <result property="applyOrganization"        column="apply_organization"        />
+        <result property="applyContent"        column="apply_content"        />
+        <result property="applyAdmin1"        column="apply_admin1"        />
+        <result property="applyAdmin2"        column="apply_admin2"        />
+        <result property="refuseReason"        column="refuse_reason"        />
+        <result property="recallReason"        column="recall_reason"        />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+        <collection  property="places"   javaType="com.yizhanshi.place.domain.Place"  resultMap="PlaceResult" />
+        <collection  property="placeReasons"   javaType="com.yizhanshi.place.domain.PlaceReason"  resultMap="PlaceReasonResult" />
+    </resultMap>
+    <resultMap id="PlaceResult" type="com.yizhanshi.place.domain.Place">
+        <id     property="placeId"       column="place_id"        />
+        <result property="placeName"     column="place_name"      />
+        <result property="placeCampus"      column="place_campus"       />
+        <result property="placeCapacity"     column="place_capacity"      />
+        <result property="status"       column="status"    />
+    </resultMap>
+    <resultMap id="PlaceReasonResult" type="com.yizhanshi.place.domain.PlaceReason">
+        <id     property="reasonId"       column="reason_id"        />
+        <result property="reasonName"     column="reason_name"      />
+        <result property="reasonType"      column="reason_type"       />
+    </resultMap>
+    <sql id="selectPlaceApplyVo">
+        select pa.apply_id, pa.apply_name, pa.user_studentid,pa.place_id,pa.instructor_name,
+        pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,pa.apply_day,
+        pa.apply_start_time,pa.apply_end_time,pa.apply_number,pa.reason_id,pa.apply_organization,
+        pa.apply_content,pa.apply_admin1,pa.apply_admin2,pa.refuse_reason,pa.recall_reason,
+        pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
+        p.place_id,p.place_name,p.place_campus,p.place_description,p.place_capacity,p.status,
+        pr.reason_id,pr.reason_name,pr.reason_type
+        from business_place_apply pa
+        left join business_place p on pa.place_id=p.place_id
+        left join business_place_reason pr on pa.reason_id=pr.reason_id
+    </sql>
+    <select id="selectPlaceApplyList" parameterType="com.yizhanshi.place.domain.PlaceApply" resultMap="PlaceApplyResult">
+        select pa.apply_id, pa.apply_name, pa.user_studentid,pa.place_id,pa.instructor_name,
+        pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,pa.apply_day,
+        pa.apply_start_time,pa.apply_end_time,pa.apply_number,pa.reason_id,pa.apply_organization,
+        pa.apply_content,pa.apply_admin1,pa.apply_admin2,pa.refuse_reason,pa.recall_reason,
+        pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
+        p.place_id,p.place_name,p.place_campus,p.place_description,p.place_capacity,p.status,
+        pr.reason_id,pr.reason_name,pr.reason_type
+        from business_place_apply pa
+        left join business_place p on pa.place_id=p.place_id
+        left join business_place_reason pr on pa.reason_id=pr.reason_id
+        where pa.del_flag = '0'
+        <if test="applyId != null and applyId != 0">
+            AND pa.apply_id = #{applyId}
+        </if>
+        <if test="applyName != null and applyName != ''">
+            AND pa.apply_name like concat('%', #{applyName}, '%')
+        </if>
+        <if test="userStudentid != null and useSstudentid != ''">
+            AND pa.userStudentid like concat('%', #{userStudentid}, '%')
+        </if>
+        <if test="placeName != null and placeName != ''">
+            AND p.place_name like concat('%', #{placeName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND pa.status = #{status}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(pa.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(pa.create_time,'%Y%m%d')  &lt;= date_format(#{params.endTime},'%Y%m%d')
+        </if>
+    </select>
+
+    <insert id="insertPlace" parameterType="com.yizhanshi.place.domain.Place" useGeneratedKeys="true" keyProperty="placeId">
+        insert into business_place (
+        <if test="placeId != null and placeId != 0">place_id,</if>
+        <if test="placeName != null and placeName != 0">place_name,</if>
+        <if test="placeCampus != null and placeCampus != ''">place_campus,</if>
+        <if test="placeDescription != null and placeDescription != ''">place_description,</if>
+        <if test="placeCapacity != null and placeCapacity != ''">place_capacity,</if>
+        <if test="managerName != null and managerName != ''">manager_name,</if>
+        <if test="managerPhone != null and managerPhone != ''">manager_phone,</if>
+        <if test="placePicture1 != null and placePicture1 != ''">place_picture1,</if>
+        <if test="placePicture2 != null and placePicture2 != ''">place_picture2,</if>
+        <if test="placePicture3 != null and placePicture3 != ''">place_picture3,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="placeId != null and placeId != 0">#{placeId},</if>
+        <if test="placeName != null and placeName != 0">#{placeName},</if>
+        <if test="placeCampus != null and placeCampus != ''">#{placeCampus},</if>
+        <if test="placeDescription != null and placeDescription != ''">#{placeDescription},</if>
+        <if test="placeCapacity != null and placeCapacity != ''">#{placeCapacity},</if>
+        <if test="managerName != null and managerName != ''">#{managerName},</if>
+        <if test="managerPhone != null and managerPhone != ''">#{managerPhone},</if>
+        <if test="placePicture1 != null and placePicture1 != ''">#{placePicture1},</if>
+        <if test="placePicture2 != null and placePicture2 != ''">#{placePicture2},</if>
+        <if test="placePicture3 != null and placePicture3 != ''">#{placePicture3},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updatePlaceApply" parameterType="com.yizhanshi.place.domain.PlaceApply">
+    update business_place_apply
+    <set>
+        <if test="applyName != null and applyName != ''">apply_name=#{applyName},</if>
+        <if test="userStudentid != null and userStudentid != ''">user_studentid=#{userStudentid},</if>
+        <if test="placeId != null and placeId != 0">place_id=#{placeId},</if>
+        <if test="instructorName != null and instructorName != ''">instructor_name=#{instructorName},</if>
+        <if test="instructorStudentid != null and instructorStudentid != ''">instructor_studentid=#{instructorStudentid},</if>
+        <if test="instructorOrgnization != null and instructorOrgnization != ''">instructor_orgnization=#{instructorOrgnization},</if>
+        <if test="instructorPhone != null and instructorPhone != ''">instructor_phone=#{instructorPhone},</if>
+        <if test="applyDay != null and applyDay != ''">apply_day=#{applyDay},</if>
+        <if test="applyStartTime != null and applyStartTime != ''">apply_start_time=#{applyStartTime},</if>
+        <if test="applyEndTime != null and applyEndTime != ''">apply_end_time=#{applyEndTime},</if>
+        <if test="applyNumber != null and applyNumber != 0">apply_number=#{applyNumber},</if>
+        <if test="reasonId != null and reasonId != 0">reason_id=#{reasonId},</if>
+        <if test="applyContent != null and applyContent != ''">apply_content=#{applyContent},</if>
+        <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1=#{applyAdmin1},</if>
+        <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2=#{applyAdmin2},</if>
+        <if test="refuseReason != null and refuseReason != ''">refuse_reason=#{refuseReason},</if>
+        <if test="recallReason != null and recallReason != ''">recall_reason=#{recallReason},</if>
+        <if test="status != null and status != ''">status=#{status},</if>
+        <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+        <if test="remark != null and remark != ''">remark=#{remark},</if>
+        update_time = sysdate()
+    </set>
+        where apply_id = #{applyId}
+    </update>
+    <delete id="deletePlaceApply" parameterType="Long">
+        update business_place_apply set del_flag = '2' where apply_id in
+        <foreach collection="array" item="applyId" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </delete>
+    <insert id="insertPlaceApply" parameterType="com.yizhanshi.place.domain.PlaceApply" useGeneratedKeys="true" keyProperty="userId">
+        insert into business_place_apply(
+            <if test="applyId != null and applyId != ''">apply_id,</if>
+            <if test="applyName != null and applyName != ''">apply_name,</if>
+            <if test="userStudentid != null and userStudentid != ''">user_studentid,</if>
+            <if test="placeId != null and placeId != 0">place_id,</if>
+            <if test="instructorName != null and instructorName != ''">instructor_name,</if>
+            <if test="instructorStudentid != null and instructorStudentid != ''">instructor_studentid,</if>
+            <if test="instructorOrgnization != null and instructorOrgnization != ''">instructor_orgnization,</if>
+            <if test="instructorPhone != null and instructorPhone != ''">instructor_phone,</if>
+            <if test="applyDay != null and applyDay != ''">apply_day,</if>
+            <if test="applyStartTime != null and applyStartTime != ''">apply_start_time,</if>
+            <if test="applyEndTime != null and applyEndTime != ''">apply_end_time,</if>
+            <if test="applyNumber != null and applyNumber != 0">apply_number,</if>
+            <if test="reasonId != null and reasonId != 0">reason_id,</if>
+            <if test="applyContent != null and applyContent != ''">apply_content,</if>
+            <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1,</if>
+            <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2,</if>
+            <if test="refuseReason != null and refuseReason != ''">refuse_reason,</if>
+            <if test="recallReason != null and recallReason != ''">recall_reason,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            create_time
+        )values(
+        <if test="applyId != null and applyId != ''">#{applyId},</if>
+        <if test="applyName != null and applyName != ''">#{applyName},</if>
+        <if test="userStudentid != null and userStudentid != ''">#{userStudentid},</if>
+        <if test="placeId != null and placeId != 0">#{placeId},</if>
+        <if test="instructorName != null and instructorName != ''">#{instructorName},</if>
+        <if test="instructorStudentid != null and instructorStudentid != ''">#{instructorStudentid},</if>
+        <if test="instructorOrgnization != null and instructorOrgnization != ''">#{instructorOrgnization},</if>
+        <if test="instructorPhone != null and instructorPhone != ''">#{instructorPhone},</if>
+        <if test="applyDay != null and applyDay != ''">#{applyDay},</if>
+        <if test="applyStartTime != null and applyStartTime != ''">#{applyStartTime},</if>
+        <if test="applyEndTime != null and applyEndTime != ''">#{applyEndTime},</if>
+        <if test="applyNumber != null and applyNumber != 0">#{applyNumber},</if>
+        <if test="reasonId != null and reasonId != 0">#{reasonId},</if>
+        <if test="applyContent != null and applyContent != ''">#{applyContent},</if>
+        <if test="applyAdmin1 != null and applyAdmin1 != ''">#{applyAdmin1},</if>
+        <if test="applyAdmin2 != null and applyAdmin2 != ''">#{applyAdmin2},</if>
+        <if test="refuseReason != null and refuseReason != ''">#{refuseReason},</if>
+        <if test="recallReason != null and recallReason != ''">#{recallReason},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <select id="selectByPlaceIds" parameterType="Long" resultMap="PlaceApplyResult">
+        <include refid="selectPlaceApplyVo"/>
+        where pa.place_id  in
+        <foreach collection="array" item="placeId" open="(" separator="," close=")">
+        #{placeId}
+        </foreach>
+    </select>
+    <select id="selectByApplyIds" parameterType="Long" resultMap="PlaceApplyResult">
+        <include refid="selectPlaceApplyVo"/>
+        where pa.apply_id  in
+        <foreach collection="array" item="applyId" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </select>
+    <select id="selectAllPlace" parameterType="Long" resultMap="PlaceApplyResult">
+        <include refid="selectPlaceApplyVo"/>
+        where pa.place_id  = #{placeId}
+         AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d')
+    </select>
+
+
+</mapper>

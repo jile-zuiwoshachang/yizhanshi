@@ -2,6 +2,13 @@ package com.yizhanshi.system.api.domain;
 
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
+import com.yizhanshi.common.core.xss.Xss;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 信誉对象 sys_credit
@@ -33,6 +40,15 @@ public class SysCredit extends BaseEntity {
     private String status;
     @Excel(name = "删除标志（0存在 1删除）")
     private String delFlag;
+    public SysCredit()
+    {
+
+    }
+
+    public SysCredit(Long creditId)
+    {
+        this.creditId = creditId;
+    }
 
     public Long getCreditId() {
         return creditId;
@@ -65,7 +81,7 @@ public class SysCredit extends BaseEntity {
     public void setUserStudentid(String userStudentid) {
         this.userStudentid = userStudentid;
     }
-
+    @NotNull(message = "信誉分数不可为空")
     public int getCreditNumber() {
         return creditNumber;
     }
@@ -73,7 +89,9 @@ public class SysCredit extends BaseEntity {
     public void setCreditNumber(int creditNumber) {
         this.creditNumber = creditNumber;
     }
-
+    @Xss(message = "用户姓名不能包含脚本字符")
+    @NotBlank(message = "用户姓名不能为空")
+    @Size(min = 0, max = 100, message = "用户姓名长度不能超过100个字符")
     public String getAdminName() {
         return adminName;
     }
@@ -96,5 +114,24 @@ public class SysCredit extends BaseEntity {
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("creditId", getCreditId())
+                .append("creditContent", getCreditContent())
+                .append("creditSource", getCreditSource())
+                .append("userStudentid", getUserStudentid())
+                .append("creditNumber", getCreditNumber())
+                .append("adminName", getAdminName())
+                .append("status", getStatus())
+                .append("delFlag", getDelFlag())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .toString();
     }
 }
