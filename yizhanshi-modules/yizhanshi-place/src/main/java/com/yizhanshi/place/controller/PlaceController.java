@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  * @author hejiale
  */
 @RestController
-@RequestMapping("/place")
+@RequestMapping("/placeInfo")
 public class PlaceController extends BaseController {
     @Autowired
     private IPlaceService placeService;
@@ -53,10 +54,16 @@ public class PlaceController extends BaseController {
         List<Place> list = placeService.selectPlaceList(place);
         return getDataTable(list);
     }
+
+    /**
+     * 导出场地信息——管理员使用
+     * @param response
+     * @param place
+     */
     @Log(title = "场地管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("business:place:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Place place)
+    public void export(HttpServletResponse response,@RequestBody Place place)
     {
         List<Place> list = placeService.selectPlaceList(place);
         ExcelUtil<Place> util = new ExcelUtil<Place>(Place.class);
@@ -67,12 +74,12 @@ public class PlaceController extends BaseController {
      */
     @RequiresPermissions("business:place:query")
     @GetMapping(value = { "/{placeId}" })
-    public AjaxResult getInfo(@PathVariable(value = "placeId", required = false) Long placeId){
+    public AjaxResult getInfo(@PathVariable(value = "placeId") Long placeId){
         return success(placeService.selectPlaceById(placeId));
     }
 
     /**
-     * 新增场地信息
+     * 新增场地信息——管理员使用
      * @param place
      * @return
      */
@@ -85,7 +92,7 @@ public class PlaceController extends BaseController {
     }
 
     /**
-     * 修改场地
+     * 修改场地——管理员使用
      * @param place
      * @return
      */
@@ -100,7 +107,7 @@ public class PlaceController extends BaseController {
     }
 
     /**
-     * 删除场地
+     * 删除场地——管理员使用
      */
     @RequiresPermissions("business:place:remove")
     @Log(title = "场地管理", businessType = BusinessType.DELETE)
@@ -130,8 +137,9 @@ public class PlaceController extends BaseController {
         List<AllPlace> allPlaces=new ArrayList<>();
         for(int i=0;i<placeIdList.length;i++){
             //获得每个placeid的chooseDay那天的场地申请记录
-            List<PlaceApply> placeApplyList = placeApplyService.selectAllPlace(placeIdList[i],
-                    DateUtils.parseDate(place.getParams().get("chooseDay")));
+            Date chooseDay=DateUtils.parseDate(place.getParams().get("chooseDay"));
+            //为转化加上保险
+            List<PlaceApply> placeApplyList= placeApplyService.selectAllPlace(placeIdList[i],  DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,chooseDay));
             AllPlace allPlace=new AllPlace(list.get(i),placeApplyList);
             allPlaces.add(allPlace);
         }

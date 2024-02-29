@@ -1,16 +1,22 @@
 package com.yizhanshi.place.controller;
 
+import com.yizhanshi.common.core.utils.DateUtils;
 import com.yizhanshi.common.core.web.controller.BaseController;
 import com.yizhanshi.common.core.web.domain.AjaxResult;
 import com.yizhanshi.common.core.web.page.TableDataInfo;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
+import com.yizhanshi.place.domain.PlaceApply;
 import com.yizhanshi.place.domain.Time;
+import com.yizhanshi.place.service.IPlaceApplyService;
 import com.yizhanshi.place.service.ITimeService;
 import com.yizhanshi.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 时间信息 业务参数获取
@@ -23,6 +29,14 @@ public class TimeController extends BaseController {
 
     @Autowired
     private ITimeService timeService;
+    @Autowired
+    private IPlaceApplyService placeApplyService;
+
+    /**
+     * 查看时间列表——管理员使用
+     * @param time
+     * @return
+     */
     @RequiresPermissions("business:time:list")
     @GetMapping("/list")
     public TableDataInfo list(@RequestBody Time time){
@@ -40,19 +54,47 @@ public class TimeController extends BaseController {
     public AjaxResult getTrueTimeList(){
         return success(timeService.selectTrueTime());
     }
+
+    /**
+     * 新增时间列表——管理员使用
+     * @param time
+     * @return
+     */
     @RequiresPermissions("business:time:add")
     @PostMapping
     public AjaxResult add(@RequestBody Time time){
         return toAjax(timeService.insertTime(time));
     }
-    @RequiresPermissions("business:time:update")
+    /**
+     * 根据时间id查询具体信息——管理员使用
+     * @param timeId
+     * @return
+     */
+    @RequiresPermissions("business:time:query")
+    @GetMapping("/{timeId}")
+    public AjaxResult query(@PathVariable("timeId") Long timeId){
+        return success(timeService.selectTimeById(timeId));
+    }
+
+    /**
+     * 更新时间列表——管理员使用
+     * @param time
+     * @return
+     */
+    @RequiresPermissions("business:time:edit")
     @PutMapping
     public AjaxResult edit(@RequestBody Time time){
         return toAjax(timeService.updateTime(time));
     }
-    @RequiresPermissions("business:time:delete")
-    @DeleteMapping
-    public AjaxResult remove(String timeType){
+
+    /**
+     * 根据类别删除某一方案所有的时间列表
+     * @param timeType
+     * @return
+     */
+    @RequiresPermissions("business:time:remove")
+    @DeleteMapping("/{timeType}")
+    public AjaxResult remove(@PathVariable("timeType") String timeType){
         return toAjax(timeService.deleteTime(timeType));
     }
 
@@ -61,9 +103,20 @@ public class TimeController extends BaseController {
      * @param timeType status
      * @return
      */
-    @PutMapping
+    @RequiresPermissions("business:time:edit")
+    @PutMapping("/updateStatus")
     public AjaxResult editStatusByTimeType(String status,String timeType) {
-        return toAjax(timeService.updateStatus(status,timeType));
+        //确保修改状态后不影响今后的场地申请记录
+        PlaceApply placeApply=new PlaceApply();
+        Map<String,Object> map=new HashMap<>();
+        map.put("beginTime", DateUtils.getTime());
+        placeApply.setParams(map);
+        if(CollectionUtils.isEmpty(placeApplyService.selectPlaceApplyList(placeApply))){
+            return toAjax(timeService.updateStatus(status,timeType));
+        }else{
+            return  error("存在未来的场地申请记录，目前不可修改时间");
+        }
+
     }
 
 

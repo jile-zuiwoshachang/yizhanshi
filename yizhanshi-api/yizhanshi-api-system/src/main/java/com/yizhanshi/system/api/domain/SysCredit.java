@@ -45,6 +45,17 @@ public class SysCredit extends BaseEntity {
 
     }
 
+    public SysCredit(Long creditId, String creditContent, String creditSource, String userStudentid, int creditNumber, String adminName, String status, String delFlag) {
+        this.creditId = creditId;
+        this.creditContent = creditContent;
+        this.creditSource = creditSource;
+        this.userStudentid = userStudentid;
+        this.creditNumber = creditNumber;
+        this.adminName = adminName;
+        this.status = status;
+        this.delFlag = delFlag;
+    }
+
     public SysCredit(Long creditId)
     {
         this.creditId = creditId;
@@ -89,9 +100,7 @@ public class SysCredit extends BaseEntity {
     public void setCreditNumber(int creditNumber) {
         this.creditNumber = creditNumber;
     }
-    @Xss(message = "用户姓名不能包含脚本字符")
-    @NotBlank(message = "用户姓名不能为空")
-    @Size(min = 0, max = 100, message = "用户姓名长度不能超过100个字符")
+
     public String getAdminName() {
         return adminName;
     }

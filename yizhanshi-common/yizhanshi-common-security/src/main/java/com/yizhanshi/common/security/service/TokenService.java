@@ -44,6 +44,8 @@ public class TokenService
 
     /**
      * 创建令牌
+     * 这里写入token
+     * 和线程变量有关
      */
     public Map<String, Object> createToken(LoginUser loginUser)
     {
@@ -51,10 +53,12 @@ public class TokenService
         Long userId = loginUser.getSysUser().getUserId();
         String userName = loginUser.getSysUser().getUserName();
         String userStudentid = loginUser.getSysUser().getUserStudentid();
+        String userType = loginUser.getSysUser().getUserType();
         loginUser.setToken(token);
         loginUser.setUserid(userId);
         loginUser.setUsername(userName);
         loginUser.setUserStudentid(userStudentid);
+        loginUser.setUserType(userType);
         loginUser.setIpaddr(IpUtils.getIpAddr());
         refreshToken(loginUser);
 
@@ -64,6 +68,7 @@ public class TokenService
         claimsMap.put(SecurityConstants.DETAILS_USER_ID, userId);
         claimsMap.put(SecurityConstants.DETAILS_USERNAME, userName);
         claimsMap.put(SecurityConstants.DETAILS_USERSTUDENTID, userStudentid);
+        claimsMap.put(SecurityConstants.USER_TYPE, userType);
 
         // 接口返回信息
         Map<String, Object> rspMap = new HashMap<String, Object>();

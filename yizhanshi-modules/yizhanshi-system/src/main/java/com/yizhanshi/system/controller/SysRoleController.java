@@ -58,7 +58,7 @@ public class SysRoleController extends BaseController
     @Log(title = "角色管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:role:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysRole role)
+    public void export(HttpServletResponse response, @RequestBody SysRole role)
     {
         List<SysRole> list = roleService.selectRoleList(role);
         ExcelUtil<SysRole> util = new ExcelUtil<SysRole>(SysRole.class);

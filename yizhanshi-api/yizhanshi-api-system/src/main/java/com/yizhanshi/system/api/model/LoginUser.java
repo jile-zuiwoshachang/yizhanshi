@@ -26,6 +26,10 @@ public class LoginUser implements Serializable
      * 学号
      */
     private String userStudentid;
+    /**
+     * 用户类型
+     */
+    private String userType;
 
     /**
      * 用户名
@@ -70,6 +74,14 @@ public class LoginUser implements Serializable
     public void setToken(String token)
     {
         this.token = token;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public Long getUserid()

@@ -47,7 +47,7 @@ public class SysDictTypeController extends BaseController
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:dict:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysDictType dictType)
+    public void export(HttpServletResponse response,@RequestBody SysDictType dictType)
     {
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtil<SysDictType> util = new ExcelUtil<SysDictType>(SysDictType.class);

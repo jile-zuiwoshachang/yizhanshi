@@ -20,6 +20,10 @@ public interface IPlaceApplyService {
      */
     public List<PlaceApply> selectByPlaceIds(Long[] placeIds);
     /**
+     * 根据编号查询具体信息
+     */
+    public PlaceApply selectPlaceApplyById(Long applyId);
+    /**
      * 根据申请单id查询场地申请列表
      * @param placeIds
      * @return
@@ -31,7 +35,7 @@ public interface IPlaceApplyService {
      * @param chooseDay
      * @return
      */
-    public  List<PlaceApply> selectAllPlace(Long placeId, Date chooseDay);
+    public  List<PlaceApply> selectAllPlace(Long placeId, String chooseDay);
 
     /**
      * 用于管理员审核场地申请单
@@ -50,10 +54,10 @@ public interface IPlaceApplyService {
 
     /**
      * 删除场地申请
-     * @param placeApplyIds
+     * @param applyIds
      * @return
      */
-    public int deletePlaceApply(Long[] placeApplyIds);
+    public int deletePlaceApply(Long[] applyIds);
 
     /**
      * 新增场地申请，即场地预约

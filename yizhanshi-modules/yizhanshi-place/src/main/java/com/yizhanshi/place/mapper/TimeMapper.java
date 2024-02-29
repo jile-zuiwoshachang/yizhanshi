@@ -13,6 +13,7 @@ public interface TimeMapper {
     public List<Time> selectTimeList(Time time);
     public List<Time> selectTimeByType(String timeType);
     public List<Time> selectTrueTime();
+    public Time selectTimeById(Long timeId);
     /**
      * 新增时间
      */
@@ -29,4 +30,5 @@ public interface TimeMapper {
      * 修改状态
      */
     public int updateStatus(String status,String  timeType);
+
 }

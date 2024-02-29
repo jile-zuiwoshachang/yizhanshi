@@ -144,5 +144,5 @@ public interface SysUserMapper
      * @param number
      * @return
      */
-    public int updateUserScore(int number,String userStudentid);
+    public int updateUserScore(@Param("number") int number,@Param("userStudentid") String userStudentid);
 }

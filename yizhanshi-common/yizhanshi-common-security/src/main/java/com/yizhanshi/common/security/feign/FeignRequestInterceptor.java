@@ -31,6 +31,14 @@ public class FeignRequestInterceptor implements RequestInterceptor
             {
                 requestTemplate.header(SecurityConstants.DETAILS_USER_ID, userId);
             }
+            String userType = headers.get(SecurityConstants.USER_TYPE);
+            if (StringUtils.isNotEmpty(userType))
+            {
+                requestTemplate.header(SecurityConstants.USER_TYPE, userType);
+            }
+            /**
+             * userKey
+             */
             String userKey = headers.get(SecurityConstants.USER_KEY);
             if (StringUtils.isNotEmpty(userKey))
             {
@@ -40,6 +48,11 @@ public class FeignRequestInterceptor implements RequestInterceptor
             if (StringUtils.isNotEmpty(userName))
             {
                 requestTemplate.header(SecurityConstants.DETAILS_USERNAME, userName);
+            }
+            String userStudentid = headers.get(SecurityConstants.DETAILS_USERSTUDENTID);
+            if (StringUtils.isNotEmpty(userStudentid))
+            {
+                requestTemplate.header(SecurityConstants.DETAILS_USERSTUDENTID, userStudentid);
             }
             String authentication = headers.get(SecurityConstants.AUTHORIZATION_HEADER);
             if (StringUtils.isNotEmpty(authentication))

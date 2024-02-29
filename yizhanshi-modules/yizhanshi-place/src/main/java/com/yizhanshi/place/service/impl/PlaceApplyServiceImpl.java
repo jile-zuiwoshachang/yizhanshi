@@ -31,11 +31,15 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
        return  placeApplyMapper.selectByPlaceIds(placeIds);
     }
     @Override
+    public  PlaceApply selectPlaceApplyById(Long applyId){
+        return placeApplyMapper.selectPlaceApplyById(applyId);
+    }
+    @Override
     public List<PlaceApply> selectByApplyIds(Long[] placeApplyIds){
         return  placeApplyMapper.selectByApplyIds(placeApplyIds);
     }
     @Override
-    public List<PlaceApply> selectAllPlace(Long placeId, Date chooseDay){
+    public List<PlaceApply> selectAllPlace(Long placeId, String chooseDay){
         return  placeApplyMapper.selectAllPlace(placeId,chooseDay);
     }
 
@@ -48,8 +52,8 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
         return  placeApplyMapper.updatePlaceApply(placeApply);
     }
     @Override
-    public int deletePlaceApply(Long[] placeApplyIds){
-        return  placeApplyMapper.deletePlaceApply(placeApplyIds);
+    public int deletePlaceApply(Long[] applyIds){
+        return  placeApplyMapper.deletePlaceApply(applyIds);
     }
     @Override
     public int insertPlaceApply(PlaceApply placeApply){

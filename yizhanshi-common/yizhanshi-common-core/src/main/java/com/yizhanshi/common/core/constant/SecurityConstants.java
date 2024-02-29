@@ -10,16 +10,16 @@ public class SecurityConstants
     /**
      * 用户ID字段
      */
-    public static final String DETAILS_USER_ID = "user_id";
+    public static final String DETAILS_USER_ID = "userId";
 
     /**
      * 用户名字段
      */
-    public static final String DETAILS_USERNAME = "username";
+    public static final String DETAILS_USERNAME = "userName";
     /**
      * 学号字段
      */
-    public static final String DETAILS_USERSTUDENTID = "user_studentid";
+    public static final String DETAILS_USERSTUDENTID = "userStudentid";
 
     /**
      * 授权信息字段
@@ -37,13 +37,13 @@ public class SecurityConstants
     public static final String INNER = "inner";
 
     /**
-     * 用户标识
-     */
-    public static final String USER_KEY = "user_key";
-    /**
      * 用户类型
      */
-    public static final String USER_TYPE = "user_type";
+    public static final String USER_TYPE = "userType";
+    /**
+     * 用户标识
+     */
+    public static final String USER_KEY = "userKey";
     /**
      * 登录用户
      */

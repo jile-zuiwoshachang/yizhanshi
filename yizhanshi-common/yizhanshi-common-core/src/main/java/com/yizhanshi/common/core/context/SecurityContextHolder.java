@@ -88,6 +88,11 @@ public class SecurityContextHolder
     {
         set(SecurityConstants.USER_TYPE, userType);
     }
+
+    /**
+     * 获取token
+     * @return
+     */
     public static String getUserKey()
     {
         return get(SecurityConstants.USER_KEY);

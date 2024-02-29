@@ -63,6 +63,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         return dateTimeNow(YYYYMMDDHHMMSS);
     }
 
+    /**
+     * 获取特定格式的当前日期
+     * @param format
+     * @return
+     */
     public static final String dateTimeNow(final String format)
     {
         return parseDateToStr(format, new Date());

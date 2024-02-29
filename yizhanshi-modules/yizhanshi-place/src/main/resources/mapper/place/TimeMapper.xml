@@ -40,6 +40,11 @@
         from business_time t
         where t.status='0'
     </select>
+    <select id="selectTimeById" parameterType="Long" resultMap="TimeResult">
+        select t.time_name,t.time_type,t.status
+        from business_time t
+        where t.time_id=#{timeId}
+    </select>
 
     <insert id="insertTime" parameterType="com.yizhanshi.place.domain.Time" useGeneratedKeys="true" keyProperty="timeId">
         insert into business_time (

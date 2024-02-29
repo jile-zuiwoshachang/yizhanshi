@@ -1,6 +1,7 @@
 package com.yizhanshi.system.controller;
 
 import com.yizhanshi.common.core.domain.R;
+import com.yizhanshi.common.core.utils.StringUtils;
 import com.yizhanshi.common.core.utils.poi.ExcelUtil;
 import com.yizhanshi.common.core.web.controller.BaseController;
 import com.yizhanshi.common.core.web.domain.AjaxResult;
@@ -10,14 +11,17 @@ import com.yizhanshi.common.log.enums.BusinessType;
 import com.yizhanshi.common.security.annotation.InnerAuth;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
-import com.yizhanshi.system.api.RemoteCreditService;
+
 import com.yizhanshi.system.api.domain.SysCredit;
 import com.yizhanshi.system.api.domain.SysUser;
 import com.yizhanshi.system.mapper.SysCreditMapper;
 import com.yizhanshi.system.mapper.SysUserMapper;
 import com.yizhanshi.system.service.ISysCreditService;
-import org.apache.commons.lang3.ArrayUtils;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +56,7 @@ public class SysCreditController extends BaseController {
     @Log(title = "信誉管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:credit:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysCredit credit)
+    public void export(HttpServletResponse response, @RequestBody SysCredit credit)
     {
         List<SysCredit> list = creditService.selectCreditList(credit);
         ExcelUtil<SysCredit> util = new ExcelUtil<SysCredit>(SysCredit.class);
@@ -69,7 +73,14 @@ public class SysCreditController extends BaseController {
     @PostMapping
     public R<Boolean> addUserCredit(@Validated @RequestBody SysCredit credit) {
         String userStudentid=credit.getUserStudentid();
-        int newScore=userMapper.selectUserByUserStudentid(userStudentid).getUserScore()+credit.getCreditNumber();
+        if(StringUtils.isEmpty(userStudentid)){
+            return R.fail("学号为空，请联系管理员");
+        }
+        SysUser sysUser=userMapper.selectUserByUserStudentid(userStudentid);
+        if(ObjectUtils.isEmpty(sysUser)){
+            return R.fail("该用户不存在");
+        }
+        int newScore=sysUser.getUserScore()+credit.getCreditNumber();
         if(newScore>100 || newScore<0){
             return R.fail("该用户信誉已经超过或低于限定范围，请重新修改信誉分");
         }

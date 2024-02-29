@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 
-	<insert id="insertCredit" parameterType="com.yizhanshi.system.api.domain.SysCredit" useGeneratedKeys="true" keyProperty="userId">
+	<insert id="insertCredit" parameterType="com.yizhanshi.system.api.domain.SysCredit" useGeneratedKeys="true" keyProperty="creditId">
 	insert into system_credit(
 	<if test="creditId != null and creditId != 0">credit_id,</if>
 	<if test="creditContent != null and creditContent != ''">credit_content,</if>

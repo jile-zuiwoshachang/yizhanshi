@@ -50,7 +50,7 @@ public class SysPostController extends BaseController
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:post:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysPost post)
+    public void export(HttpServletResponse response,@RequestBody SysPost post)
     {
         List<SysPost> list = postService.selectPostList(post);
         ExcelUtil<SysPost> util = new ExcelUtil<SysPost>(SysPost.class);

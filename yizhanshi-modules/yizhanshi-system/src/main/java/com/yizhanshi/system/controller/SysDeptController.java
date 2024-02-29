@@ -52,7 +52,7 @@ public class SysDeptController extends BaseController
      */
     @RequiresPermissions("system:dept:list")
     @GetMapping("/list/exclude/{deptId}")
-    public AjaxResult excludeChild(@PathVariable(value = "deptId", required = false) Long deptId)
+    public AjaxResult excludeChild(@PathVariable(value = "deptId") Long deptId)
     {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
         depts.removeIf(d -> d.getDeptId().intValue() == deptId || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), deptId + ""));

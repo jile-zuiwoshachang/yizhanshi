@@ -20,13 +20,10 @@ public  interface PlaceApplyMapper {
      * @return 场地申请信息集合信息
      */
     public List<PlaceApply> selectPlaceApplyList(PlaceApply placeApply);
-
     /**
-     * 新增场地信息
-     * @param place
-     * @return
+     * 根据编号查询具体信息
      */
-    public int insertPlace(Place place);
+    public PlaceApply  selectPlaceApplyById(Long applyId);
     /**
      * 修改场地申请息
      * @param placeApply
@@ -35,10 +32,10 @@ public  interface PlaceApplyMapper {
     public int updatePlaceApply(PlaceApply placeApply);
     /**
      * 删除场地申请息
-     * @param placeApplyIds
+     * @param applyIds
      * @return
      */
-    public int deletePlaceApply(Long[] placeApplyIds);
+    public int deletePlaceApply(Long[] applyIds);
     /**
      * 新增场地申请息
      * @param placeApply
@@ -56,7 +53,7 @@ public  interface PlaceApplyMapper {
     /**
      * 根据查询条件，获得当天的场地申请记录
      */
-    public List<PlaceApply> selectAllPlace(Long placeId, Date chooseDay);
+    public List<PlaceApply> selectAllPlace(@Param("placeId") Long placeId,@Param("chooseDay") String chooseDay);
 
 
 }

@@ -10,40 +10,38 @@ public class LoginBody
     /**
      * 学号
      */
-    private String studentid;
+    private String userStudentid;
     /**
      * 用户名
      */
-    private String username;
+    private String userName;
 
     /**
      * 用户密码
      */
-    private String password;
+    private String userPassword;
 
-    public String getStudentid() {
-        return studentid;
+    public String getUserStudentid() {
+        return userStudentid;
     }
 
-    public void setStudentid(String studentid) {
-        this.studentid = studentid;
+    public void setUserStudentid(String userStudentid) {
+        this.userStudentid = userStudentid;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPassword()
-    {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassword(String password)
-    {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 }

@@ -75,6 +75,11 @@
             <groupId>com.bishe</groupId>
             <artifactId>bishe-common-swagger</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-loadbalancer</artifactId>
+        </dependency>
+
 
     </dependencies>
     <build>

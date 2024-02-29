@@ -42,8 +42,31 @@ public class JwtUtils
     }
 
     /**
-     * 根据令牌获取用户标识
+     * 根据令牌获取用户类别
      * 
+     * @param token 令牌
+     * @return 用户ID
+     */
+    public static String getUserType(String token)
+    {
+        Claims claims = parseToken(token);
+        return getValue(claims, SecurityConstants.USER_TYPE);
+    }
+
+    /**
+     * 根据令牌获取用户类别
+     * 
+     * @param claims 身份信息
+     * @return 用户ID
+     */
+    public static String getUserType(Claims claims)
+    {
+        return getValue(claims, SecurityConstants.USER_TYPE);
+    }
+
+    /**
+     * 根据令牌获取用户标识
+     *
      * @param token 令牌
      * @return 用户ID
      */
@@ -55,7 +78,7 @@ public class JwtUtils
 
     /**
      * 根据令牌获取用户标识
-     * 
+     *
      * @param claims 身份信息
      * @return 用户ID
      */
@@ -63,7 +86,6 @@ public class JwtUtils
     {
         return getValue(claims, SecurityConstants.USER_KEY);
     }
-
     /**
      * 根据令牌获取用户ID
      * 

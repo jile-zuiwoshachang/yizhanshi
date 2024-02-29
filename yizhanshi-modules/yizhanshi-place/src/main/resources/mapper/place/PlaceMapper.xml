@@ -54,7 +54,7 @@
             AND date_format(p.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
     </select>
-    <select id="selectPlaceById">
+    <select id="selectPlaceById" parameterType="Long" resultMap="PlaceResult">
         <include refid="selectPlaceVo">
         </include>
         where p.place_id=#{placeId}
@@ -63,10 +63,10 @@
     <insert id="insertPlace" parameterType="com.yizhanshi.place.domain.Place" useGeneratedKeys="true" keyProperty="placeId">
         insert into business_place (
         <if test="placeId != null and placeId != 0">place_id,</if>
-        <if test="placeName != null and placeName != 0">place_name,</if>
+        <if test="placeName != null and placeName != ''">place_name,</if>
         <if test="placeCampus != null and placeCampus != ''">place_campus,</if>
         <if test="placeDescription != null and placeDescription != ''">place_description,</if>
-        <if test="placeCapacity != null and placeCapacity != ''">place_capacity,</if>
+        <if test="placeCapacity != null and placeCapacity != 0">place_capacity,</if>
         <if test="managerName != null and managerName != ''">manager_name,</if>
         <if test="managerPhone != null and managerPhone != ''">manager_phone,</if>
         <if test="placePicture1 != null and placePicture1 != ''">place_picture1,</if>
@@ -78,10 +78,10 @@
         create_time
         )values(
         <if test="placeId != null and placeId != 0">#{placeId},</if>
-        <if test="placeName != null and placeName != 0">#{placeName},</if>
+        <if test="placeName != null and placeName != ''">#{placeName},</if>
         <if test="placeCampus != null and placeCampus != ''">#{placeCampus},</if>
         <if test="placeDescription != null and placeDescription != ''">#{placeDescription},</if>
-        <if test="placeCapacity != null and placeCapacity != ''">#{placeCapacity},</if>
+        <if test="placeCapacity != null and placeCapacity != 0">#{placeCapacity},</if>
         <if test="managerName != null and managerName != ''">#{managerName},</if>
         <if test="managerPhone != null and managerPhone != ''">#{managerPhone},</if>
         <if test="placePicture1 != null and placePicture1 != ''">#{placePicture1},</if>
@@ -97,10 +97,10 @@
     <update id="updatePlace" parameterType="com.yizhanshi.place.domain.Place">
     update business_place
     <set>
-        <if test="placeName != null and placeName != 0">place_name=#{placeName},</if>
+        <if test="placeName != null and placeName != ''">place_name=#{placeName},</if>
         <if test="placeCampus != null and placeCampus != ''">place_campus=#{placeCampus},</if>
         <if test="placeDescription != null and placeDescription != ''">place_description=#{placeDescription},</if>
-        <if test="placeCapacity != null and placeCapacity != ''">place_capacity=#{placeCapacity},</if>
+        <if test="placeCapacity != null and placeCapacity != 0">place_capacity=#{placeCapacity},</if>
         <if test="managerName != null and managerName != ''">manager_name=#{managerName},</if>
         <if test="managerPhone != null and managerPhone != ''">manager_phone=#{managerPhone},</if>
         <if test="placePicture1 != null and placePicture1 != ''">place_picture1=#{placePicture1},</if>

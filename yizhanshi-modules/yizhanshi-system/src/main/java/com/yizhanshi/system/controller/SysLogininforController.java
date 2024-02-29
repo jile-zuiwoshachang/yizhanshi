@@ -50,7 +50,7 @@ public class SysLogininforController extends BaseController
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:logininfor:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysLogininfor logininfor)
+    public void export(HttpServletResponse response,@RequestBody SysLogininfor logininfor)
     {
         List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
         ExcelUtil<SysLogininfor> util = new ExcelUtil<SysLogininfor>(SysLogininfor.class);

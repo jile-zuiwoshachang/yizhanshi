@@ -35,7 +35,7 @@ public class TokenController
     public R<?> login(@RequestBody LoginBody form)
     {
         // 用户登录
-        LoginUser userInfo = sysLoginService.login(form.getStudentid(),form.getUsername(), form.getPassword());
+        LoginUser userInfo = sysLoginService.login(form.getUserStudentid(),form.getUserName(), form.getUserPassword());
         // 获取登录token
         return R.ok(tokenService.createToken(userInfo));
     }

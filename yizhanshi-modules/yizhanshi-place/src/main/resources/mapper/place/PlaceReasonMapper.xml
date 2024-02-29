@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.place.mapper.PlaceReasonMapper">
+
+    <resultMap type="com.yizhanshi.place.domain.PlaceReason" id="PlaceReasonResult">
+        <id     property="reasonId"       column="reason_id"      />
+        <result property="reasonName"       column="reason_name"      />
+        <result property="reasonType"     column="reason_type"    />
+    </resultMap>
+
+
+    <select id="selectPlaceReasonList" parameterType="com.yizhanshi.place.domain.PlaceReason" resultMap="PlaceReasonResult">
+        select r.reason_id,r.reason_name,r.reason_type
+        from business_place_reason r
+       <where>
+        <if test="reasonId != null and reasonId != 0">
+            AND r.reason_id = #{reasonId}
+        </if>
+        <if test="reasonName != null and reasonName != ''">
+            AND r.reason_name like concat('%', #{reasonName}, '%')
+        </if>
+        <if test="reasonType != null and reasonType != ''">
+            AND r.reason_type like concat('%', #{reasonType}, '%')
+        </if>
+        </where>
+    </select>
+    <select id="selectReasonById" parameterType="Long" resultMap="PlaceReasonResult">
+    select r.reason_name,r.reason_type
+    from business_place_reason r
+        where r.reason_id=#{reasonId}
+    </select>
+    <insert id="insertPlaceReason" parameterType="com.yizhanshi.place.domain.PlaceReason" useGeneratedKeys="true" keyProperty="reasonId">
+        insert into business_place_reason (
+        <if test="reasonId != null and reasonId != 0">reason_id,</if>
+        <if test="reasonName != null and reasonName != ''">reason_name,</if>
+        <if test="reasonType != null and reasonType != ''">reason_type,</if>
+        )values(
+        <if test="reasonId != null and reasonId != 0">#{reasonId},</if>
+        <if test="reasonName != null and reasonName != ''">#{reasonName},</if>
+        <if test="reasonType != null and reasonType != ''">#{reasonType},</if>
+        )
+    </insert>
+
+    <update id="updatePlaceReason" parameterType="com.yizhanshi.place.domain.PlaceReason">
+        update business_place_reason
+        <set>
+            <if test="reasonName != null and reasonName != 0">reason_name=#{reasonName},</if>
+            <if test="reasonType != null and reasonType != ''">reason_type=#{reasonType},</if>
+        </set>
+        where reason_id = #{reasonId}
+    </update>
+    <delete id="deletePlaceReasons" parameterType="Long">
+        delete  from business_place_reason  where reason_id in
+        <foreach collection="array" item="reasonId" open="(" separator="," close=")">
+            #{reasonId}
+        </foreach>
+    </delete>
+
+
+</mapper>

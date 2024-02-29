@@ -45,7 +45,7 @@ public class SysOperlogController extends BaseController
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:operlog:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysOperLog operLog)
+    public void export(HttpServletResponse response,@RequestBody SysOperLog operLog)
     {
         List<SysOperLog> list = operLogService.selectOperLogList(operLog);
         ExcelUtil<SysOperLog> util = new ExcelUtil<SysOperLog>(SysOperLog.class);

@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<sql id="selectUserVo">
 		select u.user_id, u.user_studentid,u.user_sex, u.user_password,  u.user_name, u.user_type,
-		u.user_organization,u.user_campus,u.user_email,  u.user_phone,u.user_description,u.user_picture1,
+		u.user_organization,u.user_campus,u.user_email,  u.user_phone,u.user_score,u.user_description,u.user_picture1,
 		u.user_picture2,u.user_picture3, u.status, u.del_flag, u.create_by, u.create_time, u.remark,
         d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.status as dept_status,
         r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectUserList" parameterType="com.yizhanshi.system.api.domain.SysUser" resultMap="SysUserResult">
 		select u.user_id, u.user_studentid,u.user_sex, u.user_name, u.user_type,
-		u.user_organization,u.user_campus,u.user_email,  u.user_phone,u.user_description,u.user_picture1,
+		u.user_organization,u.user_campus,u.user_email,  u.user_phone,u.user_score,u.user_description,u.user_picture1,
 		u.user_picture2,u.user_picture3, u.status,  u.create_by, u.create_time, u.remark,
 		d.dept_name, d.leader from system_user u
 		left join system_dept d on u.dept_id = d.dept_id
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectAllocatedList" parameterType="com.yizhanshi.system.api.domain.SysUser" resultMap="SysUserResult">
 	    select distinct u.user_id, u.user_studentid,u.user_sex, u.user_name, u.user_type,
-		u.user_organization,u.user_campus,u.user_email, u.user_phone,u.user_description,u.user_picture1,
+		u.user_organization,u.user_campus,u.user_email, u.user_phone,u.user_score,u.user_description,u.user_picture1,
 		u.user_picture2,u.user_picture3, u.status, u.create_by, u.create_time, u.remark
 	    from system_user u
 			 left join system_dept d on u.dept_id = d.dept_id
@@ -115,7 +115,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectUnallocatedList" parameterType="com.yizhanshi.system.api.domain.SysUser" resultMap="SysUserResult">
 		select distinct u.user_id, u.user_studentid,u.user_sex, u.user_name, u.user_type,
-		u.user_organization,u.user_campus,u.user_email, u.user_phone,u.user_description,u.user_picture1,
+		u.user_organization,u.user_campus,u.user_email, u.user_phone,u.user_score,u.user_description,u.user_picture1,
 		u.user_picture2,u.user_picture3, u.status, u.create_by, u.create_time, u.remark
 	    from system_user u
 			 left join system_dept d on u.dept_id = d.dept_id
@@ -245,6 +245,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach> 
  	</delete>
 	<update id="updateUserScore" >
-		update system_user set user_score = #{numebr} where user_id = #{userStudentid}
+		update system_user set user_score = #{number} where user_studentid = #{userStudentid}
 	</update>
 </mapper> 
