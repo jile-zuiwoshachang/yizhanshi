@@ -14,7 +14,7 @@ import com.yizhanshi.common.log.annotation.Log;
 import com.yizhanshi.common.log.enums.BusinessType;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.domain.PlaceApply;
 import com.yizhanshi.place.domain.constants.ApplyConstants;
 import com.yizhanshi.place.domain.constants.ReasonConstants;
@@ -56,6 +56,7 @@ public class PlaceApplyController extends BaseController {
 
 
     /**
+     * 普通用户 ：自己的学号 status 0/1审核中 2已通过 5已拒绝 4已撤销
      * 查看所有场地申请信息-管理员使用
      * 一级：北校区/南校区 status:0125
      * 二级：北校区/南校区 status:0125
@@ -147,6 +148,7 @@ public class PlaceApplyController extends BaseController {
             placeApply.setStatus(ApplyConstants.YIADMINAGREESTATUS);
         }
         placeApply.setUpdateBy(SecurityUtils.getUsername());
+        placeApply.setApplyAdmin1(SecurityUtils.getUserStudentid());
         //修改为不可撤销
         placeApply.setRecallStatus(ApplyConstants.RECALLNOT);
         return   toAjax(placeApplyService.updatePlaceApply(placeApply));
@@ -161,6 +163,7 @@ public class PlaceApplyController extends BaseController {
     public AjaxResult check2(@RequestBody PlaceApply placeApply){
         //不分大小活动直接通过为2，拒绝为5
         placeApply.setUpdateBy(SecurityUtils.getUsername());
+        placeApply.setApplyAdmin2(SecurityUtils.getUserStudentid());
         //修改为不可撤销
         placeApply.setRecallStatus(ApplyConstants.RECALLNOT);
         return   toAjax(placeApplyService.updatePlaceApply(placeApply));

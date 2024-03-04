@@ -1,4 +1,5 @@
-package com.yizhanshi.place.domain;
+package com.yizhanshi.place.api.domain;
+
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.annotation.Excel.ColumnType;
 import com.yizhanshi.common.core.web.domain.BaseEntity;

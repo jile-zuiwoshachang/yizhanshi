@@ -24,8 +24,7 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
 
     @Autowired
     private PlaceApplyMapper placeApplyMapper;
-    @Autowired
-    protected Validator validator;
+
     @Override
     public List<PlaceApply> selectByPlaceIds(Long[] placeIds){
        return  placeApplyMapper.selectByPlaceIds(placeIds);

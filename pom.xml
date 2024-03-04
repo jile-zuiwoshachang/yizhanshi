@@ -205,6 +205,12 @@
                 <artifactId>bishe-api-system</artifactId>
                 <version>${bishe.version}</version>
             </dependency>
+            <!-- 场地模块接口 -->
+            <dependency>
+                <groupId>com.bishe</groupId>
+                <artifactId>yizhanshi-api-place</artifactId>
+                <version>${bishe.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

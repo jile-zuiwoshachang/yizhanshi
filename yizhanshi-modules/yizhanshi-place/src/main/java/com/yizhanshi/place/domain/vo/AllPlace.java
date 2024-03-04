@@ -2,7 +2,7 @@ package com.yizhanshi.place.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.domain.PlaceApply;
 
 import java.util.List;

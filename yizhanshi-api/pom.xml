@@ -10,6 +10,7 @@
 
     <modules>
         <module>yizhanshi-api-system</module>
+        <module>yizhanshi-api-place</module>
     </modules>
 
     <artifactId>bishe-api</artifactId>

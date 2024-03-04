@@ -1,6 +1,6 @@
 package com.yizhanshi.place.service;
 
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.system.api.domain.SysUser;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface IPlaceService {
     /**
-     * 根据条件分页查询用户列表
+     * 根据条件分页查询场地列表
      *
      * @param place 场地信息
      * @return 场地信息集合信息
@@ -19,7 +19,7 @@ public interface IPlaceService {
     public List<Place> selectPlaceList(Place place);
 
     /**
-     * 通过场地ID查询用户
+     * 通过场地ID查询场地
      *
      * @param placeId  场地ID
      * @return 场地对象信息

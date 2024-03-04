@@ -9,10 +9,10 @@
         <version>3.6.3</version>
     </parent>
 
-    <artifactId>yizhanshi-place</artifactId>
+    <artifactId>yizhanshi-course</artifactId>
 
     <description>
-        yizhanshi-modules-place 场地管理模块
+        yizhanshi-modules-course 课程管理模块
     </description>
     <dependencies>
 
@@ -80,12 +80,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-loadbalancer</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.bishe</groupId>
             <artifactId>yizhanshi-api-place</artifactId>
         </dependency>
-
-
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

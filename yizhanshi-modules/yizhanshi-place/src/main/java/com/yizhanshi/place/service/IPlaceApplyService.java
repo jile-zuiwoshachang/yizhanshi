@@ -1,7 +1,7 @@
 package com.yizhanshi.place.service;
 
 import com.yizhanshi.place.controller.PlaceApplyController;
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.domain.PlaceApply;
 
 import java.util.Date;

@@ -38,10 +38,10 @@
         <result property="updateTime"     column="update_time"    />
         <result property="updateBy"     column="update_by"    />
         <result property="remark"     column="remark"    />
-        <collection  property="places"   javaType="com.yizhanshi.place.domain.Place"  resultMap="PlaceResult" />
+        <collection  property="places"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
         <collection  property="placeReasons"   javaType="com.yizhanshi.place.domain.PlaceReason"  resultMap="PlaceReasonResult" />
     </resultMap>
-    <resultMap id="PlaceResult" type="com.yizhanshi.place.domain.Place">
+    <resultMap id="PlaceResult" type="com.yizhanshi.place.api.domain.Place">
         <id     property="placeId"       column="place_id"        />
         <result property="placeName"     column="place_name"      />
         <result property="placeCampus"      column="place_campus"       />

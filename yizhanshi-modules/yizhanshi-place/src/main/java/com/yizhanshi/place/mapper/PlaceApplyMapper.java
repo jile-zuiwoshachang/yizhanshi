@@ -1,6 +1,6 @@
 package com.yizhanshi.place.mapper;
 
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.domain.PlaceApply;
 import org.apache.ibatis.annotations.Param;
 

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yizhanshi.place.mapper.PlaceMapper">
 
-    <resultMap type="com.yizhanshi.place.domain.Place" id="PlaceResult">
+    <resultMap type="com.yizhanshi.place.api.domain.Place" id="PlaceResult">
         <id     property="placeId"       column="place_id"      />
         <result property="placeName"       column="place_name"      />
         <result property="placeCampus"     column="place_campus"    />
@@ -30,7 +30,7 @@
         p.status, p.del_flag,p.create_by, p.create_time, p.remark
         from business_place p 
     </sql>
-    <select id="selectPlaceList" parameterType="com.yizhanshi.place.domain.Place" resultMap="PlaceResult">
+    <select id="selectPlaceList" parameterType="com.yizhanshi.place.api.domain.Place" resultMap="PlaceResult">
         select p.place_id, p.place_name, p.place_campus, p.place_description, p.place_capacity,
         p.manager_name, p.manager_phone, p.place_picture1, p.place_picture2, p.place_picture3,
         p.status, p.create_by, p.create_time, p.remark from business_place p
@@ -60,7 +60,7 @@
         where p.place_id=#{placeId}
     </select>
 
-    <insert id="insertPlace" parameterType="com.yizhanshi.place.domain.Place" useGeneratedKeys="true" keyProperty="placeId">
+    <insert id="insertPlace" parameterType="com.yizhanshi.place.api.domain.Place" useGeneratedKeys="true" keyProperty="placeId">
         insert into business_place (
         <if test="placeId != null and placeId != 0">place_id,</if>
         <if test="placeName != null and placeName != ''">place_name,</if>
@@ -94,7 +94,7 @@
         )
     </insert>
 
-    <update id="updatePlace" parameterType="com.yizhanshi.place.domain.Place">
+    <update id="updatePlace" parameterType="com.yizhanshi.place.api.domain.Place">
     update business_place
     <set>
         <if test="placeName != null and placeName != ''">place_name=#{placeName},</if>

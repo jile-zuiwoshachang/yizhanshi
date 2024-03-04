@@ -12,7 +12,7 @@ import com.yizhanshi.common.log.enums.BusinessType;
 import com.yizhanshi.common.security.annotation.InnerAuth;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.domain.PlaceApply;
 import com.yizhanshi.place.domain.vo.AllPlace;
 import com.yizhanshi.place.service.IPlaceApplyService;

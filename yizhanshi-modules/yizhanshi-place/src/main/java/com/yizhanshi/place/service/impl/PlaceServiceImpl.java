@@ -2,7 +2,7 @@ package com.yizhanshi.place.service.impl;
 
 import com.yizhanshi.common.datascope.annotation.DataScope;
 import com.yizhanshi.common.security.utils.SecurityUtils;
-import com.yizhanshi.place.domain.Place;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.mapper.PlaceMapper;
 import com.yizhanshi.place.service.IPlaceService;
 import com.yizhanshi.system.api.domain.SysUser;
@@ -26,8 +26,7 @@ public class PlaceServiceImpl  implements IPlaceService {
 
     @Autowired
     private PlaceMapper placeMapper;
-    @Autowired
-    protected Validator validator;
+
 
 
     @Override
@@ -44,22 +43,17 @@ public class PlaceServiceImpl  implements IPlaceService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int insertPlace(Place place){
-        String userName= SecurityUtils.getUsername();
-        place.setCreateBy(userName);
-        int rows = placeMapper.insertPlace(place);
-        return rows;
+        return placeMapper.insertPlace(place);
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updatePlace(Place place){
-        int rows = placeMapper.updatePlace(place);
-        return rows;
+        return placeMapper.updatePlace(place);
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int  deletePlace(Long[] placeIds){
-        int rows = placeMapper.deletePlace(placeIds);
-        return rows;
+        return placeMapper.deletePlace(placeIds);
     }
 
 

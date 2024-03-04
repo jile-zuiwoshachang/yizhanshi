@@ -24,8 +24,7 @@ public class SysCreditServiceImpl implements ISysCreditService {
     private static final Logger log = LoggerFactory.getLogger(SysCreditServiceImpl.class);
     @Autowired
     private SysCreditMapper creditMapper;
-    @Autowired
-    protected Validator validator;
+
     /**
      * 根据条件分页查询信誉列表
      *
