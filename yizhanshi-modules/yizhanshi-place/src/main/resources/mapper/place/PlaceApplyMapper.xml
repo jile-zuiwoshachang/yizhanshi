@@ -13,6 +13,10 @@
         <result property="instructorOrganization"     column="instructor_organization"    />
         <result property="instructorPhone"     column="instructor_phone"    />
         <result property="instructorStudentid"     column="instructor_studentid"    />
+        <result property="fudaoName"     column="fudao_name"    />
+        <result property="fudaoOrganization"     column="fudao_organization"    />
+        <result property="fudaoPhone"     column="fudao_phone"    />
+        <result property="fudaoStudentid"     column="fudao_studentid"    />
         <result property="applyDay"     column="apply_day"    />
         <result property="timeStartId"     column="time_start_id"    />
         <result property="timeEndId"        column="time_end_id"        />
@@ -51,7 +55,8 @@
     </resultMap>
     <sql id="selectPlaceApplyVo">
         select pa.apply_id, pa.apply_name, pa.user_studentid,pa.place_id,pa.instructor_name,
-        pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,pa.apply_day,
+        pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,
+        pa.fudao_name, pa.fudao_studentid,pa.fudao_organization,pa.fudao_phone,pa.apply_day,
         pa.time_start_id,pa.time_end_id,pa.apply_start_time,pa.apply_end_time,pa.apply_number,pa.reason_id,pa.apply_organization,
         pa.apply_content,pa.apply_admin1,pa.apply_admin2,pa.refuse_reason,pa.recall_reason,
         pa.recall_status,pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
@@ -108,6 +113,10 @@
         <if test="instructorStudentid != null and instructorStudentid != ''">instructor_studentid=#{instructorStudentid},</if>
         <if test="instructorOrganization != null and instructorOrganization != ''">instructor_organization=#{instructorOrganization},</if>
         <if test="instructorPhone != null and instructorPhone != ''">instructor_phone=#{instructorPhone},</if>
+        <if test="fudaoName != null and fudaoName != ''">fudao_name=#{fudaoName},</if>
+        <if test="fudaoStudentid != null and fudaoStudentid != ''">fudao_studentid=#{fudaoStudentid},</if>
+        <if test="fudaoOrganization != null and fudaoOrganization != ''">fudao_organization=#{fudaoOrganization},</if>
+        <if test="fudaoPhone != null and fudaoPhone != ''">fudao_phone=#{fudaoPhone},</if>
         <if test="applyDay != null and applyDay != ''">apply_day=#{applyDay},</if>
         <if test="timeStartId != null and timeStartId != 0">time_start_id=#{timeStartId},</if>
         <if test="timeEndId != null and timeEndId != 0">time_end_id=#{timeEndId},</if>
@@ -144,6 +153,10 @@
             <if test="instructorStudentid != null and instructorStudentid != ''">instructor_studentid,</if>
             <if test="instructorOrganization != null and instructorOrganization != ''">instructor_organization,</if>
             <if test="instructorPhone != null and instructorPhone != ''">instructor_phone,</if>
+        <if test="fudaoName != null and fudaoName != ''">fudao_name,</if>
+        <if test="fudaoStudentid != null and fudaoStudentid != ''">fudao_studentid,</if>
+        <if test="fudaoOrganization != null and fudaoOrganization != ''">fudao_organization,</if>
+        <if test="fudaoPhone != null and fudaoPhone != ''">fudao_phone,</if>
             apply_day,
             <if test="timeStartId != null and timeStartId != 0">time_start_id,</if>
             <if test="timeEndId != null and timeEndId != 0">time_end_id,</if>
@@ -170,6 +183,10 @@
         <if test="instructorStudentid != null and instructorStudentid != ''">#{instructorStudentid},</if>
         <if test="instructorOrganization != null and instructorOrganization != ''">#{instructorOrganization},</if>
         <if test="instructorPhone != null and instructorPhone != ''">#{instructorPhone},</if>
+        <if test="fudaoName != null and fudaoName != ''">#{fudaoName},</if>
+        <if test="fudaoStudentid != null and fudaoStudentid != ''">#{fudaoStudentid},</if>
+        <if test="fudaoOrganization != null and fudaoOrganization != ''">#{fudaoOrganization},</if>
+        <if test="fudaoPhone != null and fudaoPhone != ''">#{fudaoPhone},</if>
         #{applyDay, jdbcType=DATE},
         <if test="timeStartId != null and timeStartId != ''">#{timeStartId},</if>
         <if test="timeEndId != null and timeEndId != ''">#{timeEndId},</if>

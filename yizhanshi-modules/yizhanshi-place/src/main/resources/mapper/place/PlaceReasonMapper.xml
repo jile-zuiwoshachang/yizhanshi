@@ -35,19 +35,19 @@
         insert into business_place_reason (
         <if test="reasonId != null and reasonId != 0">reason_id,</if>
         <if test="reasonName != null and reasonName != ''">reason_name,</if>
-        <if test="reasonType != null and reasonType != ''">reason_type,</if>
+        <if test="reasonType != null and reasonType != ''">reason_type</if>
         )values(
         <if test="reasonId != null and reasonId != 0">#{reasonId},</if>
         <if test="reasonName != null and reasonName != ''">#{reasonName},</if>
-        <if test="reasonType != null and reasonType != ''">#{reasonType},</if>
+        <if test="reasonType != null and reasonType != ''">#{reasonType}</if>
         )
     </insert>
 
     <update id="updatePlaceReason" parameterType="com.yizhanshi.place.domain.PlaceReason">
         update business_place_reason
         <set>
-            <if test="reasonName != null and reasonName != 0">reason_name=#{reasonName},</if>
-            <if test="reasonType != null and reasonType != ''">reason_type=#{reasonType},</if>
+            <if test="reasonName != null and reasonName != ''">reason_name=#{reasonName},</if>
+            <if test="reasonType != null and reasonType != ''">reason_type=#{reasonType}</if>
         </set>
         where reason_id = #{reasonId}
     </update>

@@ -56,6 +56,13 @@ public class SysUser extends BaseEntity
     /** 手机号码 */
     @Excel(name = "手机号码")
     private String userPhone;
+    /** 用户qq */
+    @Excel(name = "用户qq")
+    private String userQq;
+
+    /** 用户微信 */
+    @Excel(name = "用户微信号")
+    private String userWechat;
 
     /** 用户评价分数*/
     @Excel(name = "用户评价分数(满分100)")
@@ -150,7 +157,21 @@ public class SysUser extends BaseEntity
         return userId != null && 123456789L == userId;
     }
 
+    public String getUserQq() {
+        return userQq;
+    }
 
+    public void setUserQq(String userQq) {
+        this.userQq = userQq;
+    }
+
+    public String getUserWechat() {
+        return userWechat;
+    }
+
+    public void setUserWechat(String userWechat) {
+        this.userWechat = userWechat;
+    }
 
     @Xss(message = "用户姓名不能包含脚本字符")
     @NotBlank(message = "用户姓名不能为空")
@@ -166,7 +187,7 @@ public class SysUser extends BaseEntity
     }
 
     @Email(message = "邮箱格式不正确")
-    @Size(min = 0, max = 30, message = "邮箱长度不能超过30个字符")
+    @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
     public String getUserEmail()
     {
         return userEmail;
@@ -325,6 +346,8 @@ public class SysUser extends BaseEntity
                 .append("userType", getUserType())
                 .append("userEmail", getUserEmail())
                 .append("userPhone", getUserPhone())
+                .append("userQq", getUserQq())
+                .append("userWechat", getUserWechat())
                 .append("userScore", getUserScore())
                 .append("userDescription", getUserDescription())
                 .append("status", getStatus())

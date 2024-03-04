@@ -1,14 +1,15 @@
+# 使用时，用容器名称:容器端口号访问
 version : '3.8'
 services:
   yizhanshi-nacos:
     container_name: yizhanshi-nacos
-    image: nacos/nacos-server
+    image: nacos/nacos-server:v2.3.0
     build:
       context: ./nacos
     environment:
       - MODE=standalone
     volumes:
-      - ./nacos/logs/:/home/nacos/logs
+      - ./nacos/logs:/home/nacos/logs
       - ./nacos/conf/application.properties:/home/nacos/conf/application.properties
     ports:
       - "8848:8848"
@@ -18,60 +19,59 @@ services:
       - yizhanshi-mysql
   yizhanshi-mysql:
     container_name: yizhanshi-mysql
-    image: mysql:5.7
+    image: mysql:8.0.30
     build:
       context: ./mysql
     ports:
-      - "3306:3306"
+      - "13306:3306"
     volumes:
-      - ./mysql/conf:/etc/mysql/conf.d
-      - ./mysql/logs:/logs
+      - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/logs:/var/logs/mysql
       - ./mysql/data:/var/lib/mysql
     command: [
           'mysqld',
-          '--innodb-buffer-pool-size=80M',
+          '--innodb-buffer-pool-size=100M',
           '--character-set-server=utf8mb4',
           '--collation-server=utf8mb4_unicode_ci',
           '--default-time-zone=+8:00',
           '--lower-case-table-names=1'
         ]
     environment:
-      MYSQL_DATABASE: 'ry-cloud'
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: 'yizhanshi-system'
+      MYSQL_ROOT_PASSWORD: Nwafu_176012
   yizhanshi-redis:
     container_name: yizhanshi-redis
-    image: redis
+    image: redis:7.2
     build:
       context: ./redis
     ports:
-      - "6379:6379"
+      - "16379:6379"
     volumes:
-      - ./redis/conf/redis.conf:/home/yizhanshi/redis/redis.conf
+      - ./redis/redis.conf:/etc/redis/redis.conf
       - ./redis/data:/data
-    command: redis-server /home/yizhanshi/redis/redis.conf
-  yizhanshi-nginx:
-    container_name: yizhanshi-nginx
-    image: nginx
-    build:
-      context: ./nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/html/dist:/home/yizhanshi/projects/yizhanshi-ui
-      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/logs:/var/log/nginx
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - yizhanshi-gateway
-    links:
-      - yizhanshi-gateway
+#  yizhanshi-nginx:
+#    container_name: yizhanshi-nginx
+#    image: nginx
+#    build:
+#      context: ./nginx
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./nginx/html/dist:/home/yizhanshi/projects/yizhanshi-ui
+#      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+#      - ./nginx/logs:/var/log/nginx
+#      - ./nginx/conf.d:/etc/nginx/conf.d
+#    depends_on:
+#      - yizhanshi-gateway
+#    links:
+#      - yizhanshi-gateway
   yizhanshi-gateway:
     container_name: yizhanshi-gateway
     build:
       context: ./yizhanshi/gateway
       dockerfile: dockerfile
     ports:
-      - "8080:8080"
+      - "18080:8080"
     depends_on:
       - yizhanshi-redis
     links:
@@ -100,41 +100,32 @@ services:
     links:
       - yizhanshi-redis
       - yizhanshi-mysql
-  yizhanshi-modules-gen:
-    container_name: yizhanshi-modules-gen
+  yizhanshi-place:
+    container_name: yizhanshi-place
     build:
-      context: ./yizhanshi/modules/gen
+      context: ./yizhanshi/modules/place
       dockerfile: dockerfile
     ports:
       - "9202:9202"
     depends_on:
+      - yizhanshi-redis
       - yizhanshi-mysql
     links:
+      - yizhanshi-redis
       - yizhanshi-mysql
-  yizhanshi-modules-job:
-    container_name: yizhanshi-modules-job
-    build:
-      context: ./yizhanshi/modules/job
-      dockerfile: dockerfile
-    ports:
-      - "9203:9203"
-    depends_on:
-      - yizhanshi-mysql
-    links:
-      - yizhanshi-mysql
-  yizhanshi-modules-file:
-    container_name: yizhanshi-modules-file
-    build:
-      context: ./yizhanshi/modules/file
-      dockerfile: dockerfile
-    ports:
-      - "9300:9300"
-    volumes:
-    - ./yizhanshi/uploadPath:/home/yizhanshi/uploadPath
-  yizhanshi-visual-monitor:
-    container_name: yizhanshi-visual-monitor
-    build:
-      context: ./yizhanshi/visual/monitor
-      dockerfile: dockerfile
-    ports:
-      - "9100:9100"
+#  yizhanshi-modules-file:
+#    container_name: yizhanshi-modules-file
+#    build:
+#      context: ./yizhanshi/modules/file
+#      dockerfile: dockerfile
+#    ports:
+#      - "9300:9300"
+#    volumes:
+#    - ./yizhanshi/uploadPath:/home/yizhanshi/uploadPath
+#  yizhanshi-visual-monitor:
+#    container_name: yizhanshi-visual-monitor
+#    build:
+#      context: ./yizhanshi/visual/monitor
+#      dockerfile: dockerfile
+#    ports:
+#      - "9100:9100"

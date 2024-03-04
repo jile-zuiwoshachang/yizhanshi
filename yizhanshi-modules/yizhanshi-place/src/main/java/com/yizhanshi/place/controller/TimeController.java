@@ -93,8 +93,8 @@ public class TimeController extends BaseController {
      * @return
      */
     @RequiresPermissions("business:time:remove")
-    @DeleteMapping("/{timeType}")
-    public AjaxResult remove(@PathVariable("timeType") String timeType){
+    @DeleteMapping("/ByTimeType")
+    public AjaxResult remove( String timeType){
         return toAjax(timeService.deleteTime(timeType));
     }
 
@@ -114,7 +114,7 @@ public class TimeController extends BaseController {
         if(CollectionUtils.isEmpty(placeApplyService.selectPlaceApplyList(placeApply))){
             return toAjax(timeService.updateStatus(status,timeType));
         }else{
-            return  error("存在未来的场地申请记录，目前不可修改时间");
+            return  error("存在现在和未来的场地申请记录，目前不可修改时间");
         }
 
     }

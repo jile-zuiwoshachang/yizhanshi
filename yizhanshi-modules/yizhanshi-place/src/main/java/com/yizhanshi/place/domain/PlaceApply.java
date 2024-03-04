@@ -43,12 +43,19 @@ public class PlaceApply extends BaseEntity {
     private String instructorOrganization;
     @Excel(name = "指导老师电话")
     private String instructorPhone;
+    @Excel(name = "辅导员姓名")
+    private String fudaoName;
 
+    @Excel(name = "辅导员学号")
+    private String fudaoStudentid;
+
+    @Excel(name = "辅导员学院")
+    private String fudaoOrganization;
+    @Excel(name = "辅导员电话")
+    private String fudaoPhone;
+    @Excel(name="申请日期")
     private Date applyDay;
-
-
     private Long timeStartId;
-
     private Long timeEndId;
 
     @Excel(name = "开始时间")
@@ -106,6 +113,7 @@ public class PlaceApply extends BaseEntity {
         this.userStudentid = userStudentid;
     }
 
+
     public String getRecallStatus() {
         return recallStatus;
     }
@@ -158,8 +166,40 @@ public class PlaceApply extends BaseEntity {
         return instructorOrganization;
     }
 
-    public void setInstructorOrgnization(String instructorOrganization) {
+    public void setInstructorOrganization(String instructorOrganization) {
         this.instructorOrganization = instructorOrganization;
+    }
+
+    public String getFudaoName() {
+        return fudaoName;
+    }
+
+    public void setFudaoName(String fudaoName) {
+        this.fudaoName = fudaoName;
+    }
+
+    public String getFudaoStudentid() {
+        return fudaoStudentid;
+    }
+
+    public void setFudaoStudentid(String fudaoStudentid) {
+        this.fudaoStudentid = fudaoStudentid;
+    }
+
+    public String getFudaoOrganization() {
+        return fudaoOrganization;
+    }
+
+    public void setFudaoOrganization(String fudaoOrganization) {
+        this.fudaoOrganization = fudaoOrganization;
+    }
+
+    public String getFudaoPhone() {
+        return fudaoPhone;
+    }
+
+    public void setFudaoPhone(String fudaoPhone) {
+        this.fudaoPhone = fudaoPhone;
     }
 
     public String getInstructorPhone() {
@@ -309,8 +349,12 @@ public class PlaceApply extends BaseEntity {
                 .append("placeId", placeId)
                 .append("instructorName", instructorName)
                 .append("instructorStudentid", instructorStudentid)
-                .append("instructorOrgaization", instructorOrganization)
+                .append("instructorOrganization", instructorOrganization)
                 .append("instructorPhone", instructorPhone)
+                .append("fudaoName", fudaoName)
+                .append("fudaoStudentid", fudaoStudentid)
+                .append("fudaoOrganization", fudaoOrganization)
+                .append("fudaoPhone", fudaoPhone)
                 .append("applyDay", applyDay)
                 .append("timeStartId", timeStartId)
                 .append("timeEndId", timeEndId)

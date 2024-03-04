@@ -14,7 +14,7 @@ public class PlaceReasonServiceImpl implements IPlaceReasonService {
     private PlaceReasonMapper placeReasonMapper;
     @Override
     public List<PlaceReason> selectPlaceReasonList(PlaceReason placeReason){
-        return  placeReasonMapper.selectPlaceReasonList();
+        return  placeReasonMapper.selectPlaceReasonList(placeReason);
     }
     @Override
     public PlaceReason selectReasonById(Long reasonId ){

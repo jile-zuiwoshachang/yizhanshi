@@ -31,7 +31,7 @@ base(){
 
 # 启动程序模块（必须）
 modules(){
-	docker-compose up -d yizhanshi-nginx yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system
+	docker-compose up -d  yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place
 }
 
 # 关闭所有环境/模块

@@ -18,7 +18,7 @@ public class PlaceReason {
     /** 原因名称 */
     private String reasonName;
 
-    /** 原因类型 Big 大活动； Small 小型活动 ；Other 其他*/
+    /** 原因类型 BIG 大活动； SMALL 小型活动 */
     private String reasonType;
 
     public Long getReasonId() {

@@ -1,12 +1,13 @@
 package com.yizhanshi.place.mapper;
 
+import com.yizhanshi.place.domain.Place;
 import com.yizhanshi.place.domain.PlaceReason;
 import com.yizhanshi.place.domain.Time;
 
 import java.util.List;
 
 public interface PlaceReasonMapper {
-    public List<PlaceReason> selectPlaceReasonList();
+    public List<PlaceReason> selectPlaceReasonList(PlaceReason placeReason);
     public PlaceReason selectReasonById(Long reasonId);
     /**
      * 新增原因

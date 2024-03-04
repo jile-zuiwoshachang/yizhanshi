@@ -1,6 +1,7 @@
 package com.yizhanshi.place.mapper;
 
 import com.yizhanshi.place.domain.Time;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,6 +30,6 @@ public interface TimeMapper {
     /**
      * 修改状态
      */
-    public int updateStatus(String status,String  timeType);
+    public int updateStatus(@Param("status") String status,@Param("timeType") String  timeType);
 
 }
