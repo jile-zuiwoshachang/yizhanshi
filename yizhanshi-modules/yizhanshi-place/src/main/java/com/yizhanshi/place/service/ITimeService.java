@@ -1,6 +1,6 @@
 package com.yizhanshi.place.service;
 
-import com.yizhanshi.place.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApply;
 import com.yizhanshi.place.domain.Time;
 
 import java.util.List;
@@ -32,9 +32,6 @@ public interface ITimeService {
      * 修改状态
      */
     public int updateStatus(String status,String timeType);
-    /**
-     * 判断时间冲突
-     */
-    public Boolean timeConflict(List<PlaceApply> dataBase,PlaceApply newApply);
+
 
 }

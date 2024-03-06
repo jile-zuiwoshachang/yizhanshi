@@ -1,5 +1,9 @@
 package com.yizhanshi.course.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.yizhanshi.common.core.constant.SecurityConstants;
+import com.yizhanshi.common.core.domain.R;
+import com.yizhanshi.common.core.exception.ServiceException;
 import com.yizhanshi.common.core.utils.DateUtils;
 import com.yizhanshi.common.core.utils.poi.ExcelUtil;
 import com.yizhanshi.common.core.web.controller.BaseController;
@@ -7,21 +11,28 @@ import com.yizhanshi.common.core.web.domain.AjaxResult;
 import com.yizhanshi.common.core.web.page.TableDataInfo;
 import com.yizhanshi.common.log.annotation.Log;
 import com.yizhanshi.common.log.enums.BusinessType;
+import com.yizhanshi.common.security.annotation.InnerAuth;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
-import com.yizhanshi.course.domain.Course;
+import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.course.domain.CourseApply;
 import com.yizhanshi.course.domain.vo.AllCourse;
+import com.yizhanshi.course.domain.vo.CourseExport;
+import com.yizhanshi.course.service.ICourseApplyService;
 import com.yizhanshi.course.service.ICourseService;
+import com.yizhanshi.place.api.RemotePlaceService;
+import com.yizhanshi.place.api.domain.Place;
+import com.yizhanshi.place.api.domain.PlaceApply;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 业务层——课程信息
@@ -33,6 +44,9 @@ import java.util.List;
 public class CourseController extends BaseController {
     @Autowired
     private ICourseService courseService;
+    @Autowired
+    private ICourseApplyService courseApplyService;
+
 
     /**
      * 课程信息-管理员使用
@@ -55,8 +69,17 @@ public class CourseController extends BaseController {
     public void export(HttpServletResponse response, @RequestBody Course course)
     {
         List<Course> list = courseService.selectCourseList(course);
-        ExcelUtil<Course> util = new ExcelUtil<Course>(Course.class);
-        util.exportExcel(response, list, "课程信息数据");
+        List<CourseExport> courseExportList = list.stream()
+                .map(courseTemp -> {
+                    CourseExport courseExport = new CourseExport();
+                    BeanUtils.copyProperties(courseTemp, courseExport);
+                    courseExport.setPlaceName(courseTemp.getPlaces().getPlaceName());
+                    courseExport.setTeacherName(courseTemp.getTeachers().getTeacherName());
+                    return courseExport;
+                })
+                .collect(Collectors.toList());
+        ExcelUtil<CourseExport> util = new ExcelUtil<CourseExport>(CourseExport.class);
+        util.exportExcel(response, courseExportList, "课程信息数据");
     }
     /**
      * 根据课程编号获取详细信息
@@ -76,7 +99,25 @@ public class CourseController extends BaseController {
     @Log(title = "课程管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult addCourse(@Validated @RequestBody Course course) {
-
+        //判断时间冲突
+        //查询那个场地那天的申请情况
+        String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,course.getCourseDay());
+        List<Course> dataBaseCourses = courseService.selectAllCourse(course.getPlaceId(),str);
+        if(courseService.timeConflict(dataBaseCourses,course)){
+            return error("时间冲突!请查看当天课程信息后修改时间");
+        }
+        //再远程调用该场地服务，判断时间是否冲突
+        PlaceApply placeApply=new PlaceApply();
+        placeApply.setTimeStartId(course.getTimeStartId());
+        placeApply.setTimeEndId(course.getTimeEndId());
+        placeApply.setApplyStartTime(course.getCourseStartTime());
+        placeApply.setApplyEndTime(course.getCourseEndTime());
+        Map<String,Object> params=new HashMap<>();
+        params.put("chooseDay",str);
+        placeApply.setParams(params);
+        if(courseService.timeConflictByPlace(placeApply)){
+            return error("与场地预约冲突，请检查场地预约时间");
+        }
         course.setCreateBy(SecurityUtils.getUsername());
         return toAjax(courseService.insertCourse(course));
     }
@@ -91,8 +132,28 @@ public class CourseController extends BaseController {
     @PutMapping
     public AjaxResult editCourse(@Validated @RequestBody Course course)
     {
+        //判断时间冲突
+        //查询那个场地那天的申请情况
+        String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,course.getCourseDay());
+        List<Course> dataBaseCourses = courseService.selectAllCourse(course.getPlaceId(),str);
+        if(courseService.timeConflict(dataBaseCourses,course)){
+            return error("时间冲突!请查看当天课程信息后修改时间");
+        }
+        //再远程调用该场地服务，判断时间是否冲突
+        PlaceApply placeApply=new PlaceApply();
+        placeApply.setTimeStartId(course.getTimeStartId());
+        placeApply.setTimeEndId(course.getTimeEndId());
+        placeApply.setApplyStartTime(course.getCourseStartTime());
+        placeApply.setApplyEndTime(course.getCourseEndTime());
+        Map<String,Object> params=new HashMap<>();
+        params.put("chooseDay",str);
+        placeApply.setParams(params);
+        if(courseService.timeConflictByPlace(placeApply)){
+            return error("与场地预约冲突，请检查场地预约时间");
+        }
         course.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(courseService.updateCourse(course));
+
     }
 
     /**
@@ -112,7 +173,7 @@ public class CourseController extends BaseController {
     /**
      * 查看可预约的课程信息
      * 用于课程申请
-     * 前端传递参数为chooseDay
+     * 前端传递参数为chooseDay place_id
      *
      * @author  hejiale
      */
@@ -122,16 +183,30 @@ public class CourseController extends BaseController {
         //根据查询条件和分页得到初步的课程信息
         List<Course> list = courseService.selectCourseList(course);
         Long[] courseIdList = list.stream().map(Course::getCourseId).toArray(Long[]::new);
-
         List<AllCourse> allCourses=new ArrayList<>();
         for(int i=0;i<courseIdList.length;i++){
-            //获得每个courseid的chooseDay那天的课程申请记录
-            Date chooseDay= DateUtils.parseDate(course.getParams().get("chooseDay"));
-            //为转化加上保险
-            List<CourseApply> courseApplyList= courseApplyService.selectAllCourse(courseIdList[i],  DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,chooseDay));
-            AllCourse allCourse=new AllCourse(list.get(i),courseApplyList);
+            //计算选课人数
+            int chooseNumber= courseApplyService.selectNumberByCourse(courseIdList[i]);
+            Boolean flag;
+            if(chooseNumber<list.get(i).getCourseNumber()){
+                flag=Boolean.TRUE;
+            }else{
+                flag=Boolean.FALSE;
+            }
+            AllCourse allCourse=new AllCourse(list.get(i),chooseNumber,flag);
             allCourses.add(allCourse);
         }
         return getDataTable(allCourses);
+    }
+    @InnerAuth
+    @PostMapping("/timeConflictByCourse")
+    public R<Boolean> timeConflictByCourse(@RequestBody Course course){
+        String chooseDay= (String) course.getParams().get("chooseDay");
+        List<Course> dataBaseCourseApplies = courseService.selectAllCourse(course.getPlaceId(),chooseDay);
+        if(courseService.timeConflict(dataBaseCourseApplies,course)){
+            return R.fail("时间冲突!请查看当天课程信息后修改时间");
+        }
+        return R.ok(Boolean.FALSE);
+
     }
 }

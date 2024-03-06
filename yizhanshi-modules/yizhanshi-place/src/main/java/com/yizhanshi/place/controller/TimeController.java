@@ -5,7 +5,7 @@ import com.yizhanshi.common.core.web.controller.BaseController;
 import com.yizhanshi.common.core.web.domain.AjaxResult;
 import com.yizhanshi.common.core.web.page.TableDataInfo;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
-import com.yizhanshi.place.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApply;
 import com.yizhanshi.place.domain.Time;
 import com.yizhanshi.place.service.IPlaceApplyService;
 import com.yizhanshi.place.service.ITimeService;

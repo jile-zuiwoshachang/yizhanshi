@@ -1,8 +1,8 @@
-package com.yizhanshi.course.domain;
+package com.yizhanshi.course.api.domain;
 
 import com.yizhanshi.common.core.annotation.Excel;
-import com.yizhanshi.common.core.web.domain.BaseEntity;
 import com.yizhanshi.common.core.annotation.Excel.ColumnType;
+import com.yizhanshi.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,7 +12,7 @@ public class Teacher extends BaseEntity {
     private Long teacherId;
     @Excel(name = "老师名称")
     private  String teacherName;
-    @Excel(name = "老师性别",readConverterExp = "0男 1女 2 未知")
+    @Excel(name = "老师性别",readConverterExp = "0=男,1=女,2=未知")
     private String teacherSex;
     @Excel(name = "老师年龄", cellType = ColumnType.NUMERIC)
     private  int teacherAge;

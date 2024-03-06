@@ -6,6 +6,12 @@
         <artifactId>bishe</artifactId>
         <version>3.6.3</version>
     </parent>
+    <dependencies>
+        <dependency>
+            <groupId>com.bishe</groupId>
+            <artifactId>bishe-common-security</artifactId>
+        </dependency>
+    </dependencies>
     <modelVersion>4.0.0</modelVersion>
 
     <modules>

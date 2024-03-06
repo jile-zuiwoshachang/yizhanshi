@@ -1,9 +1,11 @@
-package com.yizhanshi.place.domain;
+package com.yizhanshi.place.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
 import com.yizhanshi.common.core.xss.Xss;
+import com.yizhanshi.place.api.domain.Place;
+import com.yizhanshi.system.api.domain.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,7 +55,7 @@ public class PlaceApply extends BaseEntity {
     private String fudaoOrganization;
     @Excel(name = "辅导员电话")
     private String fudaoPhone;
-    @Excel(name="申请日期")
+    @Excel(name="申请日期",dateFormat = "yyyy-MM-dd")
     private Date applyDay;
     private Long timeStartId;
     private Long timeEndId;
@@ -70,24 +72,29 @@ public class PlaceApply extends BaseEntity {
     private String applyOrganization;
     @Excel(name = "申请内容")
     private String applyContent;
-    @Excel(name = "一级管理员")
+    @Excel(name = "一级管理员学号")
     private String applyAdmin1;
-    @Excel(name = "二级管理员")
+    @Excel(name = "一级管理员姓名")
+    private String applyAdmin1Name;
+    @Excel(name = "二级管理员学号")
     private String applyAdmin2;
+    @Excel(name = "二级管理员姓名")
+    private String applyAdmin2Name;
     @Excel(name = "拒绝理由")
     private String refuseReason;
-    @Excel(name = "可撤销标志",readConverterExp = "0可撤销 1不可撤销 2已花费信誉撤销")
+    @Excel(name = "可撤销标志",readConverterExp = "0=可撤销,1=不可撤销,2=已花费信誉撤销")
     private String recallStatus;
     @Excel(name = "撤销理由")
     private String recallReason;
     /** 状态（0正常 1停用） */
-    @Excel(name = "状态", readConverterExp = "0已申请  1一级通过 2 二级通过 4撤销 5拒绝")
+    @Excel(name = "状态", readConverterExp = "0=已申请,1=一级通过,2=二级通过,4=撤销,5=拒绝")
     private String status;
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
     private Place places;
     private PlaceReason placeReasons;
+    private SysUser sysUsers;
 
     public Long getApplyId() {
         return applyId;
@@ -215,7 +222,7 @@ public class PlaceApply extends BaseEntity {
      * @return
      */
     @NotNull(message = "申请日期不可为null")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     public Date getApplyDay() {
         return applyDay;
     }
@@ -340,6 +347,30 @@ public class PlaceApply extends BaseEntity {
         this.placeReasons = placeReasons;
     }
 
+    public SysUser getSysUsers() {
+        return sysUsers;
+    }
+
+    public void setSysUsers(SysUser sysUsers) {
+        this.sysUsers = sysUsers;
+    }
+
+    public String getApplyAdmin1Name() {
+        return applyAdmin1Name;
+    }
+
+    public void setApplyAdmin1Name(String applyAdmin1Name) {
+        this.applyAdmin1Name = applyAdmin1Name;
+    }
+
+    public String getApplyAdmin2Name() {
+        return applyAdmin2Name;
+    }
+
+    public void setApplyAdmin2Name(String applyAdmin2Name) {
+        this.applyAdmin2Name = applyAdmin2Name;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -365,12 +396,17 @@ public class PlaceApply extends BaseEntity {
                 .append("applyOrganization", applyOrganization)
                 .append("applyContent", applyContent)
                 .append("applyAdmin1", applyAdmin1)
+                .append("applyAdmin1Name", applyAdmin1Name)
                 .append("applyAdmin2", applyAdmin2)
+                .append("applyAdmin2Name", applyAdmin2Name)
                 .append("refuseReason", refuseReason)
                 .append("recallStatus", recallStatus)
                 .append("recallReason", recallReason)
                 .append("status", status)
                 .append("delFlag", delFlag)
+                .append("places", places)
+                .append("placeReasons", placeReasons)
+                .append("sysUsers", sysUsers)
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
@@ -378,4 +414,5 @@ public class PlaceApply extends BaseEntity {
                 .append("remark", getRemark())
                 .toString();
     }
+
 }

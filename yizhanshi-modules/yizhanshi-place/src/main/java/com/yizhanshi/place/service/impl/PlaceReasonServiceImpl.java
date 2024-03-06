@@ -1,6 +1,6 @@
 package com.yizhanshi.place.service.impl;
 
-import com.yizhanshi.place.domain.PlaceReason;
+import com.yizhanshi.place.api.domain.PlaceReason;
 import com.yizhanshi.place.mapper.PlaceReasonMapper;
 import com.yizhanshi.place.service.IPlaceReasonService;
 import org.springframework.beans.factory.annotation.Autowired;

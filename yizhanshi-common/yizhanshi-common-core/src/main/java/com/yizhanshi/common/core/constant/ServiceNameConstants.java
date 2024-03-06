@@ -21,4 +21,12 @@ public class ServiceNameConstants
      * 文件服务的serviceid
      */
     public static final String FILE_SERVICE = "yizhanshi-file";
+    /**
+     * 场地模块的serviceid
+     */
+    public static final String PLACE_SERVICE = "yizhanshi-place";
+    /**
+     * 课程模块的serviceid
+     */
+    public static final String COURSE_SERVICE = "yizhanshi-course";
 }

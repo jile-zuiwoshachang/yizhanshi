@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yizhanshi.course.mapper.CourseMapper">
 
-    <resultMap type="com.yizhanshi.course.domain.Course" id="CourseResult">
+    <resultMap type="com.yizhanshi.course.api.domain.Course" id="CourseResult">
         <id     property="courseId"       column="course_id"      />
         <result property="courseName"       column="course_name"      />
         <result property="courseDescription"     column="course_description"    />
@@ -26,11 +26,11 @@
         <result property="updateTime"     column="update_time"    />
         <result property="updateBy"     column="update_by"    />
         <result property="remark"     column="remark"    />
-        <collection  property="teachers"   javaType="com.yizhanshi.course.domain.Teacher"  resultMap="TeacherResult" />
+        <collection  property="teachers"   javaType="com.yizhanshi.course.api.domain.Teacher"  resultMap="TeacherResult" />
         <collection  property="places"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
     </resultMap>
 
-    <resultMap id="TeacherResult" type="com.yizhanshi.course.domain.Teacher">
+    <resultMap id="TeacherResult" type="com.yizhanshi.course.api.domain.Teacher">
         <id     property="teacherId"       column="teacher_id"        />
         <result property="teacherName"     column="teacher_name"      />
         <result property="teacherUserStudentid"      column="teacher_userStudentid"      />
@@ -54,7 +54,7 @@
         left join business_place p on c.place_id=p.place_id
         left join business_teacher t on c.teacher_id=t.teacher_id
     </sql>
-    <select id="selectCourseList" parameterType="com.yizhanshi.course.domain.Course" resultMap="CourseResult">
+    <select id="selectCourseList" parameterType="com.yizhanshi.course.api.domain.Course" resultMap="CourseResult">
         <include refid="selectCourseVo" />
         where c.del_flag = '0'
         <if test="courseId != null and courseId != 0">
@@ -67,10 +67,10 @@
             AND c.course_type like concat('%', #{courseType}, '%')
         </if>
         <if test="teachers!=null and teachers.teacherName != null and teachers.teacherName != ''">
-            AND c.teacher_name like concat('%', #{teachers.teacherName}, '%')
+            AND t.teacher_name like concat('%', #{teachers.teacherName}, '%')
         </if>
         <if test="places!=null and places.placeName != null and places.placeName != ''">
-            AND c.place_name like concat('%', #{places.placeName}, '%')
+            AND p.place_name like concat('%', #{places.placeName}, '%')
         </if>
         <if test="status != null and status != ''">
             AND c.status = #{status}
@@ -91,21 +91,22 @@
         where c.course_id=#{courseId}
     </select>
 
-    <insert id="insertCourse" parameterType="com.yizhanshi.course.domain.Course" useGeneratedKeys="true" keyProperty="courseId">
+    <insert id="insertCourse" parameterType="com.yizhanshi.course.api.domain.Course" useGeneratedKeys="true" keyProperty="courseId">
         insert into business_course (
         <if test="courseId != null and courseId != 0">course_id,</if>
         <if test="courseName != null and courseName != ''">course_name,</if>
         <if test="courseDescription != null and courseDescription != ''">course_description,</if>
         <if test="courseType != null and courseType != ''">course_type,</if>
         <if test="teacherId != null and teacherId != 0">teacher_id,</if>
-        <if test="courseDay != null and courseDay != ''">course_day,</if>
+        course_day,
         <if test="timeStartId != null and timeStartId != 0">time_start_id,</if>
         <if test="timeEndId != null and timeEndId != 0">time_end_id,</if>
         <if test="courseStartTime != null and courseStartTime != ''">course_start_time,</if>
         <if test="courseEndTime != null and courseEndTime != ''">course_end_time,</if>
-        <if test="courseEndTime != null and courseEndTime != ''">course_end_time,</if>
-        <if test="courseEndTime != null and courseEndTime != ''">course_end_time,</if>
-        <if test="courseEndTime != null and courseEndTime != ''">course_end_time,</if>
+        <if test="placeId != null and placeId != 0">place_id,</if>
+        <if test="courseNumber != null and courseNumber != 0">course_number,</if>
+        <if test="chooseStatus != null and chooseStatus != ''">choose_status,</if>
+        <if test="courseCheck != null and courseCheck != ''">course_check,</if>
         <if test="status != null and status != ''">status,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         <if test="remark != null and remark != ''">remark,</if>
@@ -113,14 +114,18 @@
         )values(
         <if test="courseId != null and courseId != 0">#{courseId},</if>
         <if test="courseName != null and courseName != ''">#{courseName},</if>
-        <if test="courseCampus != null and courseCampus != ''">#{courseCampus},</if>
         <if test="courseDescription != null and courseDescription != ''">#{courseDescription},</if>
-        <if test="courseCapacity != null and courseCapacity != 0">#{courseCapacity},</if>
-        <if test="managerName != null and managerName != ''">#{managerName},</if>
-        <if test="managerPhone != null and managerPhone != ''">#{managerPhone},</if>
-        <if test="coursePicture1 != null and coursePicture1 != ''">#{coursePicture1},</if>
-        <if test="coursePicture2 != null and coursePicture2 != ''">#{coursePicture2},</if>
-        <if test="coursePicture3 != null and coursePicture3 != ''">#{coursePicture3},</if>
+        <if test="courseType != null and courseType != ''">#{courseType},</if>
+        <if test="teacherId != null and teacherId != 0">#{teacherId},</if>
+        #{courseDay, jdbcType=DATE},
+        <if test="timeStartId != null and timeStartId != 0">#{timeStartId},</if>
+        <if test="timeEndId != null and timeEndId != 0">#{timeEndId},</if>
+        <if test="courseStartTime != null and courseStartTime != ''">#{courseStartTime},</if>
+        <if test="courseEndTime != null and courseEndTime != ''">#{courseEndTime},</if>
+        <if test="placeId != null and placeId != 0">#{placeId},</if>
+        <if test="courseNumber != null and courseNumber != 0">#{courseNumber},</if>
+        <if test="chooseStatus != null and chooseStatus != ''">#{chooseStatus},</if>
+        <if test="courseCheck != null and courseCheck != ''">#{courseCheck},</if>
         <if test="status != null and status != ''">#{status},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
@@ -128,18 +133,23 @@
         )
     </insert>
 
-    <update id="updateCourse" parameterType="com.yizhanshi.course.domain.Course">
+    <update id="updateCourse" parameterType="com.yizhanshi.course.api.domain.Course">
         update business_course
         <set>
             <if test="courseName != null and courseName != ''">course_name=#{courseName},</if>
-            <if test="courseCampus != null and courseCampus != ''">course_campus=#{courseCampus},</if>
             <if test="courseDescription != null and courseDescription != ''">course_description=#{courseDescription},</if>
-            <if test="courseCapacity != null and courseCapacity != 0">course_capacity=#{courseCapacity},</if>
-            <if test="managerName != null and managerName != ''">manager_name=#{managerName},</if>
-            <if test="managerPhone != null and managerPhone != ''">manager_phone=#{managerPhone},</if>
-            <if test="coursePicture1 != null and coursePicture1 != ''">course_picture1=#{coursePicture1},</if>
-            <if test="coursePicture2 != null and coursePicture2 != ''">course_picture2=#{coursePicture2},</if>
-            <if test="coursePicture3 != null and coursePicture3 != ''">course_picture3=#{coursePicture3},</if>
+            <if test="courseType != null and courseType != ''">course_type=#{courseType},</if>
+            <if test="teacherId != null and teacherId != 0">teacher_id=#{teacherId},</if>
+            <if test="courseDay != null ">course_day=#{courseDay,jdbcType=DATE},</if>
+            <if test="timeStartId != null and timeStartId != 0">time_start_id=#{timeStartId},</if>
+            <if test="timeEndId != null and timeEndId != 0">time_end_id=#{timeEndId},</if>
+            <if test="courseStartTime != null and courseStartTime != ''">course_start_time=#{courseStartTime},</if>
+            <if test="courseEndTime != null and courseEndTime != ''">course_end_time=#{courseEndTime},</if>
+            <if test="placeId != null and placeId != 0">place_id=#{placeId},</if>
+            <if test="courseNumber != null and courseNumber != 0">course_number=#{courseNumber},</if>
+            <if test="chooseStatus != null and chooseStatus != ''">choose_status=#{chooseStatus},</if>
+            <if test="courseCheck != null and courseCheck != ''">course_check=#{courseCheck},</if>
+            <if test="chooseStatus != null and chooseStatus != ''">choose_status=#{chooseStatus},</if>
             <if test="status != null and status != ''">status=#{status},</if>
             <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
             <if test="remark != null and remark != ''">remark=#{remark},</if>
@@ -153,7 +163,11 @@
             #{courseId}
         </foreach>
     </delete>
-
+    <select id="selectAllCourse" resultMap="CourseResult">
+        <include refid="selectCourseVo"/>
+        where c.place_id  = #{placeId}
+        AND date_format(c.course_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d')
+    </select>
 
 
 </mapper>

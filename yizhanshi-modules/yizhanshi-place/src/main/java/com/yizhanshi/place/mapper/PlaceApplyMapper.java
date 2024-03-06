@@ -1,7 +1,7 @@
 package com.yizhanshi.place.mapper;
 
 import com.yizhanshi.place.api.domain.Place;
-import com.yizhanshi.place.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApply;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

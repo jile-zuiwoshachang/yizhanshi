@@ -1,7 +1,8 @@
 package com.yizhanshi.course.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.yizhanshi.course.domain.Course;
+import com.yizhanshi.course.api.domain.Course;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * 返回给前端用于课程申请的课程列表
@@ -42,5 +43,20 @@ public class AllCourse {
 
     public void setFlag(Boolean flag) {
         this.flag = flag;
+    }
+
+    public AllCourse(Course course, int chooseNumber, Boolean flag) {
+        this.course = course;
+        this.chooseNumber = chooseNumber;
+        this.flag = flag;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("course", course)
+                .append("chooseNumber", chooseNumber)
+                .append("flag", flag)
+                .toString();
     }
 }

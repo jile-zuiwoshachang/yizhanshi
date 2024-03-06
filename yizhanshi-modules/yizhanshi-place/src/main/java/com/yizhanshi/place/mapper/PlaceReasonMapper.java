@@ -1,7 +1,7 @@
 package com.yizhanshi.place.mapper;
 
 import com.yizhanshi.place.api.domain.Place;
-import com.yizhanshi.place.domain.PlaceReason;
+import com.yizhanshi.place.api.domain.PlaceReason;
 import com.yizhanshi.place.domain.Time;
 
 import java.util.List;

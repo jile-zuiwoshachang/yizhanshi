@@ -42,8 +42,8 @@ public class SysUser extends BaseEntity
     /** 用户学院 */
     @Excel(name = "用户学院")
     private String userOrganization;
-    /** 用户学院 */
-    @Excel(name = "所在校区",readConverterExp = "北校区 南校区")
+    /** 用户校区 */
+    @Excel(name = "所在校区",readConverterExp = "0=北校区,1=南校区")
     private String userCampus;
     /** 用户类型 */
     @Excel(name = "用户类型", readConverterExp = "01=普通,02=管理,03=系统")

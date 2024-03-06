@@ -1,6 +1,6 @@
 package com.yizhanshi.place.service;
 
-import com.yizhanshi.place.domain.PlaceReason;
+import com.yizhanshi.place.api.domain.PlaceReason;
 
 import java.util.List;
 

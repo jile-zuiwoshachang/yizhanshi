@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yizhanshi.place.mapper.PlaceApplyMapper">
 
-    <resultMap type="com.yizhanshi.place.domain.PlaceApply" id="PlaceApplyResult">
+    <resultMap type="com.yizhanshi.place.api.domain.PlaceApply" id="PlaceApplyResult">
         <id     property="applyId"       column="apply_id"      />
         <result property="applyName"       column="apply_name"      />
         <result property="userStudentid"       column="user_studentid"      />
@@ -27,7 +27,9 @@
         <result property="applyOrganization"        column="apply_organization"        />
         <result property="applyContent"        column="apply_content"        />
         <result property="applyAdmin1"        column="apply_admin1"        />
+        <result property="applyAdmin1Name"        column="apply_admin1_name"        />
         <result property="applyAdmin2"        column="apply_admin2"        />
+        <result property="applyAdmin2Name"        column="apply_admin2_name"        />
         <result property="refuseReason"        column="refuse_reason"        />
         <result property="recallStatus"        column="recall_status"        />
         <result property="recallReason"        column="recall_reason"        />
@@ -39,7 +41,7 @@
         <result property="updateBy"     column="update_by"    />
         <result property="remark"     column="remark"    />
         <collection  property="places"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
-        <collection  property="placeReasons"   javaType="com.yizhanshi.place.domain.PlaceReason"  resultMap="PlaceReasonResult" />
+        <collection  property="placeReasons"   javaType="com.yizhanshi.place.api.domain.PlaceReason"  resultMap="PlaceReasonResult" />
     </resultMap>
     <resultMap id="PlaceResult" type="com.yizhanshi.place.api.domain.Place">
         <id     property="placeId"       column="place_id"        />
@@ -48,25 +50,39 @@
         <result property="placeCapacity"     column="place_capacity"      />
         <result property="status"       column="status"    />
     </resultMap>
-    <resultMap id="PlaceReasonResult" type="com.yizhanshi.place.domain.PlaceReason">
+    <resultMap id="PlaceReasonResult" type="com.yizhanshi.place.api.domain.PlaceReason">
         <id     property="reasonId"       column="reason_id"        />
         <result property="reasonName"     column="reason_name"      />
         <result property="reasonType"      column="reason_type"       />
+    </resultMap>
+    <resultMap id="UserResult" type="com.yizhanshi.system.api.domain.SysUser">
+        <id     property="userId"       column="user_id"        />
+        <result property="userStudentid"      column="user_studentid"       />
+        <result property="userName"     column="user_name"      />
+        <result property="userOrganization"      column="user_organization"       />
+        <result property="userCampus"      column="user_campus"       />
+        <result property="userEmail"      column="user_email"       />
+        <result property="userPhone"      column="user_phone"       />
+        <result property="userQq"      column="user_qq"       />
+        <result property="userWechat"      column="user_wechat"       />
+        <result property="userScore"      column="user_score"       />
     </resultMap>
     <sql id="selectPlaceApplyVo">
         select pa.apply_id, pa.apply_name, pa.user_studentid,pa.place_id,pa.instructor_name,
         pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,
         pa.fudao_name, pa.fudao_studentid,pa.fudao_organization,pa.fudao_phone,pa.apply_day,
         pa.time_start_id,pa.time_end_id,pa.apply_start_time,pa.apply_end_time,pa.apply_number,pa.reason_id,pa.apply_organization,
-        pa.apply_content,pa.apply_admin1,pa.apply_admin2,pa.refuse_reason,pa.recall_reason,
+        pa.apply_content,pa.apply_admin1,pa.apply_admin1_name,pa.apply_admin2,pa.apply_admin2_name,pa.refuse_reason,pa.recall_reason,
         pa.recall_status,pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
         p.place_id,p.place_name,p.place_campus,p.place_description,p.place_capacity,p.status,
-        pr.reason_id,pr.reason_name,pr.reason_type
+        pr.reason_id,pr.reason_name,pr.reason_type,
+        u.user_id,u.user_studentid,u.user_name,u.user_organization,u.user_campus,u.user_email,u.user_phone,u.user_qq,u.user_wechat,u.user_score
         from business_place_apply pa
         left join business_place p on pa.place_id=p.place_id
         left join business_place_reason pr on pa.reason_id=pr.reason_id
+        left join system_user u on u.user_studentid=pa.user_studentid
     </sql>
-    <select id="selectPlaceApplyList" parameterType="com.yizhanshi.place.domain.PlaceApply" resultMap="PlaceApplyResult">
+    <select id="selectPlaceApplyList" parameterType="com.yizhanshi.place.api.domain.PlaceApply" resultMap="PlaceApplyResult">
        <include refid="selectPlaceApplyVo"></include>
         where pa.del_flag = '0'
         <if test="applyId != null and applyId != 0">
@@ -75,8 +91,8 @@
         <if test="applyName != null and applyName != ''">
             AND pa.apply_name = #{applyName}
         </if>
-        <if test="userStudentid != null and useSstudentid != ''">
-            AND pa.userStudentid like concat('%', #{userStudentid}, '%')
+        <if test="userStudentid != null and userStudentid != ''">
+            AND pa.user_studentid like concat('%', #{userStudentid}, '%')
         </if>
         <if test="params.chooseDay != null and params.chooseDay  != ''">
             AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
@@ -103,7 +119,7 @@
     </select>
 
 
-    <update id="updatePlaceApply" parameterType="com.yizhanshi.place.domain.PlaceApply">
+    <update id="updatePlaceApply" parameterType="com.yizhanshi.place.api.domain.PlaceApply">
     update business_place_apply
     <set>
         <if test="applyName != null and applyName != ''">apply_name=#{applyName},</if>
@@ -117,7 +133,7 @@
         <if test="fudaoStudentid != null and fudaoStudentid != ''">fudao_studentid=#{fudaoStudentid},</if>
         <if test="fudaoOrganization != null and fudaoOrganization != ''">fudao_organization=#{fudaoOrganization},</if>
         <if test="fudaoPhone != null and fudaoPhone != ''">fudao_phone=#{fudaoPhone},</if>
-        <if test="applyDay != null and applyDay != ''">apply_day=#{applyDay},</if>
+        <if test="applyDay != null">apply_day=#{applyDay,jdbcType=DATE},</if>
         <if test="timeStartId != null and timeStartId != 0">time_start_id=#{timeStartId},</if>
         <if test="timeEndId != null and timeEndId != 0">time_end_id=#{timeEndId},</if>
         <if test="applyStartTime != null and applyStartTime != ''">apply_start_time=#{applyStartTime},</if>
@@ -126,7 +142,9 @@
         <if test="reasonId != null and reasonId != 0">reason_id=#{reasonId},</if>
         <if test="applyContent != null and applyContent != ''">apply_content=#{applyContent},</if>
         <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1=#{applyAdmin1},</if>
+        <if test="applyAdmin1Name != null and applyAdmin1Name != ''">apply_admin1_name=#{applyAdmin1Name},</if>
         <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2=#{applyAdmin2},</if>
+        <if test="applyAdmin2Name != null and applyAdmin2Name != ''">apply_admin2_name=#{applyAdmin2Name},</if>
         <if test="refuseReason != null and refuseReason != ''">refuse_reason=#{refuseReason},</if>
         <if test="recallStatus != null and recallStatus != ''">recall_status=#{recallStatus},</if>
         <if test="recallReason != null and recallReason != ''">recall_reason=#{recallReason},</if>
@@ -143,7 +161,7 @@
             #{applyId}
         </foreach>
     </delete>
-    <insert id="insertPlaceApply" parameterType="com.yizhanshi.place.domain.PlaceApply" useGeneratedKeys="true" keyProperty="applyId">
+    <insert id="insertPlaceApply" parameterType="com.yizhanshi.place.api.domain.PlaceApply" useGeneratedKeys="true" keyProperty="applyId">
         insert into business_place_apply(
             <if test="applyId != null and applyId != 0">apply_id,</if>
             <if test="applyName != null and applyName != ''">apply_name,</if>
@@ -166,7 +184,9 @@
             <if test="reasonId != null and reasonId != 0">reason_id,</if>
             <if test="applyContent != null and applyContent != ''">apply_content,</if>
             <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1,</if>
+            <if test="applyAdmin1Name != null and applyAdmin1Name != ''">apply_admin1_name,</if>
             <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2,</if>
+            <if test="applyAdmin2Name != null and applyAdmin2Name != ''">apply_admin2_name,</if>
             <if test="refuseReason != null and refuseReason != ''">refuse_reason,</if>
             <if test="recallStatus != null and recallStatus != ''">recall_status,</if>
             <if test="recallReason != null and recallReason != ''">recall_reason,</if>
@@ -196,7 +216,9 @@
         <if test="reasonId != null and reasonId != 0">#{reasonId},</if>
         <if test="applyContent != null and applyContent != ''">#{applyContent},</if>
         <if test="applyAdmin1 != null and applyAdmin1 != ''">#{applyAdmin1},</if>
+        <if test="applyAdmin1Name != null and applyAdmin1Name != ''">#{applyAdmin1Name},</if>
         <if test="applyAdmin2 != null and applyAdmin2 != ''">#{applyAdmin2},</if>
+        <if test="applyAdmin2Name != null and applyAdmin2Name != ''">#{applyAdmin2Name},</if>
         <if test="refuseReason != null and refuseReason != ''">#{refuseReason},</if>
         <if test="recallStatus != null and recallStatus != ''">#{recallStatus},</if>
         <if test="recallReason != null and recallReason != ''">#{recallReason},</if>

@@ -24,7 +24,7 @@ public class SysCredit extends BaseEntity {
     private Long creditId;
     @Excel(name = "信誉操作原因")
     private String creditContent;
-    @Excel(name = "信誉操作来源", readConverterExp = "自己操作 管理员操作 系统自动操作")
+    @Excel(name = "信誉操作来源", prompt = "自己操作 管理员操作 系统自动操作")
     private String creditSource;
     /** 学号 */
     @Excel(name = "用户学号", type = Excel.Type.EXPORT)

@@ -1,0 +1,44 @@
+package com.yizhanshi.course.service;
+
+import com.yizhanshi.course.domain.CourseApply;
+import com.yizhanshi.place.api.domain.PlaceApply;
+
+import java.util.List;
+
+public interface ICourseApplyService {
+    /**
+     * 根据课程id查询选课列表
+     * @param courseIds
+     * @return
+     */
+    public List<CourseApply> selectByCourseIds(Long[] courseIds);
+    /**
+     * 查询课程id所在课程的选课人数
+     */
+    public int selectNumberByCourse(Long courseId);
+
+    /**
+     * 查询课程申请单列表
+     * @param courseApply
+     * @return
+     */
+    public List<CourseApply> selectCourseApplyList(CourseApply courseApply);
+
+    /**
+     * 根据编号查询具体信息
+     */
+    public CourseApply selectCourseApplyById(Long applyId);
+    /**
+     * 修改课程申请信息
+     */
+    public  int updateCourseApply(CourseApply courseApply);
+    /**
+     * 删除选课信息
+     */
+    public int deleteCourseApply(Long[] applyIds);
+    /**
+     * 新增选课信息
+     */
+    public int insertCourseApply(CourseApply courseApply);
+
+}

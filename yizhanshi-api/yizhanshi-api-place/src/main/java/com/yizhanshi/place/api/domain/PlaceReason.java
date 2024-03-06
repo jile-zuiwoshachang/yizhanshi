@@ -1,4 +1,4 @@
-package com.yizhanshi.place.domain;
+package com.yizhanshi.place.api.domain;
 
 import com.yizhanshi.common.core.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;

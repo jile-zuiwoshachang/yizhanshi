@@ -1,8 +1,9 @@
 package com.yizhanshi.place.service;
 
+import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.place.controller.PlaceApplyController;
 import com.yizhanshi.place.api.domain.Place;
-import com.yizhanshi.place.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApply;
 
 import java.util.Date;
 import java.util.List;
@@ -65,4 +66,12 @@ public interface IPlaceApplyService {
      * @return
      */
     public int insertPlaceApply(PlaceApply placeApply);
+    /**
+     * 判断时间冲突
+     */
+    public Boolean timeConflict(List<PlaceApply> dataBase,PlaceApply newApply);
+    /**
+     * 远程调用课程冲突
+     */
+    public Boolean timeConflictByCourse(Course course);
 }

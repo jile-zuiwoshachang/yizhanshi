@@ -11,6 +11,7 @@
     <modules>
         <module>yizhanshi-api-system</module>
         <module>yizhanshi-api-place</module>
+        <module>yizhanshi-api-course</module>
     </modules>
 
     <artifactId>bishe-api</artifactId>

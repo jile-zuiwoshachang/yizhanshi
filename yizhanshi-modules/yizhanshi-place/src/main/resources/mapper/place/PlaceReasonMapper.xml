@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yizhanshi.place.mapper.PlaceReasonMapper">
 
-    <resultMap type="com.yizhanshi.place.domain.PlaceReason" id="PlaceReasonResult">
+    <resultMap type="com.yizhanshi.place.api.domain.PlaceReason" id="PlaceReasonResult">
         <id     property="reasonId"       column="reason_id"      />
         <result property="reasonName"       column="reason_name"      />
         <result property="reasonType"     column="reason_type"    />
     </resultMap>
 
 
-    <select id="selectPlaceReasonList" parameterType="com.yizhanshi.place.domain.PlaceReason" resultMap="PlaceReasonResult">
+    <select id="selectPlaceReasonList" parameterType="com.yizhanshi.place.api.domain.PlaceReason" resultMap="PlaceReasonResult">
         select r.reason_id,r.reason_name,r.reason_type
         from business_place_reason r
        <where>
@@ -31,7 +31,7 @@
     from business_place_reason r
         where r.reason_id=#{reasonId}
     </select>
-    <insert id="insertPlaceReason" parameterType="com.yizhanshi.place.domain.PlaceReason" useGeneratedKeys="true" keyProperty="reasonId">
+    <insert id="insertPlaceReason" parameterType="com.yizhanshi.place.api.domain.PlaceReason" useGeneratedKeys="true" keyProperty="reasonId">
         insert into business_place_reason (
         <if test="reasonId != null and reasonId != 0">reason_id,</if>
         <if test="reasonName != null and reasonName != ''">reason_name,</if>
@@ -43,7 +43,7 @@
         )
     </insert>
 
-    <update id="updatePlaceReason" parameterType="com.yizhanshi.place.domain.PlaceReason">
+    <update id="updatePlaceReason" parameterType="com.yizhanshi.place.api.domain.PlaceReason">
         update business_place_reason
         <set>
             <if test="reasonName != null and reasonName != ''">reason_name=#{reasonName},</if>

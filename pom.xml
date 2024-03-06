@@ -211,7 +211,12 @@
                 <artifactId>yizhanshi-api-place</artifactId>
                 <version>${bishe.version}</version>
             </dependency>
-
+            <!-- 课程模块接口 -->
+            <dependency>
+                <groupId>com.bishe</groupId>
+                <artifactId>yizhanshi-api-course</artifactId>
+                <version>${bishe.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

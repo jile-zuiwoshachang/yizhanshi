@@ -5,7 +5,7 @@ import com.yizhanshi.common.core.web.domain.AjaxResult;
 import com.yizhanshi.common.core.web.page.TableDataInfo;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.place.api.domain.Place;
-import com.yizhanshi.place.domain.PlaceReason;
+import com.yizhanshi.place.api.domain.PlaceReason;
 import com.yizhanshi.place.domain.Time;
 import com.yizhanshi.place.service.IPlaceReasonService;
 import org.springframework.beans.factory.annotation.Autowired;
