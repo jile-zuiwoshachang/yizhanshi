@@ -24,12 +24,7 @@ public interface IPlaceApplyService {
      * 根据编号查询具体信息
      */
     public PlaceApply selectPlaceApplyById(Long applyId);
-    /**
-     * 根据申请单id查询场地申请列表
-     * @param placeIds
-     * @return
-     */
-    public List<PlaceApply> selectByApplyIds(Long[] placeIds);
+
     /**
      * 查询选择的日期且是这个场地的场地信息
      * @param placeId

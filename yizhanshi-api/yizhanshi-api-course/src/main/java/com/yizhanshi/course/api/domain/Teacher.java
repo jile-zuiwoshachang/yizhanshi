@@ -29,7 +29,7 @@ public class Teacher extends BaseEntity {
     @Excel(name = "老师QQ")
     private  String teacherQq;
     @Excel(name = "老师微信")
-    private  String teacherWeChat;
+    private  String teacherWechat;
 
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
@@ -115,12 +115,12 @@ public class Teacher extends BaseEntity {
         this.teacherQq = teacherQq;
     }
 
-    public String getTeacherWeChat() {
-        return teacherWeChat;
+    public String getTeacherWechat() {
+        return teacherWechat;
     }
 
-    public void setTeacherWeChat(String teacherWeChat) {
-        this.teacherWeChat = teacherWeChat;
+    public void setTeacherWechat(String teacherWechat) {
+        this.teacherWechat = teacherWechat;
     }
 
     public String getStatus() {
@@ -152,7 +152,7 @@ public class Teacher extends BaseEntity {
                 .append("teacherEmail", teacherEmail)
                 .append("teacherPhone", teacherPhone)
                 .append("teacherQq", teacherQq)
-                .append("teacherWeChat", teacherWeChat)
+                .append("teacherWechat", teacherWechat)
                 .append("status", status)
                 .append("delFlag", delFlag)
                 .append("createBy", getCreateBy())

@@ -217,6 +217,12 @@
                 <artifactId>yizhanshi-api-course</artifactId>
                 <version>${bishe.version}</version>
             </dependency>
+            <!-- 监控模块接口 -->
+            <dependency>
+                <groupId>com.bishe</groupId>
+                <artifactId>bishe-visual-monitor</artifactId>
+                <version>${bishe.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

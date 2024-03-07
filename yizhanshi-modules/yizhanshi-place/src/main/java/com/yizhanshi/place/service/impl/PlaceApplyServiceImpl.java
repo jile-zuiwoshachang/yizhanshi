@@ -43,10 +43,6 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
         return placeApplyMapper.selectPlaceApplyById(applyId);
     }
     @Override
-    public List<PlaceApply> selectByApplyIds(Long[] placeApplyIds){
-        return  placeApplyMapper.selectByApplyIds(placeApplyIds);
-    }
-    @Override
     public List<PlaceApply> selectAllPlace(Long placeId, String chooseDay){
         return  placeApplyMapper.selectAllPlace(placeId,chooseDay);
     }

@@ -33,6 +33,7 @@ import com.yizhanshi.system.api.domain.SysCredit;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +48,7 @@ import java.util.stream.Collectors;
  *
  * @author hejiale
  */
+@RefreshScope
 @RestController
 @RequestMapping("/placeApply")
 public class PlaceApplyController extends BaseController {
@@ -106,7 +108,26 @@ public class PlaceApplyController extends BaseController {
     @PutMapping
     public AjaxResult editPlaceApply(@Validated @RequestBody PlaceApply placeApply)
     {
-        //不可修改时间
+        //判断时间冲突
+        //查询那个场地那天的申请情况
+        String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,placeApply.getApplyDay());
+        List<PlaceApply> dataBasePlaceApplies = placeApplyService.selectAllPlace(placeApply.getPlaceId(),str);
+        if(placeApplyService.timeConflict(dataBasePlaceApplies,placeApply)){
+            return error("时间冲突!请查看当天场地预约信息后修改时间");
+        }
+        //再远程调用课程服务，判断时间是否冲突
+        Course course=new Course();
+        course.setTimeStartId(placeApply.getTimeStartId());
+        course.setTimeEndId(placeApply.getTimeEndId());
+        course.setCourseStartTime(placeApply.getApplyStartTime());
+        course.setCourseEndTime(placeApply.getApplyEndTime());
+        course.setPlaceId(placeApply.getPlaceId());
+        Map<String,Object> params=new HashMap<>();
+        params.put("chooseDay",str);
+        course.setParams(params);
+        if(placeApplyService.timeConflictByCourse(course)) {
+            return error("与课程预约冲突，请检查课程预约时间");
+        }
         placeApply.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(placeApplyService.updatePlaceApply(placeApply));
     }
@@ -169,6 +190,7 @@ public class PlaceApplyController extends BaseController {
         course.setTimeEndId(placeApply.getTimeEndId());
         course.setCourseStartTime(placeApply.getApplyStartTime());
         course.setCourseEndTime(placeApply.getApplyEndTime());
+        course.setPlaceId(placeApply.getPlaceId());
         Map<String,Object> params=new HashMap<>();
         params.put("chooseDay",str);
         course.setParams(params);

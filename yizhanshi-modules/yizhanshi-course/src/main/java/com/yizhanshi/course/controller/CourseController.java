@@ -25,6 +25,7 @@ import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
@@ -112,6 +113,7 @@ public class CourseController extends BaseController {
         placeApply.setTimeEndId(course.getTimeEndId());
         placeApply.setApplyStartTime(course.getCourseStartTime());
         placeApply.setApplyEndTime(course.getCourseEndTime());
+        placeApply.setPlaceId(course.getPlaceId());
         Map<String,Object> params=new HashMap<>();
         params.put("chooseDay",str);
         placeApply.setParams(params);
@@ -145,6 +147,7 @@ public class CourseController extends BaseController {
         placeApply.setTimeEndId(course.getTimeEndId());
         placeApply.setApplyStartTime(course.getCourseStartTime());
         placeApply.setApplyEndTime(course.getCourseEndTime());
+        placeApply.setPlaceId(course.getPlaceId());
         Map<String,Object> params=new HashMap<>();
         params.put("chooseDay",str);
         placeApply.setParams(params);

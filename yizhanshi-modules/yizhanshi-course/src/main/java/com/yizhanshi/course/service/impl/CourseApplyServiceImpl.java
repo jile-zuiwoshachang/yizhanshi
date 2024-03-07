@@ -4,6 +4,7 @@ import com.yizhanshi.course.domain.CourseApply;
 import com.yizhanshi.course.mapper.CourseApplyMapper;
 import com.yizhanshi.course.service.ICourseApplyService;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,10 @@ public class CourseApplyServiceImpl implements ICourseApplyService {
     public int insertCourseApply(CourseApply courseApply){
         return courseApplyMapper.insertCourseApply(courseApply);
     }
-
+    @Override
+    public  int selectByUserIdAndCourseId( String userStudentid,  Long courseId){
+        return courseApplyMapper.selectByUserIdAndCourseId(userStudentid,courseId);
+    }
 
 
 }

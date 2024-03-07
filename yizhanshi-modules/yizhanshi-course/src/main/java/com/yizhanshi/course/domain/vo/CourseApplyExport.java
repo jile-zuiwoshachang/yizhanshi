@@ -46,11 +46,13 @@ public class CourseApplyExport {
     private String placeName;
     @Excel(name = "老师名称")
     private String teacherName;
+    @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     public CourseApplyExport() {
     }
 
-    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String teacherName) {
+    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String teacherName, Date createTime) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -70,6 +72,7 @@ public class CourseApplyExport {
         this.courseEndTime = courseEndTime;
         this.placeName = placeName;
         this.teacherName = teacherName;
+        this.createTime = createTime;
     }
 
     public Long getApplyId() {
@@ -222,5 +225,13 @@ public class CourseApplyExport {
 
     public void setCourseEndTime(String courseEndTime) {
         this.courseEndTime = courseEndTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

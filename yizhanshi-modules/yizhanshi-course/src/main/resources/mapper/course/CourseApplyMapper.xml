@@ -32,6 +32,8 @@
         <id     property="courseId"       column="course_id"        />
         <result property="courseName"     column="course_name"      />
         <result property="courseType"      column="course_type"      />
+        <result property="teacherId"      column="teacher_id"      />
+        <result property="courseCheck"      column="course_check"      />
         <result property="courseDay"      column="course_day"      />
         <result property="courseStartTime"      column="course_start_time"      />
         <result property="courseEndTime"      column="course_end_time"      />
@@ -54,7 +56,7 @@
     <sql id="selectCourseApplyVo">
         select ca.apply_id, ca.apply_name, ca.user_studentid,ca.course_id,ca.apply_content,ca.apply_admin1,ca.apply_admin1_name,ca.apply_admin2,ca.apply_admin2_name,
         ca.refuse_reason,ca.recall_status,ca.recall_reason, ca.status, ca.del_flag,ca.create_by, ca.create_time, ca.remark,
-        c.course_id,c.course_name,c.course_type,c.course_day,c.course_start_time,c.course_end_time,c.course_number,c.status,
+        c.course_id,c.course_name,c.course_type,c.teacher_id,c.course_check,c.course_day,c.course_start_time,c.course_end_time,c.course_number,c.status,
         t.teacher_id,t.teacher_name,t.teacher_userStudentid,t.status,
         p.place_id,p.place_name,p.place_campus,p.place_capacity,p.status
         from business_course_apply ca
@@ -169,6 +171,7 @@
         <foreach collection="array" item="courseId" open="(" separator="," close=")">
         #{courseId}
         </foreach>
+        and ca.del_flag='0'
     </select>
     <select id="selectByApplyIds" parameterType="Long" resultMap="CourseApplyResult">
         <include refid="selectCourseApplyVo"/>
@@ -180,7 +183,12 @@
     <select id="selectNumberByCourse" parameterType="Long" resultType="Int">
         select COUNT(apply_id)
         from business_course_apply
-        where course_id=#{courseId} and status in ('0','1','2')
+        where course_id=#{courseId} and del_flag='0' and status in ('0','1','2')
+    </select>
+    <select id="selectByUserIdAndCourseId" resultType="int">
+        select  count(*) from business_course_apply
+        where
+        user_studentid=#{userStudentid} and course_id=#{courseId} and del_flag='0'  and status in ('0','1','2')
     </select>
 
 

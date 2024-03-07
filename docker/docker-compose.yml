@@ -108,20 +108,18 @@ services:
     ports:
       - "9202:9202"
     depends_on:
-      - yizhanshi-redis
       - yizhanshi-mysql
     links:
-      - yizhanshi-redis
       - yizhanshi-mysql
-#  yizhanshi-modules-file:
-#    container_name: yizhanshi-modules-file
-#    build:
-#      context: ./yizhanshi/modules/file
-#      dockerfile: dockerfile
-#    ports:
-#      - "9300:9300"
-#    volumes:
-#    - ./yizhanshi/uploadPath:/home/yizhanshi/uploadPath
+  yizhanshi-modules-file:
+    container_name: yizhanshi-modules-file
+    build:
+      context: ./yizhanshi/modules/file
+      dockerfile: dockerfile
+    ports:
+      - "9300:9300"
+    volumes:
+    - ./yizhanshi/uploadPath:/home/yizhanshi/uploadPath
 #  yizhanshi-visual-monitor:
 #    container_name: yizhanshi-visual-monitor
 #    build:

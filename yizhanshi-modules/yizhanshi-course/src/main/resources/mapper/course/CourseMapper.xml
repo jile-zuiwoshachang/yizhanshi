@@ -44,9 +44,9 @@
         <result property="status"       column="status"    />
     </resultMap>
     <sql id="selectCourseVo">
-        select c.course_id, c.course_name, c.course_description, c.teacher_id, c.course_day,
+        select c.course_id, c.course_name, c.course_description,c.course_type, c.teacher_id, c.course_day,
         c.time_start_id, c.time_end_id, c.course_start_time, c.course_end_time, c.place_id,
-        c.course_number, c.choose_status, c.course_type,
+        c.course_number, c.choose_status, c.course_check,
         c.status, c.del_flag,c.create_by, c.create_time, c.remark,
         p.place_id,p.place_name,p.place_campus,p.place_capacity,p.status,
         t.teacher_id,t.teacher_name,t.teacher_userStudentid,t.status
@@ -166,7 +166,7 @@
     <select id="selectAllCourse" resultMap="CourseResult">
         <include refid="selectCourseVo"/>
         where c.place_id  = #{placeId}
-        AND date_format(c.course_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d')
+        AND date_format(c.course_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and c.del_flag='0'
     </select>
 
 

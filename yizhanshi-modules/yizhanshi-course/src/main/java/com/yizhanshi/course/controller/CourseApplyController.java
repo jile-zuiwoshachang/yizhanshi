@@ -27,6 +27,7 @@ import com.yizhanshi.system.api.domain.SysCredit;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
  *
  * @author hejiale
  */
+@RefreshScope
 @RestController
 @RequestMapping("/courseApply")
 public class CourseApplyController extends BaseController {
@@ -155,6 +157,10 @@ public class CourseApplyController extends BaseController {
     @PostMapping
     public AjaxResult addCourseApply(@Validated @RequestBody CourseApply courseApply)
     {
+        if(courseApplyService.selectByUserIdAndCourseId(courseApply.getUserStudentid(),courseApply.getCourseId())!=0){
+            //说明有记录数
+            return error("选课失败，已存在选课记录");
+        }
         Course course=courseService.selectCourseById(courseApply.getCourseId()) ;
         if(StringUtils.equals(course.getCourseCheck(), ApplyConstants.COURSECHECKNO)){
             //无需审核

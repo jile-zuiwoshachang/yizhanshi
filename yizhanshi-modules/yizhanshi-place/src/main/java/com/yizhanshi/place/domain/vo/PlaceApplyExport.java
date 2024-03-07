@@ -74,11 +74,13 @@ public class PlaceApplyExport {
     /** 状态（0正常 1停用） */
     @Excel(name = "状态", readConverterExp = "0=已申请,1=一级通过,2=二级通过,4=撤销,5=拒绝")
     private String status;
+    @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     public PlaceApplyExport() {
     }
 
-    public PlaceApplyExport(Long applyId, String applyName, String userStudentid, String placeCampus, String placeName, String instructorName, String instructorStudentid, String instructorOrganization, String instructorPhone, String fudaoName, String fudaoStudentid, String fudaoOrganization, String fudaoPhone, Date applyDay, String applyStartTime, String applyEndTime, int applyNumber, String reasonName, String reasonType, String applyOrganization, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status) {
+    public PlaceApplyExport(Long applyId, String applyName, String userStudentid, String placeCampus, String placeName, String instructorName, String instructorStudentid, String instructorOrganization, String instructorPhone, String fudaoName, String fudaoStudentid, String fudaoOrganization, String fudaoPhone, Date applyDay, String applyStartTime, String applyEndTime, int applyNumber, String reasonName, String reasonType, String applyOrganization, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status,Date createTime) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -107,6 +109,7 @@ public class PlaceApplyExport {
         this.recallStatus = recallStatus;
         this.recallReason = recallReason;
         this.status = status;
+        this.createTime = createTime;
     }
 
     public Long getApplyId() {
@@ -331,5 +334,21 @@ public class PlaceApplyExport {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getApplyAdmin2() {
+        return applyAdmin2;
+    }
+
+    public void setApplyAdmin2(String applyAdmin2) {
+        this.applyAdmin2 = applyAdmin2;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

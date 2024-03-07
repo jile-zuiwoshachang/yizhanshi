@@ -235,18 +235,13 @@
         <foreach collection="array" item="placeId" open="(" separator="," close=")">
         #{placeId}
         </foreach>
+        and pa.del_flag='0'
     </select>
-    <select id="selectByApplyIds" parameterType="Long" resultMap="PlaceApplyResult">
-        <include refid="selectPlaceApplyVo"/>
-        where pa.apply_id  in
-        <foreach collection="array" item="applyId" open="(" separator="," close=")">
-            #{applyId}
-        </foreach>
-    </select>
+
     <select id="selectAllPlace" resultMap="PlaceApplyResult">
         <include refid="selectPlaceApplyVo"/>
         where pa.place_id  = #{placeId}
-         AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d')
+         AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and pa.del_flag='0'
     </select>
 
 

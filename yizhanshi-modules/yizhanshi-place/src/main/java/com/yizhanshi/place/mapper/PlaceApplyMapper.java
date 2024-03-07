@@ -46,10 +46,7 @@ public  interface PlaceApplyMapper {
      * 查看该场地有多少个被预约记录
      */
     public List<PlaceApply> selectByPlaceIds(Long[] placeIds);
-    /**
-     * 根据id查询具体信息
-     */
-    public List<PlaceApply> selectByApplyIds(Long[] placeApplyIds);
+
     /**
      * 根据查询条件，获得当天的场地申请记录
      */

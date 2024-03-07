@@ -2,6 +2,7 @@ package com.yizhanshi.course.service;
 
 import com.yizhanshi.course.domain.CourseApply;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -40,5 +41,9 @@ public interface ICourseApplyService {
      * 新增选课信息
      */
     public int insertCourseApply(CourseApply courseApply);
+    /**
+     * 查询是否选过课
+     */
+    public int selectByUserIdAndCourseId(String userStudentid, Long courseId);
 
 }

@@ -48,5 +48,10 @@ public interface CourseApplyMapper {
      * 查询选课人数
      */
     public int  selectNumberByCourse(Long courseId);
-
+    /**
+     *
+     *  查询是否选过课
+     *  int 返回记录数
+     */
+    public int selectByUserIdAndCourseId(@Param("userStudentid") String userStudentid,@Param("courseId") Long courseId);
 }
