@@ -14,7 +14,7 @@ import com.yizhanshi.common.security.annotation.InnerAuth;
 /**
  * 内部服务调用验证处理
  * 
- * @author ruoyi
+ * @author hejiale
  */
 @Aspect
 @Component

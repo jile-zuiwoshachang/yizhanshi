@@ -111,6 +111,19 @@ services:
       - yizhanshi-mysql
     links:
       - yizhanshi-mysql
+
+  yizhanshi-course:
+    container_name: yizhanshi-course
+    build:
+      context: ./yizhanshi/modules/course
+      dockerfile: dockerfile
+    ports:
+      - "9203:9203"
+    depends_on:
+      - yizhanshi-mysql
+    links:
+      - yizhanshi-mysql
+
   yizhanshi-modules-file:
     container_name: yizhanshi-modules-file
     build:
@@ -120,10 +133,10 @@ services:
       - "9300:9300"
     volumes:
     - ./yizhanshi/uploadPath:/home/yizhanshi/uploadPath
-#  yizhanshi-visual-monitor:
-#    container_name: yizhanshi-visual-monitor
-#    build:
-#      context: ./yizhanshi/visual/monitor
-#      dockerfile: dockerfile
-#    ports:
-#      - "9100:9100"
+  yizhanshi-visual-monitor:
+    container_name: yizhanshi-visual-monitor
+    build:
+      context: ./yizhanshi/visual/monitor
+      dockerfile: dockerfile
+    ports:
+      - "9100:9100"

@@ -31,17 +31,34 @@ base(){
 
 # 启动程序模块（必须）
 modules(){
-	docker-compose up -d  yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place
+	docker-compose up -d  yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-visual-monitor
 }
 
 # 关闭所有环境/模块
 stop(){
 	docker-compose stop
 }
+# 关闭基础环境/模块
+stopNacos(){
+	docker-compose stop yizhanshi-nacos
+}
+# 关闭业务环境/模块
+stopBusiness(){
+	docker-compose stop yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-visual-monitor
+}
+
 
 # 删除所有环境/模块
 rm(){
 	docker-compose rm
+}
+# 删除基础环境/模块
+rmNacos(){
+	docker-compose rm yizhanshi-nacos
+}
+# 删除所有环境/模块
+rmBusiness(){
+	docker-compose rm yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-visual-monitor
 }
 
 # 根据输入参数，选择执行对应方法，不输入则执行使用说明
@@ -58,9 +75,22 @@ case "$1" in
 "stop")
 	stop
 ;;
+"stopNacos")
+	stopNacos
+;;
+"stopBusiness")
+	stopBusiness
+;;
 "rm")
 	rm
 ;;
+"rmNacos")
+	rmNacos
+;;
+"rmBusiness")
+	rmBusiness
+;;
+
 *)
 	usage
 ;;

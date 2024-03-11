@@ -177,17 +177,18 @@ public class CourseApplyController extends BaseController {
     @RequiresPermissions("business:courseApply1:check")
     @Log(title = "课程申请管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check1")
-    public AjaxResult check1(@RequestBody CourseApply courseApply){
-        if(StringUtils.equals(courseApply.getStatus(), ApplyConstants.YIADMINAGREESTATUS))
-        {
-            courseApply.setStatus(ApplyConstants.AGREESTATUS);
+    public AjaxResult check1(@RequestBody List<CourseApply> courseApplyList){
+        for(CourseApply temp:courseApplyList) {
+            if (StringUtils.equals(temp.getStatus(), ApplyConstants.YIADMINAGREESTATUS)) {
+                temp.setStatus(ApplyConstants.AGREESTATUS);
+            }
+            temp.setUpdateBy(SecurityUtils.getUsername());
+            temp.setApplyAdmin1(SecurityUtils.getUserStudentid());
+            temp.setApplyAdmin1Name(SecurityUtils.getUsername());
+            //修改为不可撤销
+            temp.setRecallStatus(ApplyConstants.RECALLNOT);
         }
-        courseApply.setUpdateBy(SecurityUtils.getUsername());
-        courseApply.setApplyAdmin1(SecurityUtils.getUserStudentid());
-        courseApply.setApplyAdmin1Name(SecurityUtils.getUsername());
-        //修改为不可撤销
-        courseApply.setRecallStatus(ApplyConstants.RECALLNOT);
-        return   toAjax(courseApplyService.updateCourseApply(courseApply));
+        return   toAjax(courseApplyService.updateCourseApplyList(courseApplyList));
     }
     /**
      * 二级管理员审核课程申请
@@ -196,14 +197,16 @@ public class CourseApplyController extends BaseController {
     @RequiresPermissions("business:courseApply2:check")
     @Log(title = "课程申请管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check2")
-    public AjaxResult check2(@RequestBody CourseApply courseApply){
-        //不分大小活动直接通过为2，拒绝为5
-        courseApply.setUpdateBy(SecurityUtils.getUsername());
-        courseApply.setApplyAdmin2(SecurityUtils.getUserStudentid());
-        courseApply.setApplyAdmin2Name(SecurityUtils.getUsername());
-        //修改为不可撤销
-        courseApply.setRecallStatus(ApplyConstants.RECALLNOT);
-        return   toAjax(courseApplyService.updateCourseApply(courseApply));
+    public AjaxResult check2(@RequestBody List<CourseApply> courseApplyList){
+        for(CourseApply temp:courseApplyList) {
+            //不分大小活动直接通过为2，拒绝为5
+            temp.setUpdateBy(SecurityUtils.getUsername());
+            temp.setApplyAdmin2(SecurityUtils.getUserStudentid());
+            temp.setApplyAdmin2Name(SecurityUtils.getUsername());
+            //修改为不可撤销
+            temp.setRecallStatus(ApplyConstants.RECALLNOT);
+        }
+        return   toAjax(courseApplyService.updateCourseApplyList(courseApplyList));
     }
     /**
      * 用户撤销申请

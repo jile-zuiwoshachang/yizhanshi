@@ -12,7 +12,7 @@ import com.yizhanshi.system.api.model.LoginUser;
 /**
  * 权限获取工具类
  * 
- * @author ruoyi
+ * @author hejiale
  */
 public class SecurityUtils
 {

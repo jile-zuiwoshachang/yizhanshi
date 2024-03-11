@@ -7,7 +7,7 @@ import com.yizhanshi.system.api.model.LoginUser;
 /**
  * Token 权限验证工具类
  * 
- * @author ruoyi
+ * @author hejiale
  */
 public class AuthUtil
 {

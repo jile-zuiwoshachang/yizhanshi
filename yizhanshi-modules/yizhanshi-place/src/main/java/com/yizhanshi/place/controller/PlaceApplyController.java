@@ -37,10 +37,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -203,24 +200,32 @@ public class PlaceApplyController extends BaseController {
     /**
      * 一级管理员审核场地申请
      * status只能是1 5
+     * 支持多选同意
      */
     @RequiresPermissions("business:placeApply1:check")
     @Log(title = "场地申请管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check1")
-    public AjaxResult check1(@RequestBody PlaceApply placeApply){
-        if(StringUtils.equals(placeReasonService.selectReasonById(placeApply.getReasonId()).getReasonType(),ReasonConstants.SMALLREASON) ){
-            placeApply.setStatus(ApplyConstants.AGREESTATUS);
+    public AjaxResult check1(@RequestBody List<PlaceApply> placeApplyList){
+        for(PlaceApply temp:placeApplyList){
+            if(StringUtils.equals(temp.getStatus(), "1")){
+                //同意申请，则根据原因判断
+                if(StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(),ReasonConstants.SMALLREASON) ){
+                    temp.setStatus(ApplyConstants.AGREESTATUS);
+                }
+                if(StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(),ReasonConstants.BIGREASON)){
+                    temp.setStatus(ApplyConstants.YIADMINAGREESTATUS);
+                }
+            }
+            //拒绝就还是5，不变
+            temp.setUpdateBy(SecurityUtils.getUsername());
+            temp.setApplyAdmin1(SecurityUtils.getUserStudentid());
+            temp.setApplyAdmin1Name(SecurityUtils.getUsername());
+            //修改为不可撤销
+            temp.setRecallStatus(ApplyConstants.RECALLNOT);
         }
-        if(StringUtils.equals(placeReasonService.selectReasonById(placeApply.getReasonId()).getReasonType(),ReasonConstants.BIGREASON)){
-            placeApply.setStatus(ApplyConstants.YIADMINAGREESTATUS);
-        }
-        placeApply.setUpdateBy(SecurityUtils.getUsername());
-        placeApply.setApplyAdmin1(SecurityUtils.getUserStudentid());
-        placeApply.setApplyAdmin1Name(SecurityUtils.getUsername());
-        //修改为不可撤销
-        placeApply.setRecallStatus(ApplyConstants.RECALLNOT);
-        return   toAjax(placeApplyService.updatePlaceApply(placeApply));
+        return   toAjax(placeApplyService.updatePlaceApplyList(placeApplyList));
     }
+
     /**
      * 二级管理员审核场地申请
      * status只能是2 5
@@ -228,14 +233,16 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:placeApply2:check")
     @Log(title = "场地申请管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check2")
-    public AjaxResult check2(@RequestBody PlaceApply placeApply){
-        //不分大小活动直接通过为2，拒绝为5
-        placeApply.setUpdateBy(SecurityUtils.getUsername());
-        placeApply.setApplyAdmin2(SecurityUtils.getUserStudentid());
-        placeApply.setApplyAdmin2Name(SecurityUtils.getUsername());
-        //修改为不可撤销
-        placeApply.setRecallStatus(ApplyConstants.RECALLNOT);
-        return   toAjax(placeApplyService.updatePlaceApply(placeApply));
+    public AjaxResult check2(@RequestBody List<PlaceApply> placeApplyList){
+        for(PlaceApply temp:placeApplyList) {
+            //不分大小活动直接通过为2，拒绝为5
+            temp.setUpdateBy(SecurityUtils.getUsername());
+            temp.setApplyAdmin2(SecurityUtils.getUserStudentid());
+            temp.setApplyAdmin2Name(SecurityUtils.getUsername());
+            //修改为不可撤销
+            temp.setRecallStatus(ApplyConstants.RECALLNOT);
+        }
+        return   toAjax(placeApplyService.updatePlaceApplyList(placeApplyList));
     }
     /**
      * 用户撤销申请

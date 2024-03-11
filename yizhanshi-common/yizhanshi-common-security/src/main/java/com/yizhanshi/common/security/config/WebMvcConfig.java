@@ -7,7 +7,7 @@ import com.yizhanshi.common.security.interceptor.HeaderInterceptor;
 /**
  * 拦截器配置
  *
- * @author ruoyi
+ * @author hejiale
  */
 public class WebMvcConfig implements WebMvcConfigurer
 {

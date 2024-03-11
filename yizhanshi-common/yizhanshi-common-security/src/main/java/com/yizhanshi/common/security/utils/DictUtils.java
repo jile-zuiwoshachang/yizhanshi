@@ -12,7 +12,7 @@ import com.yizhanshi.system.api.domain.SysDictData;
 /**
  * 字典工具类
  * 
- * @author ruoyi
+ * @author hejiale
  */
 public class DictUtils
 {

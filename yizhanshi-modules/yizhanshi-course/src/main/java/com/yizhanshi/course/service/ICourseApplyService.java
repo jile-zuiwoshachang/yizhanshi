@@ -34,6 +34,10 @@ public interface ICourseApplyService {
      */
     public  int updateCourseApply(CourseApply courseApply);
     /**
+     * 多选修改课程申请信息
+     */
+    public  int updateCourseApplyList(List<CourseApply> courseApplyList);
+    /**
      * 删除选课信息
      */
     public int deleteCourseApply(Long[] applyIds);

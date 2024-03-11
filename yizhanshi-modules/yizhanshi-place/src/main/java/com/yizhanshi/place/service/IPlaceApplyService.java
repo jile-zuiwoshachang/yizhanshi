@@ -42,12 +42,17 @@ public interface IPlaceApplyService {
     public List<PlaceApply> selectPlaceApplyList(PlaceApply placeApply);
 
     /**
+     * 多选修改场地申请单
+     * @param placeApply
+     * @return
+     */
+    public int updatePlaceApplyList(List<PlaceApply> placeApply);
+    /**
      * 修改场地申请单
      * @param placeApply
      * @return
      */
     public int updatePlaceApply(PlaceApply placeApply);
-
     /**
      * 删除场地申请
      * @param applyIds

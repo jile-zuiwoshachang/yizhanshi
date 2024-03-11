@@ -22,13 +22,13 @@
             <artifactId>spring-webmvc</artifactId>
         </dependency>
 
-        <!-- RuoYi Api System -->
+        <!-- YiZhanShi Api System -->
         <dependency>
             <groupId>com.bishe</groupId>
             <artifactId>bishe-api-system</artifactId>
         </dependency>
 
-        <!-- RuoYi Common Redis-->
+        <!-- YiZhanShi Common Redis-->
         <dependency>
             <groupId>com.bishe</groupId>
             <artifactId>bishe-common-redis</artifactId>

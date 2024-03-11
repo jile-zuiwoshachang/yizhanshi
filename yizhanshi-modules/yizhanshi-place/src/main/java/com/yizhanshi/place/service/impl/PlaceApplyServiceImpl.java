@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Validator;
 import java.util.Date;
@@ -51,10 +52,40 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
     public List<PlaceApply> selectPlaceApplyList(PlaceApply placeApply){
         return  placeApplyMapper.selectPlaceApplyList(placeApply);
     }
+
+    /**
+     * 当检测到某次更新没有影响任何行时，抛出一个RuntimeException。
+     * 这会导致Spring事务管理器回滚所有在当前事务中进行的更改，包括之前可能成功的更新操作。
+     * 这种方式确保了数据的一致性，即所有更新要么全部成功，要么在遇到第一个失败时全部回滚。
+     * @param placeApply
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updatePlaceApplyList(List<PlaceApply> placeApply){
+        int rows=0;
+        for(PlaceApply item:placeApply){
+            int result = placeApplyMapper.updatePlaceApply(item);
+            if (result == 0) {
+                // 当某次更新失败时，抛出异常以触发事务回滚
+                throw new ServiceException("更新失败，事务回滚");
+            }
+            rows += result;
+        }
+        return rows;
+    }
     @Override
     public int updatePlaceApply(PlaceApply placeApply){
-        return  placeApplyMapper.updatePlaceApply(placeApply);
+        return placeApplyMapper.updatePlaceApply(placeApply);
     }
+
+    /**
+     * 方法成功执行并且影响了一行或多行数据，正常提交
+     * 方法执行但没有影响任何行（比如，传入的applyIds中的ID不存在），方法同样会正常结束，返回0，正常提交
+     * SQL错误、数据库连接问题，异常会被抛出，根据@Transactional(rollbackFor = Exception.class)的定义，这时事务会被回滚。
+     * @param applyIds
+     * @return
+     */
     @Override
     public int deletePlaceApply(Long[] applyIds){
         return  placeApplyMapper.deletePlaceApply(applyIds);
