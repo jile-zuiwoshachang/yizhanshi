@@ -33,7 +33,7 @@
     <resultMap id="TeacherResult" type="com.yizhanshi.course.api.domain.Teacher">
         <id     property="teacherId"       column="teacher_id"        />
         <result property="teacherName"     column="teacher_name"      />
-        <result property="teacherUserStudentid"      column="teacher_userStudentid"      />
+        <result property="teacherStudentid"      column="teacher_studentid"      />
         <result property="status"      column="status"      />
     </resultMap>
     <resultMap id="PlaceResult" type="com.yizhanshi.place.api.domain.Place">
@@ -49,7 +49,7 @@
         c.course_number, c.choose_status, c.course_check,
         c.status, c.del_flag,c.create_by, c.create_time, c.remark,
         p.place_id,p.place_name,p.place_campus,p.place_capacity,p.status,
-        t.teacher_id,t.teacher_name,t.teacher_userStudentid,t.status
+        t.teacher_id,t.teacher_name,t.teacher_studentid,t.status
         from business_course c
         left join business_place p on c.place_id=p.place_id
         left join business_teacher t on c.teacher_id=t.teacher_id

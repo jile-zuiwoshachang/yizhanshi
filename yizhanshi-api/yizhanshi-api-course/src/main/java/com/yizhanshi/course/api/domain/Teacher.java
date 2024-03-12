@@ -17,7 +17,7 @@ public class Teacher extends BaseEntity {
     @Excel(name = "老师年龄", cellType = ColumnType.NUMERIC)
     private  int teacherAge;
     @Excel(name = "老师学号")
-    private  String teacherUserStudentid;
+    private  String teacherStudentid;
     @Excel(name = "老师介绍")
     private  String teacherDescription;
     @Excel(name = "老师描述")
@@ -67,12 +67,12 @@ public class Teacher extends BaseEntity {
         this.teacherAge = teacherAge;
     }
 
-    public String getTeacherUserStudentid() {
-        return teacherUserStudentid;
+    public String getteacherStudentid() {
+        return teacherStudentid;
     }
 
-    public void setTeacherUserStudentid(String teacherUserStudentid) {
-        this.teacherUserStudentid = teacherUserStudentid;
+    public void setteacherStudentid(String teacherStudentid) {
+        this.teacherStudentid = teacherStudentid;
     }
 
     public String getTeacherDescription() {
@@ -146,7 +146,7 @@ public class Teacher extends BaseEntity {
                 .append("teacherName", teacherName)
                 .append("teacherSex", teacherSex)
                 .append("teacherAge", teacherAge)
-                .append("teacherUserStudentid", teacherUserStudentid)
+                .append("teacherStudentid", teacherStudentid)
                 .append("teacherDescription", teacherDescription)
                 .append("teacherPicture", teacherPicture)
                 .append("teacherEmail", teacherEmail)

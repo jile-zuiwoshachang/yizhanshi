@@ -331,4 +331,15 @@ public class SysUserController extends BaseController
     {
         return success(deptService.selectDeptTreeList(dept));
     }
+    /**
+     * 人才管理 修改用户
+     */
+    @InnerAuth
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @PutMapping("/editByTalent")
+    public AjaxResult editByTalent(@Validated @RequestBody SysUser user)
+    {
+        user.setUpdateBy(SecurityUtils.getUsername());
+        return toAjax(userService.updateUser(user));
+    }
 }

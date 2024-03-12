@@ -21,6 +21,7 @@
         <module>yizhanshi-file</module>
         <module>yizhanshi-place</module>
         <module>yizhanshi-course</module>
+        <module>yizhanshi-talent</module>
     </modules>
 
     <artifactId>bishe-modules</artifactId>

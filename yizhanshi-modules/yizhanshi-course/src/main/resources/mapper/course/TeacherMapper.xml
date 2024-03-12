@@ -9,7 +9,7 @@
         <result property="teacherName"     column="teacher_name"    />
         <result property="teacherSex"     column="teacher_sex"    />
         <result property="teacherAge"     column="teacher_age"    />
-        <result property="teacherUserStudentid"       column="teacher_userStudentid"      />
+        <result property="teacherStudentid"       column="teacher_studentid"      />
         <result property="teacherDescription"     column="teacher_description"    />
         <result property="teacherPicture"     column="teacher_picture"    />
         <result property="teacherEmail"     column="teacher_email"    />
@@ -26,7 +26,7 @@
     </resultMap>
     
     <sql id="selectTeacherVo">
-        select t.teacher_id, t.teacher_name, t.teacher_sex,t.teacher_age,t.teacher_userStudentid,t.teacher_description,
+        select t.teacher_id, t.teacher_name, t.teacher_sex,t.teacher_age,t.teacher_studentid,t.teacher_description,
         t.teacher_picture,t.teacher_email,t.teacher_phone,t.teacher_qq,t.teacher_wechat,
         t.status, t.del_flag,t.create_by, t.create_time, t.remark
         from business_teacher t
@@ -62,7 +62,7 @@
         <if test="teacherName != null and teacherName != ''">teacher_name,</if>
         <if test="teacherSex != null and teacherSex != ''">teacher_sex,</if>
         <if test="teacherAge != null and teacherAge != 0">teacher_age,</if>
-        <if test="teacherUserStudentid != null and teacherUserStudentid != ''">teacher_userStudentid,</if>
+        <if test="teacherStudentid != null and teacherStudentid != ''">teacher_studentid,</if>
         <if test="teacherDescription != null and teacherDescription != ''">teacher_description,</if>
         <if test="teacherPicture != null and teacherPicture != ''">teacher_picture,</if>
         <if test="teacherEmail != null and teacherEmail != ''">teacher_email,</if>
@@ -78,7 +78,7 @@
         <if test="teacherName != null and teacherName != ''">#{teacherName},</if>
         <if test="teacherSex != null and teacherSex != ''">#{teacherSex},</if>
         <if test="teacherAge != null and teacherAge != 0">#{teacherAge},</if>
-        <if test="teacherUserStudentid != null and teacherUserStudentid != ''">#{teacherUserStudentid},</if>
+        <if test="teacherStudentid != null and teacherStudentid != ''">#{teacherStudentid},</if>
         <if test="teacherDescription != null and teacherDescription != ''">#{teacherDescription},</if>
         <if test="teacherPicture != null and teacherPicture != ''">#{teacherPicture},</if>
         <if test="teacherEmail != null and teacherEmail != ''">#{teacherEmail},</if>
@@ -99,7 +99,7 @@
             <if test="teacherName != null and teacherName != ''">teacher_name=#{teacherName},</if>
             <if test="teacherSex != null and teacherSex != ''">teacher_sex=#{teacherSex},</if>
             <if test="teacherAge != null and teacherAge != 0">teacher_age=#{teacherAge},</if>
-            <if test="teacherUserStudentid != null and teacherUserStudentid != ''">teacher_userStudentid=#{teacherUserStudentid},</if>
+            <if test="teacherStudentid != null and teacherStudentid != ''">teacher_studentid=#{teacherStudentid},</if>
             <if test="teacherDescription != null and teacherDescription != ''">teacher_description=#{teacherDescription},</if>
             <if test="teacherPicture != null and teacherPicture != ''">teacher_picture=#{teacherPicture},</if>
             <if test="teacherEmail != null and teacherEmail != ''">teacher_email=#{teacherEmail},</if>

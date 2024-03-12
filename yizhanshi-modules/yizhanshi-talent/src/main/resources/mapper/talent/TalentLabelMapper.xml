@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.talent.mapper.TalentLabelMapper">
+
+    <resultMap type="com.yizhanshi.talent.domain.TalentLabel" id="TalentLabelResult">
+        <result property="userStudentid"     column="user_studentid"      />
+        <result property="labelId"     column="label_id"      />
+    </resultMap>
+    <resultMap type="com.yizhanshi.talent.domain.vo.Talent" id="TalentResult">
+        <collection  property="sysUser"   javaType="com.yizhanshi.system.api.domain.SysUser"  resultMap="SysUserResult" />
+        <collection  property="labels"   javaType="java.util.List"  resultMap="LabelResult" />
+    </resultMap>
+
+    <resultMap type="com.yizhanshi.system.api.domain.SysUser" id="SysUserResult">
+        <id     property="userId"       column="user_id"      />
+        <result property="userStudentid"     column="user_studentid"    />
+        <result property="userSex"     column="user_sex"    />
+        <result property="userName"     column="user_name"    />
+        <result property="userType"     column="user_type"    />
+        <result property="userOrganization"     column="user_organization"    />
+        <result property="userCampus"     column="user_campus"    />
+        <result property="userEmail"        column="user_email"        />
+        <result property="userPhone"  column="user_phone"  />
+        <result property="userQq"        column="user_qq"        />
+        <result property="userWechat"  column="user_wechat"  />
+        <result property="userScore"          column="user_score"          />
+        <result property="userDescription"       column="user_description"       />
+        <result property="userPicture1"     column="user_picture1"     />
+        <result property="userPicture2"     column="user_picture2"     />
+        <result property="userPicture3"     column="user_picture3"     />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+    </resultMap>
+
+    <resultMap type="com.yizhanshi.talent.domain.Label" id="LabelResult">
+        <id     property="labelId"       column="label_id"      />
+        <result property="labelName"       column="label_name"      />
+        <result property="labelType"     column="label_type"    />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+    </resultMap>
+
+
+
+    <select id="selectLabelByUserStudentid" resultType="com.yizhanshi.talent.domain.TalentLabel">
+        select user_studentid,label_id from business_talent_label
+        where user_studentid=#{userStudentid}
+    </select>
+    <insert id="insertTalentLabel">
+        insert into business_talent_label(user_studentid, label_id) values
+        <foreach item="item" index="index" collection="talentLabelList" separator=",">
+            (#{item.userStudentid},#{item.labelId})
+        </foreach>
+    </insert>
+    <delete id="deleteTalentLabelByUserStudentid" parameterType="Long">
+        delete from business_talent_label where user_studentid=#{userStudentid}
+    </delete>
+    <delete id="deleteTalentLabelByLabelId" parameterType="Long">
+        delete from business_talent_label where label_id=#{labelId}
+    </delete>
+
+    <delete id="deleteTalentLabel" parameterType="com.yizhanshi.talent.domain.TalentLabel">
+        delete from business_talent_label
+        where user_studentid=#{userStudentid} and label_id=#{labelId}
+    </delete>
+
+    <delete id="deleteTalentLabels">
+        delete from business_talent_label where user_studentid=#{userStudentid}
+         and label_id in
+        <foreach collection="labelIds" item="labelId" open="(" separator="," close=")">
+            #{labelId}
+        </foreach>
+    </delete>
+    <sql id="talentSql">
+        select u.user_id, u.user_studentid,u.user_sex, u.user_name, u.user_type,
+        u.user_organization,u.user_campus,u.user_email,  u.user_phone,u.user_qq,u.user_wechat,u.user_score,u.user_description,u.user_picture1,
+        u.user_picture2,u.user_picture3, u.status, u.del_flag, u.create_by, u.create_time, u.remark,
+        l.label_id, l.label_name, l.label_type, l.status, l.del_flag,l.create_by, l.create_time, l.remark
+        from system_user u
+        left join business_talent_label t on t.user_studentid=u.user_studentid
+        left join business_label l on t.label_id=l.label_id
+    </sql>
+    <select id="selectTalentList" resultMap="TalentResult">
+      <include refid="talentSql"></include>
+        where  u.del_flag = '0' and l.del_flag='0'
+        <if test="sysUser!=null and sysUser.userId != null and sysUser.userId != 0">
+            AND u.user_id = #{sysUser.userId}
+        </if>
+        <if test="sysUser!=null and sysUser.userStudentid != null and sysUser.userStudentid != ''">
+            AND u.user_studentid like concat('%', #{sysUser.userStudentid}, '%')
+        </if>
+        <if test="sysUser!=null and sysUser.userName != null and sysUser.userName != ''">
+            AND u.user_name like concat('%', #{sysUser.userName}, '%')
+        </if>
+        <if test="sysUser!=null and sysUser.userDescription != null and sysUser.userDescription != ''">
+            AND u.user_description like concat('%', #{sysUser.userDescription}, '%')
+        </if>
+        <if test="labels!=null and !labels.isEmpty()">
+            AND l.label_name IN
+            <foreach item="label" index="index" collection="labels" open="(" separator="," close=")">
+                #{label.labelName}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

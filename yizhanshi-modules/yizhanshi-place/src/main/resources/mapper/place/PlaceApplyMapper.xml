@@ -231,11 +231,10 @@
 
     <select id="selectByPlaceIds" parameterType="Long" resultMap="PlaceApplyResult">
         <include refid="selectPlaceApplyVo"/>
-        where pa.place_id  in
+        where pa.del_flag='0'  and pa.place_id  in
         <foreach collection="array" item="placeId" open="(" separator="," close=")">
         #{placeId}
         </foreach>
-        and pa.del_flag='0'
     </select>
 
     <select id="selectAllPlace" resultMap="PlaceApplyResult">
