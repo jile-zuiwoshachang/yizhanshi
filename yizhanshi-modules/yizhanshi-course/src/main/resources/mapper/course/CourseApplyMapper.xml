@@ -173,13 +173,7 @@
         </foreach>
         and ca.del_flag='0'
     </select>
-    <select id="selectByApplyIds" parameterType="Long" resultMap="CourseApplyResult">
-        <include refid="selectCourseApplyVo"/>
-        where ca.apply_id  in
-        <foreach collection="array" item="applyId" open="(" separator="," close=")">
-            #{applyId}
-        </foreach>
-    </select>
+
     <select id="selectNumberByCourse" parameterType="Long" resultType="Int">
         select COUNT(apply_id)
         from business_course_apply

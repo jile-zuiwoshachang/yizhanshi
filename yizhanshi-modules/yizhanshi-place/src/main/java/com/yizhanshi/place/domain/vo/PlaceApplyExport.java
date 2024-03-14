@@ -7,13 +7,13 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PlaceApplyExport {
     private static final long serialVersionUID = 1L;
-    /** 申请序号 */
-    @Excel(name = "申请序号", cellType = Excel.ColumnType.NUMERIC)
+    /** 预约序号 */
+    @Excel(name = "预约序号", cellType = Excel.ColumnType.NUMERIC)
     private Long applyId;
-    @Excel(name = "申请人名称")
+    @Excel(name = "预约人名称")
     private String applyName;
 
-    @Excel(name = "申请人学号")
+    @Excel(name = "预约人学号")
     private String userStudentid;
     @Excel(name = "场地校区",readConverterExp = "0=北校区,1=南校区")
     private String placeCampus;
@@ -41,21 +41,21 @@ public class PlaceApplyExport {
     private String fudaoOrganization;
     @Excel(name = "辅导员电话")
     private String fudaoPhone;
-    @Excel(name="申请日期",dateFormat = "yyyy-MM-dd")
+    @Excel(name="预约日期",dateFormat = "yyyy-MM-dd")
     private Date applyDay;
     @Excel(name = "开始时间")
     private String applyStartTime;
     @Excel(name = "结束时间")
     private String applyEndTime;
-    @Excel(name = "申请人数", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "预约人数", cellType = Excel.ColumnType.NUMERIC)
     private int applyNumber;
-    @Excel(name = "申请原因名称")
+    @Excel(name = "预约原因名称")
     private String reasonName;
-    @Excel(name = "申请原因类型")
+    @Excel(name = "预约原因类型")
     private String reasonType;
-    @Excel(name = "申请组织")
+    @Excel(name = "预约组织")
     private String applyOrganization;
-    @Excel(name = "申请内容")
+    @Excel(name = "预约内容")
     private String applyContent;
     @Excel(name = "一级管理员学号")
     private String applyAdmin1;
@@ -72,7 +72,7 @@ public class PlaceApplyExport {
     @Excel(name = "撤销理由")
     private String recallReason;
     /** 状态（0正常 1停用） */
-    @Excel(name = "状态", readConverterExp = "0=已申请,1=一级通过,2=二级通过,4=撤销,5=拒绝")
+    @Excel(name = "状态", readConverterExp = "0=已预约,1=一级通过,2=二级通过,4=撤销,5=拒绝")
     private String status;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;

@@ -40,7 +40,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * 课程申请信息 业务处理
+ * 课程预约信息 业务处理
  *
  * @author hejiale
  */
@@ -63,8 +63,8 @@ public class CourseApplyController extends BaseController {
 
     /**
      *
-     * 查看所有课程申请信息-管理员使用
-     * userCampus 0 1  status 0/1已申请 2已通过 5已拒绝 4已撤销
+     * 查看所有课程预约信息-管理员使用
+     * userCampus 0 1  status 0/1已预约 2已通过 5已拒绝 4已撤销
      */
     @RequiresPermissions("business:courseApply:list")
     @GetMapping("/list")
@@ -76,7 +76,7 @@ public class CourseApplyController extends BaseController {
 
     /**
      * 个人选课记录查看
-     * userStudentid  status 0/1已申请 2已通过 5已拒绝 4已撤销
+     * userStudentid  status 0/1已预约 2已通过 5已拒绝 4已撤销
      * @param courseApply
      * @return
      */
@@ -95,12 +95,12 @@ public class CourseApplyController extends BaseController {
     }
 
     /**
-     * 修改课程申请信息——管理员使用
+     * 修改课程预约信息——管理员使用
      * @param courseApply
      * @return
      */
     @RequiresPermissions("business:courseApply:edit")
-    @Log(title = "课程申请管理", businessType = BusinessType.UPDATE)
+    @Log(title = "课程预约管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult editCourseApply(@Validated @RequestBody CourseApply courseApply)
     {
@@ -109,10 +109,10 @@ public class CourseApplyController extends BaseController {
     }
 
     /**
-     * 删除课程申请——管理员使用
+     * 删除课程预约——管理员使用
      */
     @RequiresPermissions("business:course:remove")
-    @Log(title = "课程申请管理", businessType = BusinessType.DELETE)
+    @Log(title = "课程预约管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{applyIds}")
     public AjaxResult removeCourseApply(@PathVariable Long[] applyIds)
     {
@@ -120,11 +120,11 @@ public class CourseApplyController extends BaseController {
     }
 
     /**
-     * 导出课程申请——一二管理员使用
+     * 导出课程预约——一二管理员使用
      * @param response
      * @param courseApply
      */
-    @Log(title = "课程申请管理", businessType = BusinessType.EXPORT)
+    @Log(title = "课程预约管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("business:courseApply:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody CourseApply courseApply)
@@ -148,12 +148,12 @@ public class CourseApplyController extends BaseController {
     }
 
     /**
-     * 新增课程申请（业务层使用）
+     * 新增课程预约（业务层使用）
      * 选课
      * 需判断course_check状态
      */
     @RequiresPermissions("business:courseApply:add")
-    @Log(title = "课程申请管理", businessType = BusinessType.INSERT)
+    @Log(title = "课程预约管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult addCourseApply(@Validated @RequestBody CourseApply courseApply)
     {
@@ -171,11 +171,11 @@ public class CourseApplyController extends BaseController {
         return toAjax(courseApplyService.insertCourseApply(courseApply));
     }
     /**
-     * 一级管理员审核课程申请
+     * 一级管理员审核课程预约
      * status只能是1 5
      */
     @RequiresPermissions("business:courseApply1:check")
-    @Log(title = "课程申请管理", businessType = BusinessType.UPDATE)
+    @Log(title = "课程预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check1")
     public AjaxResult check1(@RequestBody List<CourseApply> courseApplyList){
         for(CourseApply temp:courseApplyList) {
@@ -191,11 +191,11 @@ public class CourseApplyController extends BaseController {
         return   toAjax(courseApplyService.updateCourseApplyList(courseApplyList));
     }
     /**
-     * 二级管理员审核课程申请
+     * 二级管理员审核课程预约
      * status只能是2 5
      */
     @RequiresPermissions("business:courseApply2:check")
-    @Log(title = "课程申请管理", businessType = BusinessType.UPDATE)
+    @Log(title = "课程预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check2")
     public AjaxResult check2(@RequestBody List<CourseApply> courseApplyList){
         for(CourseApply temp:courseApplyList) {
@@ -209,8 +209,8 @@ public class CourseApplyController extends BaseController {
         return   toAjax(courseApplyService.updateCourseApplyList(courseApplyList));
     }
     /**
-     * 用户撤销申请
-     * 传递撤销理由和申请单号和status和recallStatus
+     * 用户撤销预约
+     * 传递撤销理由和预约单号和status和recallStatus
      * 返回时前端根据recallStatus，为0可点撤销按钮，不可点强行撤销；为1不可点撤销按钮，可点强行撤销按钮；为2什么都不可点
      * 有两个按钮 撤销和强行撤销（扣除5分）
      */
@@ -224,7 +224,7 @@ public class CourseApplyController extends BaseController {
         //强行撤销
         if(StringUtils.equals(courseApply.getRecallStatus(),ApplyConstants.RECALLNOT)){
             courseApply.setRecallStatus(ApplyConstants.RECALLCREDIT);
-            SysCredit sysCredit=new SysCredit(null,"用户强行撤销课程申请","自己操作",SecurityUtils.getUserStudentid(), Convert.toInt(courseRecallCredit,-2),null,"0","0");
+            SysCredit sysCredit=new SysCredit(null,"用户强行撤销课程预约","自己操作",SecurityUtils.getUserStudentid(), Convert.toInt(courseRecallCredit,-2),null,"0","0");
             R<Boolean> booleanR= remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
             if(R.FAIL == booleanR.getCode()){
                 throw new ServiceException(booleanR.getMsg());

@@ -106,7 +106,7 @@ public class TimeController extends BaseController {
     @RequiresPermissions("business:time:edit")
     @PutMapping("/updateStatus")
     public AjaxResult editStatusByTimeType(String status,String timeType) {
-        //确保修改状态后不影响今后的场地申请记录
+        //确保修改状态后不影响今后的场地预约记录
         PlaceApply placeApply=new PlaceApply();
         Map<String,Object> map=new HashMap<>();
         map.put("beginTime", DateUtils.getTime());
@@ -114,7 +114,7 @@ public class TimeController extends BaseController {
         if(CollectionUtils.isEmpty(placeApplyService.selectPlaceApplyList(placeApply))){
             return toAjax(timeService.updateStatus(status,timeType));
         }else{
-            return  error("存在现在和未来的场地申请记录，目前不可修改时间");
+            return  error("存在现在和未来的场地预约记录，目前不可修改时间");
         }
 
     }

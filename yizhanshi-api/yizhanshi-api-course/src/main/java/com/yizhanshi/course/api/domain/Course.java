@@ -121,7 +121,7 @@ public class Course extends BaseEntity {
     public void setCourseEndTime(String courseEndTime) {
         this.courseEndTime = courseEndTime;
     }
-    @NotNull(message = "申请教室编号不可为null")
+    @NotNull(message = "上课教室编号不可为null")
     public Long getPlaceId() {
         return placeId;
     }

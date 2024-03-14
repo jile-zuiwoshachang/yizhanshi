@@ -1,15 +1,14 @@
-package com.yizhanshi.talent.domain;
+package com.yizhanshi.talent.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
-import com.yizhanshi.common.core.web.domain.BaseEntity;
-import com.yizhanshi.system.api.domain.SysUser;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
-
-public class TalentApply extends BaseEntity {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class TalentApplyExport {
     private static final long serialVersionUID = 1L;
-    @Excel(name = "预约主键", cellType = Excel.ColumnType.NUMERIC)
+    /** 预约序号 */
+    @Excel(name = "预约序号", cellType = Excel.ColumnType.NUMERIC)
     private Long applyId;
     @Excel(name = "预约人名称")
     private String applyName;
@@ -17,6 +16,8 @@ public class TalentApply extends BaseEntity {
     private String userStudentid;
     @Excel(name = "人才学号")
     private String talentStudentid;
+    @Excel(name = "人才姓名")
+    private String talentName;
     @Excel(name = "预约内容")
     private String applyContent;
     @Excel(name = "开始日期",dateFormat = "yyyy-MM-dd")
@@ -25,21 +26,32 @@ public class TalentApply extends BaseEntity {
     private Date applyEndDay;
     @Excel(name = "状态", readConverterExp = "0=已申请,2=已同意,4=已撤销,5=已拒绝")
     private String status;
-    private String delFlag;
-    @Excel(name = "拒绝原因")
+    @Excel(name = "拒绝理由")
     private String refuseReason;
-    @Excel(name = "撤销原因")
-    private String recallReason;
     @Excel(name = "可撤销标志",readConverterExp = "0=可撤销,1=不可撤销")
     private String recallStatus;
-    private SysUser talents;
+    @Excel(name = "撤销理由")
+    private String recallReason;
+    @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
-    public SysUser getTalents() {
-        return talents;
+    public TalentApplyExport() {
     }
 
-    public void setTalents(SysUser talents) {
-        this.talents = talents;
+    public TalentApplyExport(Long applyId, String applyName, String userStudentid, String talentStudentid, String talentName, String applyContent, Date applyStartDay, Date applyEndDay, String status, String refuseReason, String recallStatus, String recallReason, Date createTime) {
+        this.applyId = applyId;
+        this.applyName = applyName;
+        this.userStudentid = userStudentid;
+        this.talentStudentid = talentStudentid;
+        this.talentName = talentName;
+        this.applyContent = applyContent;
+        this.applyStartDay = applyStartDay;
+        this.applyEndDay = applyEndDay;
+        this.status = status;
+        this.refuseReason = refuseReason;
+        this.recallStatus = recallStatus;
+        this.recallReason = recallReason;
+        this.createTime = createTime;
     }
 
     public Long getApplyId() {
@@ -74,6 +86,14 @@ public class TalentApply extends BaseEntity {
         this.talentStudentid = talentStudentid;
     }
 
+    public String getTalentName() {
+        return talentName;
+    }
+
+    public void setTalentName(String talentName) {
+        this.talentName = talentName;
+    }
+
     public String getApplyContent() {
         return applyContent;
     }
@@ -106,28 +126,12 @@ public class TalentApply extends BaseEntity {
         this.status = status;
     }
 
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
     public String getRefuseReason() {
         return refuseReason;
     }
 
     public void setRefuseReason(String refuseReason) {
         this.refuseReason = refuseReason;
-    }
-
-    public String getRecallReason() {
-        return recallReason;
-    }
-
-    public void setRecallReason(String recallReason) {
-        this.recallReason = recallReason;
     }
 
     public String getRecallStatus() {
@@ -138,27 +142,19 @@ public class TalentApply extends BaseEntity {
         this.recallStatus = recallStatus;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("applyId", applyId)
-                .append("applyName", applyName)
-                .append("userStudentid", userStudentid)
-                .append("talentStudentid", talentStudentid)
-                .append("applyContent", applyContent)
-                .append("applyStartDay", applyStartDay)
-                .append("applyEndDay", applyEndDay)
-                .append("status", status)
-                .append("delFlag", delFlag)
-                .append("refuseReason", refuseReason)
-                .append("recallReason", recallReason)
-                .append("recallStatus", recallStatus)
-                .append("talents", talents)
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .append("remark", getRemark())
-                .toString();
+    public String getRecallReason() {
+        return recallReason;
+    }
+
+    public void setRecallReason(String recallReason) {
+        this.recallReason = recallReason;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -94,6 +94,8 @@ public class SysResourceServiceImpl implements ISysResourceService
         {
             if (StringUtils.isNotEmpty(perm))
             {
+                //从perm对象中获取一个包含多个用逗号分隔的角色关键词的字符串，去除字符串两端的空白，然后将这些关键词拆分成单独的项，
+                // 并将它们作为独立的元素添加到permsSet集合中，过程中自动去除了任何重复的项
                 permsSet.addAll(Arrays.asList(perm.trim().split(",")));
             }
         }

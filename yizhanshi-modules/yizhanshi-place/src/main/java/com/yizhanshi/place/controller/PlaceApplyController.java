@@ -41,7 +41,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 场地申请信息 业务处理
+ * 场地预约信息 业务处理
  *
  * @author hejiale
  */
@@ -66,7 +66,7 @@ public class PlaceApplyController extends BaseController {
 
     /**
      *
-     * 查看所有场地申请信息-管理员使用
+     * 查看所有场地预约信息-管理员使用
      * places.placeCampus  0北校区  1南校区
      * status 0/1审核中 2已通过 5已拒绝 4已撤销
      */
@@ -96,17 +96,17 @@ public class PlaceApplyController extends BaseController {
     }
 
     /**
-     * 修改场地申请信息——管理员使用
+     * 修改场地预约信息——管理员使用
      * @param placeApply
      * @return
      */
     @RequiresPermissions("business:placeApply:edit")
-    @Log(title = "场地申请管理", businessType = BusinessType.UPDATE)
+    @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult editPlaceApply(@Validated @RequestBody PlaceApply placeApply)
     {
         //判断时间冲突
-        //查询那个场地那天的申请情况
+        //查询那个场地那天的预约情况
         String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,placeApply.getApplyDay());
         List<PlaceApply> dataBasePlaceApplies = placeApplyService.selectAllPlace(placeApply.getPlaceId(),str);
         if(placeApplyService.timeConflict(dataBasePlaceApplies,placeApply)){
@@ -130,10 +130,10 @@ public class PlaceApplyController extends BaseController {
     }
 
     /**
-     * 删除场地申请——管理员使用
+     * 删除场地预约——管理员使用
      */
     @RequiresPermissions("business:place:remove")
-    @Log(title = "场地申请管理", businessType = BusinessType.DELETE)
+    @Log(title = "场地预约管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{applyIds}")
     public AjaxResult removePlaceApply(@PathVariable Long[] applyIds)
     {
@@ -141,11 +141,11 @@ public class PlaceApplyController extends BaseController {
     }
 
     /**
-     * 导出场地申请——一二管理员使用
+     * 导出场地预约——一二管理员使用
      * @param response
      * @param placeApply
      */
-    @Log(title = "场地申请管理", businessType = BusinessType.EXPORT)
+    @Log(title = "场地预约管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("business:placeApply:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody PlaceApply placeApply)
@@ -163,19 +163,19 @@ public class PlaceApplyController extends BaseController {
                 })
                 .collect(Collectors.toList());
         ExcelUtil<PlaceApplyExport> util = new ExcelUtil<PlaceApplyExport>(PlaceApplyExport.class);
-        util.exportExcel(response, courseExportList, "场地申请数据");
+        util.exportExcel(response, courseExportList, "场地预约数据");
     }
 
     /**
-     * 新增场地申请（业务层使用）
+     * 新增场地预约（业务层使用）
      */
     @RequiresPermissions("business:placeApply:add")
-    @Log(title = "场地申请管理", businessType = BusinessType.INSERT)
+    @Log(title = "场地预约管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult addPlaceApply(@Validated @RequestBody PlaceApply placeApply)
     {
         //判断时间冲突
-        //查询那个场地那天的申请情况
+        //查询那个场地那天的预约情况
          String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,placeApply.getApplyDay());
         List<PlaceApply> dataBasePlaceApplies = placeApplyService.selectAllPlace(placeApply.getPlaceId(),str);
         if(placeApplyService.timeConflict(dataBasePlaceApplies,placeApply)){
@@ -198,17 +198,17 @@ public class PlaceApplyController extends BaseController {
         return toAjax(placeApplyService.insertPlaceApply(placeApply));
     }
     /**
-     * 一级管理员审核场地申请
+     * 一级管理员审核场地预约
      * status只能是1 5
      * 支持多选同意
      */
     @RequiresPermissions("business:placeApply1:check")
-    @Log(title = "场地申请管理", businessType = BusinessType.UPDATE)
+    @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check1")
     public AjaxResult check1(@RequestBody List<PlaceApply> placeApplyList){
         for(PlaceApply temp:placeApplyList){
             if(StringUtils.equals(temp.getStatus(), "1")){
-                //同意申请，则根据原因判断
+                //同意预约，则根据原因判断
                 if(StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(),ReasonConstants.SMALLREASON) ){
                     temp.setStatus(ApplyConstants.AGREESTATUS);
                 }
@@ -227,11 +227,11 @@ public class PlaceApplyController extends BaseController {
     }
 
     /**
-     * 二级管理员审核场地申请
+     * 二级管理员审核场地预约
      * status只能是2 5
      */
     @RequiresPermissions("business:placeApply2:check")
-    @Log(title = "场地申请管理", businessType = BusinessType.UPDATE)
+    @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check2")
     public AjaxResult check2(@RequestBody List<PlaceApply> placeApplyList){
         for(PlaceApply temp:placeApplyList) {
@@ -245,8 +245,8 @@ public class PlaceApplyController extends BaseController {
         return   toAjax(placeApplyService.updatePlaceApplyList(placeApplyList));
     }
     /**
-     * 用户撤销申请
-     * 传递撤销理由和申请单号和status和recallStatus
+     * 用户撤销预约
+     * 传递撤销理由和预约单号和status和recallStatus
      * 返回时前端根据recallStatus，为0可点撤销按钮，不可点强行撤销；为1不可点撤销按钮，可点强行撤销按钮；为2什么都不可点
      * 有两个按钮 撤销和强行撤销（扣除5分）
      */
@@ -260,7 +260,7 @@ public class PlaceApplyController extends BaseController {
         //强行撤销
         if(StringUtils.equals(placeApply.getRecallStatus(),ApplyConstants.RECALLNOT)){
             placeApply.setRecallStatus(ApplyConstants.RECALLCREDIT);
-            SysCredit sysCredit=new SysCredit(null,"用户强行撤销场地申请","自己操作",SecurityUtils.getUserStudentid(), Convert.toInt(placeRecallCredit,-2),null,"0","0");
+            SysCredit sysCredit=new SysCredit(null,"用户强行撤销场地预约","自己操作",SecurityUtils.getUserStudentid(), Convert.toInt(placeRecallCredit,-2),null,"0","0");
             R<Boolean> booleanR= remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
             if(R.FAIL == booleanR.getCode()){
                 throw new ServiceException(booleanR.getMsg());

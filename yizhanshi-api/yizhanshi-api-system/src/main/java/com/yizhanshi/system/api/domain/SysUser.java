@@ -29,7 +29,7 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户学号", type = Type.EXPORT)
     private String userStudentid;
     /** 学号 */
-    @Excel(name = "用户性别，0男 1女 2未知")
+    @Excel(name = "用户性别",readConverterExp = "0=男,1=1女,2=未知")
     private String userSex;
     /** 学号 */
     @Excel(name = "部门id")
@@ -68,7 +68,6 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户评价分数(满分100)")
     private int userScore;
     /** 用户简介 */
-    @Excel(name = "用户简介")
     private String userDescription;
     /** 用户图片1 */
     private String userPicture1;

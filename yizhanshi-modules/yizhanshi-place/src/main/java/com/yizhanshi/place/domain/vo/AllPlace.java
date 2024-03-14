@@ -8,7 +8,7 @@ import com.yizhanshi.place.api.domain.PlaceApply;
 import java.util.List;
 
 /**
- * 返回给前端用于场地申请的场地列表
+ * 返回给前端用于场地预约的场地列表
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AllPlace {

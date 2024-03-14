@@ -7,15 +7,22 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class TalentLabel {
 
-    private Long userStudentid;
+    private String userStudentid;
     private Long labelId;
 
+    public TalentLabel() {
+    }
 
-    public Long getUserStudentid() {
+    public TalentLabel(String userStudentid, Long labelId) {
+        this.userStudentid = userStudentid;
+        this.labelId = labelId;
+    }
+
+    public String getUserStudentid() {
         return userStudentid;
     }
 
-    public void setUserStudentid(Long userStudentid) {
+    public void setUserStudentid(String userStudentid) {
         this.userStudentid = userStudentid;
     }
 

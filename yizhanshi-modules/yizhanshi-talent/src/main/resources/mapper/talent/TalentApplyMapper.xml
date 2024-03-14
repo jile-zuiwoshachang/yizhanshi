@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.talent.mapper.TalentApplyMapper">
+
+    <resultMap type="com.yizhanshi.talent.domain.TalentApply" id="TalentApplyResult">
+        <id     property="applyId"       column="apply_id"      />
+        <result property="applyName"       column="apply_name"      />
+        <result property="userStudentid"       column="user_studentid"      />
+        <result property="talentStudentid"     column="talent_studentid"    />
+        <result property="applyContent"     column="apply_content"    />
+        <result property="applyStartDay"        column="apply_start_day"        />
+        <result property="applyEndDay"        column="apply_end_day"        />
+        <result property="recallReason"     column="recallReason"    />
+        <result property="refuseReason"     column="refuseReason"    />
+        <result property="recallStatus"     column="recallStatus"    />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+        <collection  property="talents"   javaType="com.yizhanshi.system.api.domain.SysUser"  resultMap="TalentResult" />
+    </resultMap>
+    <resultMap id="TalentResult" type="com.yizhanshi.system.api.domain.SysUser">
+        <id     property="userId"       column="user_id"      />
+        <result property="userStudentid"     column="user_studentid"    />
+        <result property="userSex"     column="user_sex"    />
+        <result property="userName"     column="user_name"    />
+        <result property="userOrganization"     column="user_organization"    />
+        <result property="userCampus"     column="user_campus"    />
+        <result property="userEmail"        column="user_email"        />
+        <result property="userPhone"  column="user_phone"  />
+        <result property="userQq"        column="user_qq"        />
+        <result property="userWechat"  column="user_wechat"  />
+        <result property="userScore"          column="user_score"          />
+        <result property="userDescription"       column="user_description"       />
+        <result property="userPicture1"     column="user_picture1"     />
+        <result property="userPicture2"     column="user_picture2"     />
+        <result property="userPicture3"     column="user_picture3"     />
+    </resultMap>
+  
+    <sql id="selectTalentApplyVo">
+        select ta.apply_id, ta.apply_name, ta.user_studentid,ta.talent_studentid,ta.apply_content,ta.apply_start_day,ta.apply_end_day,
+        ta.refuse_reason,ta.recall_status,ta.recall_status, ta.status, ta.del_flag,ta.create_by, ta.create_time, ta.remark,
+        u.user_id, u.user_studentid,u.user_sex,u.user_name, u.user_organization,u.user_campus,
+        u.user_email,  u.user_phone,u.user_qq,u.user_wechat,u.user_score,u.user_description,u.user_picture1, u.user_picture2,u.user_picture3
+        from business_talent_apply ta
+        left join system_user u on ta.talent_studentid=u.user_studentid
+    </sql>
+    <select id="selectTalentApplyList" parameterType="com.yizhanshi.talent.domain.TalentApply" resultMap="TalentApplyResult">
+        <include refid="selectTalentApplyVo"></include>
+        where ta.del_flag = '0'
+        <if test="applyId != null and applyId != 0">
+            AND ta.apply_id = #{applyId}
+        </if>
+        <if test="applyName != null and applyName != ''">
+            AND ta.apply_name = #{applyName}
+        </if>
+        <if test="userStudentid != null and userStudentid != ''">
+            AND ta.user_studentid like concat('%', #{userStudentid}, '%')
+        </if>
+        <if test="courses!=null and courses.courseDay != null and courses.courseDay != ''">
+            AND date_format(c.course_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
+        </if>
+        <if test="courses!=null and courses.courseName != null and courses.courseName != ''">
+            AND c.course_name like concat('%', #{courses.courseName}, '%')
+        </if>
+        <if test="teachers!=null and teachers.teacherName != null and teachers.teacherName != ''">
+            AND t.teacher_name like concat('%', #{teachers.teacherName}, '%')
+        </if>
+        <if test="places!=null and places.placeName != null and places.placeName != ''">
+            AND p.place_name like concat('%', #{places.placeName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND ta.status = #{status}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(ta.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(ta.create_time,'%Y%m%d')  &lt;= date_format(#{params.endTime},'%Y%m%d')
+        </if>
+    </select>
+    <select id="selectTalentApplyById" parameterType="Long" resultMap="TalentApplyResult">
+        <include refid="selectTalentApplyVo"></include>
+        where ta.apply_id = #{applyId}
+    </select>
+
+
+    <update id="updateTalentApply" parameterType="com.yizhanshi.talent.domain.TalentApply">
+        update business_talent_apply
+        <set>
+            <if test="applyName != null and applyName != ''">apply_name=#{applyName},</if>
+            <if test="userStudentid != null and userStudentid != ''">user_studentid=#{userStudentid},</if>
+            <if test="courseId != null and courseId != 0">course_id=#{courseId},</if>
+            <if test="applyContent != null and applyContent != ''">apply_content=#{applyContent},</if>
+            <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1=#{applyAdmin1},</if>
+            <if test="applyAdmin1Name != null and applyAdmin1Name != ''">apply_admin1_name=#{applyAdmin1Name},</if>
+            <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2=#{applyAdmin2},</if>
+            <if test="applyAdmin2Name != null and applyAdmin2Name != ''">apply_admin2_name=#{applyAdmin2Name},</if>
+            <if test="refuseReason != null and refuseReason != ''">refuse_reason=#{refuseReason},</if>
+            <if test="recallStatus != null and recallStatus != ''">recall_status=#{recallStatus},</if>
+            <if test="recallReason != null and recallReason != ''">recall_reason=#{recallReason},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            update_time = sysdate()
+        </set>
+        where apply_id = #{applyId}
+    </update>
+    <delete id="deleteTalentApply" parameterType="Long">
+        update business_talent_apply set del_flag = '2' where apply_id in
+        <foreach collection="array" item="applyId" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </delete>
+    <insert id="insertTalentApply" parameterType="com.yizhanshi.talent.domain.TalentApply" useGeneratedKeys="true" keyProperty="applyId">
+        insert into business_talent_apply(
+        <if test="applyName != null and applyName != ''">apply_name,</if>
+        <if test="userStudentid != null and userStudentid != ''">user_studentid,</if>
+        <if test="courseId != null and courseId != 0">course_id,</if>
+        <if test="applyContent != null and applyContent != ''">apply_content,</if>
+        <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1,</if>
+        <if test="applyAdmin1Name != null and applyAdmin1Name != ''">apply_admin1_name,</if>
+        <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2,</if>
+        <if test="applyAdmin2Name != null and applyAdmin2Name != ''">apply_admin2_name,</if>
+        <if test="refuseReason != null and refuseReason != ''">refuse_reason,</if>
+        <if test="recallStatus != null and recallStatus != ''">recall_status,</if>
+        <if test="recallReason != null and recallReason != ''">recall_reason,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="applyName != null and applyName != ''">#{applyName},</if>
+        <if test="userStudentid != null and userStudentid != ''">#{userStudentid},</if>
+        <if test="courseId != null and courseId != 0">#{courseId},</if>
+        <if test="applyContent != null and applyContent != ''">#{applyContent},</if>
+        <if test="applyAdmin1 != null and applyAdmin1 != ''">#{applyAdmin1},</if>
+        <if test="applyAdmin2 != null and applyAdmin2 != ''">#{applyAdmin2},</if>
+        <if test="refuseReason != null and refuseReason != ''">#{refuseReason},</if>
+        <if test="recallStatus != null and recallStatus != ''">#{recallStatus},</if>
+        <if test="recallReason != null and recallReason != ''">#{recallReason},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <select id="selectByCourseIds" parameterType="Long" resultMap="TalentApplyResult">
+        <include refid="selectTalentApplyVo"/>
+        where ta.course_id  in
+        <foreach collection="array" item="courseId" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+        and ta.del_flag='0'
+    </select>
+
+    <select id="selectNumberByApply" parameterType="Long" resultType="Int">
+        select COUNT(apply_id)
+        from business_talent_apply
+        where course_id=#{courseId} and del_flag='0' and status in ('0','1','2')
+    </select>
+
+
+
+</mapper>

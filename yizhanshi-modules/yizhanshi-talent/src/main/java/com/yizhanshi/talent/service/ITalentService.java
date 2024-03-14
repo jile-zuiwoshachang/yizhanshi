@@ -18,4 +18,8 @@ public interface ITalentService {
      * 人才查询
      */
     public List<Talent> selectTalentList(Talent talent);
+    /**
+     * 修改人才
+     */
+    public  int updateTalent(Talent talnet);
 }

@@ -5,7 +5,7 @@ import com.yizhanshi.course.api.domain.Course;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * 返回给前端用于课程申请的课程列表
+ * 返回给前端用于课程预约的课程列表
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AllCourse {

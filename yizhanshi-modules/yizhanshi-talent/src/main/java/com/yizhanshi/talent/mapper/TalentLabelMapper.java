@@ -63,4 +63,12 @@ public interface TalentLabelMapper {
      * 人才查询
      */
     public List<Talent> selectTalentList(Talent talent);
+    /**
+     * 人才修改-用户修改
+     */
+    public int updateTalentUser(Talent talent);
+    /**
+     * 人才修改-标签修改
+     */
+    public int updateTalentLabel(Talent talent);
 }

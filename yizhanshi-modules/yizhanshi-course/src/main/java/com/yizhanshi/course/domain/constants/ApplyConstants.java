@@ -2,7 +2,7 @@ package com.yizhanshi.course.domain.constants;
 
 public class ApplyConstants {
     /**
-     * 已申请
+     * 已预约
      */
     public static final String YISHENQINGSTATUS = "0";
     /**

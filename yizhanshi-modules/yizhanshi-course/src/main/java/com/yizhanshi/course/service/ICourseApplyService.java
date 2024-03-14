@@ -19,7 +19,7 @@ public interface ICourseApplyService {
     public int selectNumberByCourse(Long courseId);
 
     /**
-     * 查询课程申请单列表
+     * 查询课程预约单列表
      * @param courseApply
      * @return
      */
@@ -30,11 +30,11 @@ public interface ICourseApplyService {
      */
     public CourseApply selectCourseApplyById(Long applyId);
     /**
-     * 修改课程申请信息
+     * 修改课程预约信息
      */
     public  int updateCourseApply(CourseApply courseApply);
     /**
-     * 多选修改课程申请信息
+     * 多选修改课程预约信息
      */
     public  int updateCourseApplyList(List<CourseApply> courseApplyList);
     /**

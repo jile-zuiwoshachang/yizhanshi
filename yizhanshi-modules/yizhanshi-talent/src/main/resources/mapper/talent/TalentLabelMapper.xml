@@ -114,5 +114,37 @@
             </foreach>
         </if>
     </select>
+    <update id="updateTalentUser" parameterType="com.yizhanshi.talent.domain.vo.Talent">
+            update system_user
+            <set>
+                <if test="sysUser!=null and sysUser.userStudentid != null and sysUser.userStudentid != ''">user_studentid=#{sysUser.userStudentid},</if>
+                <if test="sysUser!=null and sysUser.userSex != null and sysUser.userSex != ''">user_sex=#{sysUser.userSex},</if>
+                <if test="sysUser!=null and  sysUser.userName != null and sysUser.userName != ''">user_name=#{sysUser.userName},</if>
+                <if test="sysUser!=null and  sysUser.userOrganization != null and sysUser.userOrganization != ''">user_organization=#{sysUser.userOrganization},</if>
+                <if test="sysUser!=null and  sysUser.userCampus != null and sysUser.userCampus != ''">user_campus=#{sysUser.userCampus},</if>
+                <if test="sysUser!=null and  sysUser.userScore != null and sysUser.userScore != 0">user_score=#{sysUser.userScore},</if>
+                <if test="sysUser!=null and  sysUser.userEmail != null and sysUser.userEmail != ''">user_email=#{sysUser.userEmail},</if>
+                <if test="sysUser!=null and  sysUser.userPhone != null and sysUser.userPhone != ''">user_phone=#{sysUser.userPhone},</if>
+                <if test="sysUser!=null and  sysUser.userQq != null and sysUser.userQq != ''">user_qq=#{sysUser.userQq},</if>
+                <if test="usysUser!=null and  sysUser.userWechat != null and sysUser.userWechat != ''">user_wechat=#{sysUser.userWechat},</if>
+                <if test="sysUser!=null and  sysUser.userDescription != null and sysUser.userDescription != ''">user_description=#{sysUser.userDescription},</if>
+                <if test="sysUser!=null and  sysUser.userPicture1 != null and sysUser.userPicture1 != ''">user_picture1=#{sysUser.userPicture1},</if>
+                <if test="sysUser!=null and  sysUser.userPicture2 != null and sysUser.userPicture2 != ''">user_picture2=#{sysUser.userPicture2},</if>
+                <if test="sysUser!=null and  sysUser.userPicture3 != null and sysUser.userPicture3 != ''">user_picture3=#{sysUser.userPicture3},</if>
+                <if test="sysUser!=null and  sysUser.updateBy != null and sysUser.updateBy != ''">update_by = #{sysUser.updateBy},</if>
+                <if test="sysUser!=null and  sysUser.remark != null">remark = #{sysUser.remark},</if>
+                update_time = sysdate()
+            </set>
+            where user_studentid = #{sysUser.userStudentid}
+    </update>
+    <update id="updateTalentLabel" parameterType="com.yizhanshi.talent.domain.vo.Talent">
+        <if test="labels!=null and !labels.isEmpty()" >
+        <foreach collection="labels" item="label" separator=";">
+            UPDATE business_talent_label
+            SET user_studentid = #{sysUser.userStudentid}
+            WHERE label_id = #{label.labelId}
+        </foreach>
+        </if>
+    </update>
 
 </mapper>

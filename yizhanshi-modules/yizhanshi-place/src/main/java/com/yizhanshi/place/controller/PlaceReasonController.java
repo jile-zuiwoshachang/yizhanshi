@@ -50,7 +50,7 @@ public class PlaceReasonController extends BaseController {
 
 
     /**
-     * 新增申请原因列表——管理员使用
+     * 新增预约原因列表——管理员使用
      * @param placeReason
      * @return
      */
@@ -61,7 +61,7 @@ public class PlaceReasonController extends BaseController {
     }
 
     /**
-     * 更新申请原因列表——管理员使用
+     * 更新预约原因列表——管理员使用
      * @param placeReason
      * @return
      */

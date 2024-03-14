@@ -45,7 +45,7 @@ public interface ICourseService {
     public int deleteCourse(Long[] courseIds);
     /**
      * 判断时间冲突
-     * 和场地申请服务的timeConflict原理相同
+     * 和场地预约服务的timeConflict原理相同
      */
     public Boolean timeConflict(List<Course> dataBase, Course newCourse);
     /**

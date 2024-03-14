@@ -16,12 +16,12 @@
 
     <modules>
         <module>yizhanshi-system</module>
-        <module>yizhanshi-gen</module>
         <module>yizhanshi-job</module>
         <module>yizhanshi-file</module>
         <module>yizhanshi-place</module>
         <module>yizhanshi-course</module>
         <module>yizhanshi-talent</module>
+        <module>yizhanshi-lost</module>
     </modules>
 
     <artifactId>bishe-modules</artifactId>

@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 场地申请 业务层
+ * 场地预约 业务层
  *
  * @author hejiale
  */
@@ -34,34 +34,34 @@ public interface IPlaceApplyService {
     public  List<PlaceApply> selectAllPlace(Long placeId, String chooseDay);
 
     /**
-     * 用于管理员审核场地申请单
-     * 查询场地申请记录
+     * 用于管理员审核场地预约单
+     * 查询场地预约记录
      * @param placeApply
      * @return
      */
     public List<PlaceApply> selectPlaceApplyList(PlaceApply placeApply);
 
     /**
-     * 多选修改场地申请单
+     * 多选修改场地预约单
      * @param placeApply
      * @return
      */
     public int updatePlaceApplyList(List<PlaceApply> placeApply);
     /**
-     * 修改场地申请单
+     * 修改场地预约单
      * @param placeApply
      * @return
      */
     public int updatePlaceApply(PlaceApply placeApply);
     /**
-     * 删除场地申请
+     * 删除场地预约
      * @param applyIds
      * @return
      */
     public int deletePlaceApply(Long[] applyIds);
 
     /**
-     * 新增场地申请，即场地预约
+     * 新增场地预约，即场地预约
      * @param placeApply
      * @return
      */

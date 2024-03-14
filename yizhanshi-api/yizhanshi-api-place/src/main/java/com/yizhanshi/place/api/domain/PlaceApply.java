@@ -23,13 +23,13 @@ import java.util.Date;
  */
 public class PlaceApply extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    /** 申请序号 */
-    @Excel(name = "申请序号", cellType = Excel.ColumnType.NUMERIC)
+    /** 预约序号 */
+    @Excel(name = "预约序号", cellType = Excel.ColumnType.NUMERIC)
     private Long applyId;
-    @Excel(name = "申请人名称")
+    @Excel(name = "预约人名称")
     private String applyName;
 
-    @Excel(name = "申请人学号")
+    @Excel(name = "预约人学号")
     private String userStudentid;
 
     @Excel(name = "场地id", cellType = Excel.ColumnType.NUMERIC)
@@ -55,7 +55,7 @@ public class PlaceApply extends BaseEntity {
     private String fudaoOrganization;
     @Excel(name = "辅导员电话")
     private String fudaoPhone;
-    @Excel(name="申请日期",dateFormat = "yyyy-MM-dd")
+    @Excel(name="预约日期",dateFormat = "yyyy-MM-dd")
     private Date applyDay;
     private Long timeStartId;
     private Long timeEndId;
@@ -64,13 +64,13 @@ public class PlaceApply extends BaseEntity {
     private String applyStartTime;
     @Excel(name = "结束时间")
     private String applyEndTime;
-    @Excel(name = "申请人数", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "预约人数", cellType = Excel.ColumnType.NUMERIC)
     private int applyNumber;
-    @Excel(name = "申请原因id", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "预约原因id", cellType = Excel.ColumnType.NUMERIC)
     private Long reasonId;
-    @Excel(name = "申请组织")
+    @Excel(name = "预约组织")
     private String applyOrganization;
-    @Excel(name = "申请内容")
+    @Excel(name = "预约内容")
     private String applyContent;
     @Excel(name = "一级管理员学号")
     private String applyAdmin1;
@@ -87,7 +87,7 @@ public class PlaceApply extends BaseEntity {
     @Excel(name = "撤销理由")
     private String recallReason;
     /** 状态（0正常 1停用） */
-    @Excel(name = "状态", readConverterExp = "0=已申请,1=一级通过,2=二级通过,4=撤销,5=拒绝")
+    @Excel(name = "状态", readConverterExp = "0=已预约,1=一级通过,2=二级通过,4=撤销,5=拒绝")
     private String status;
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
@@ -128,7 +128,7 @@ public class PlaceApply extends BaseEntity {
     public void setRecallStatus(String recallStatus) {
         this.recallStatus = recallStatus;
     }
-    @NotNull(message = "申请教室编号不可为null")
+    @NotNull(message = "预约教室编号不可为null")
     public Long getPlaceId() {
         return placeId;
     }
@@ -221,7 +221,7 @@ public class PlaceApply extends BaseEntity {
      * 格式转化为2024-02-01
      * @return
      */
-    @NotNull(message = "申请日期不可为null")
+    @NotNull(message = "预约日期不可为null")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     public Date getApplyDay() {
         return applyDay;
@@ -254,7 +254,7 @@ public class PlaceApply extends BaseEntity {
     public void setApplyNumber(int applyNumber) {
         this.applyNumber = applyNumber;
     }
-   @NotNull(message = "申请原因id不能为空")
+   @NotNull(message = "预约原因id不能为空")
     public Long getReasonId() {
         return reasonId;
     }
@@ -270,9 +270,9 @@ public class PlaceApply extends BaseEntity {
     public void setApplyOrganization(String applyOrganization) {
         this.applyOrganization = applyOrganization;
     }
-    @Xss(message = "申请内容不能包含脚本字符")
-    @NotBlank(message = "申请内容不能为空")
-    @Size(min = 0, max = 100, message = "申请内容不能超过100个字符")
+    @Xss(message = "预约内容不能包含脚本字符")
+    @NotBlank(message = "预约内容不能为空")
+    @Size(min = 0, max = 100, message = "预约内容不能超过100个字符")
     public String getApplyContent() {
         return applyContent;
     }

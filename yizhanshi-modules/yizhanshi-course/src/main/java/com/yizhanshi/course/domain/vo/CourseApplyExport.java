@@ -8,15 +8,15 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CourseApplyExport {
     private static final long serialVersionUID = 1L;
-    @Excel(name = "申请序号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "预约序号", cellType = Excel.ColumnType.NUMERIC)
     private Long applyId;
-    @Excel(name = "申请人姓名")
+    @Excel(name = "预约人姓名")
     private String applyName;
-    @Excel(name = "申请人学号")
+    @Excel(name = "预约人学号")
     private String userStudentid;
     @Excel(name = "课程序号", cellType = Excel.ColumnType.NUMERIC)
     private Long courseId;
-    @Excel(name = "申请内容")
+    @Excel(name = "预约内容")
     private String applyContent;
     @Excel(name = "一级管理员学号")
     private String applyAdmin1;
@@ -32,7 +32,7 @@ public class CourseApplyExport {
     private String recallStatus;
     @Excel(name = "撤销原因")
     private String recallReason;
-    @Excel(name = "状态",readConverterExp = "0=已申请,1=一级通过,2=二级通过, 4=撤销, 5=拒绝")
+    @Excel(name = "状态",readConverterExp = "0=已预约,1=一级通过,2=二级通过, 4=撤销, 5=拒绝")
     private String status;
     @Excel(name = "课程名称")
     private String courseName;

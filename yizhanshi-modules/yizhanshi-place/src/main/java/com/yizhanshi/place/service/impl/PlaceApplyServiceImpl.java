@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 场地申请  业务层
+ * 场地预约  业务层
  *
  * @author  hejaile
  */

@@ -101,7 +101,7 @@ public class CourseController extends BaseController {
     @PostMapping
     public AjaxResult addCourse(@Validated @RequestBody Course course) {
         //判断时间冲突
-        //查询那个场地那天的申请情况
+        //查询那个场地那天的预约情况
         String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,course.getCourseDay());
         List<Course> dataBaseCourses = courseService.selectAllCourse(course.getPlaceId(),str);
         if(courseService.timeConflict(dataBaseCourses,course)){
@@ -135,7 +135,7 @@ public class CourseController extends BaseController {
     public AjaxResult editCourse(@Validated @RequestBody Course course)
     {
         //判断时间冲突
-        //查询那个场地那天的申请情况
+        //查询那个场地那天的预约情况
         String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,course.getCourseDay());
         List<Course> dataBaseCourses = courseService.selectAllCourse(course.getPlaceId(),str);
         if(courseService.timeConflict(dataBaseCourses,course)){
@@ -169,13 +169,13 @@ public class CourseController extends BaseController {
     {
         if (!CollectionUtils.isEmpty(courseApplyService.selectByCourseIds(courseIds)))
         {
-            return error("存在课程申请记录不可删除");
+            return error("存在课程预约记录不可删除");
         }
         return toAjax(courseService.deleteCourse(courseIds));
     }
     /**
      * 查看可预约的课程信息
-     * 用于课程申请
+     * 用于课程预约
      * 前端传递参数为chooseDay place_id
      *
      * @author  hejiale

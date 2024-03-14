@@ -116,13 +116,13 @@ public class PlaceController extends BaseController {
     {
         if (!CollectionUtils.isEmpty(placeApplyService.selectByPlaceIds(placeIds)))
         {
-            return error("存在场地申请记录不可删除");
+            return error("存在场地预约记录不可删除");
         }
         return toAjax(placeService.deletePlace(placeIds));
     }
     /**
      * 查看可预约的场地信息
-     * 用于场地申请
+     * 用于场地预约
      * 前端传递参数为chooseDay
      *
      * @author  hejiale
@@ -136,7 +136,7 @@ public class PlaceController extends BaseController {
 
         List<AllPlace> allPlaces=new ArrayList<>();
         for(int i=0;i<placeIdList.length;i++){
-            //获得每个placeid的chooseDay那天的场地申请记录
+            //获得每个placeid的chooseDay那天的场地预约记录
             Date chooseDay=DateUtils.parseDate(place.getParams().get("chooseDay"));
             //为转化加上保险
             List<PlaceApply> placeApplyList= placeApplyService.selectAllPlace(placeIdList[i],  DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,chooseDay));
