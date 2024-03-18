@@ -14,6 +14,7 @@ import com.yizhanshi.common.log.annotation.Log;
 import com.yizhanshi.common.log.enums.BusinessType;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
+import com.yizhanshi.system.api.RemoteCreditService;
 import com.yizhanshi.system.api.RemoteUserService;
 import com.yizhanshi.system.api.domain.SysCredit;
 import com.yizhanshi.talent.domain.TalentApply;
@@ -45,6 +46,8 @@ public class TalentApplyController extends BaseController {
     private ITalentApplyService talentApplyService;
     @Autowired
     private RemoteUserService remoteUserService;
+    @Autowired
+    private RemoteCreditService remoteCreditService;
     @Value("${app.applyNums}")
     private int applyNums;
     /**
@@ -150,6 +153,23 @@ public class TalentApplyController extends BaseController {
             return error("已经撤销");
         }
         return  error("撤销失败或者参数不足");
+    }
+    /**
+     * 信誉管理
+     *
+     * @param sysCredit
+     * @return
+     */
+    @RequiresPermissions("business:talentApply:credit")
+    @PostMapping("/credit")
+    public AjaxResult credit(@RequestBody SysCredit sysCredit){
+        sysCredit.setCreditSource("管理员操作");
+        sysCredit.setAdminName(SecurityUtils.getUsername());
+        R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
+        if(R.FAIL == booleanR.getCode()){
+            throw new ServiceException(booleanR.getMsg());
+        }
+        return success();
     }
 
 }

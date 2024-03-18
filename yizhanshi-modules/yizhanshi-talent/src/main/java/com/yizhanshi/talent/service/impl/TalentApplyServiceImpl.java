@@ -2,6 +2,7 @@ package com.yizhanshi.talent.service.impl;
 
 import com.yizhanshi.talent.domain.TalentApply;
 import com.yizhanshi.talent.mapper.TalentApplyMapper;
+import com.yizhanshi.talent.service.ITalentApplyService;
 import com.yizhanshi.talent.service.ITalentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TalentApplyServiceImpl implements ITalentService {
+public class TalentApplyServiceImpl implements ITalentApplyService {
     @Autowired
     private TalentApplyMapper talentApplyMapper;
 
@@ -31,11 +32,11 @@ public class TalentApplyServiceImpl implements ITalentService {
         return  talentApplyMapper.updateTalentApply(talentApply);
     }
     @Override
-    public  int deleteCourseApply(Long[] applyIds){
+    public  int deleteTalentApply(Long[] applyIds){
         return  talentApplyMapper.deleteTalentApply(applyIds);
     }
     @Override
-    public int insertCourseApply(TalentApply talentApply){
+    public int insertTalentApply(TalentApply talentApply){
         return talentApplyMapper.insertTalentApply(talentApply);
     }
 }

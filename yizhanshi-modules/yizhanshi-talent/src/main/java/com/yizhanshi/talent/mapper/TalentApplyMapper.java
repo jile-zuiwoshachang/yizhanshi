@@ -37,6 +37,6 @@ public interface TalentApplyMapper {
     /**
      * 查看该人才有多少个被预约记录
      */
-    public int selectNumberByApply(String userStudentid);
+    public int selectNumberByApply(String talentStudentid);
 
 }

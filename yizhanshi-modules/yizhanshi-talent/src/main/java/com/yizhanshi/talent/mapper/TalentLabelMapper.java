@@ -30,7 +30,7 @@ public interface TalentLabelMapper {
      * @param userStudentid 用户学号
      * @return 结果
      */
-    public int deleteTalentLabelByUserStudentid(Long userStudentid);
+    public int deleteTalentLabelByUserStudentid(String userStudentid);
 
     /**
      * 通过标签删除所有的用户和标签关联

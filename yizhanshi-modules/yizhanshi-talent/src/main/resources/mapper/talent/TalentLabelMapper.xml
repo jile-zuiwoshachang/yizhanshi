@@ -64,7 +64,7 @@
             (#{item.userStudentid},#{item.labelId})
         </foreach>
     </insert>
-    <delete id="deleteTalentLabelByUserStudentid" parameterType="Long">
+    <delete id="deleteTalentLabelByUserStudentid" parameterType="String">
         delete from business_talent_label where user_studentid=#{userStudentid}
     </delete>
     <delete id="deleteTalentLabelByLabelId" parameterType="Long">

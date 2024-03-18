@@ -62,17 +62,11 @@
         <if test="userStudentid != null and userStudentid != ''">
             AND ta.user_studentid like concat('%', #{userStudentid}, '%')
         </if>
-        <if test="courses!=null and courses.courseDay != null and courses.courseDay != ''">
-            AND date_format(c.course_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
+        <if test="talentStudentid != null and talentStudentid != ''">
+            AND ta.talent_studentid like concat('%', #{talentStudentid}, '%')
         </if>
-        <if test="courses!=null and courses.courseName != null and courses.courseName != ''">
-            AND c.course_name like concat('%', #{courses.courseName}, '%')
-        </if>
-        <if test="teachers!=null and teachers.teacherName != null and teachers.teacherName != ''">
-            AND t.teacher_name like concat('%', #{teachers.teacherName}, '%')
-        </if>
-        <if test="places!=null and places.placeName != null and places.placeName != ''">
-            AND p.place_name like concat('%', #{places.placeName}, '%')
+        <if test="talents!=null and talents.userName != null and talents.userName != ''">
+            AND u.user_name like concat('%', #{talents.userName}, '%')
         </if>
         <if test="status != null and status != ''">
             AND ta.status = #{status}
@@ -95,12 +89,10 @@
         <set>
             <if test="applyName != null and applyName != ''">apply_name=#{applyName},</if>
             <if test="userStudentid != null and userStudentid != ''">user_studentid=#{userStudentid},</if>
-            <if test="courseId != null and courseId != 0">course_id=#{courseId},</if>
+            <if test="talentStudentid != null and talentStudentid != ''">talent_studentid=#{talentStudentid},</if>
             <if test="applyContent != null and applyContent != ''">apply_content=#{applyContent},</if>
-            <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1=#{applyAdmin1},</if>
-            <if test="applyAdmin1Name != null and applyAdmin1Name != ''">apply_admin1_name=#{applyAdmin1Name},</if>
-            <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2=#{applyAdmin2},</if>
-            <if test="applyAdmin2Name != null and applyAdmin2Name != ''">apply_admin2_name=#{applyAdmin2Name},</if>
+            <if test="applyStartDay != null">apply_start_day=#{applyStartDay,jdbcType=DATE},</if>
+            <if test="applyEndDay != null">apply_end_day=#{applyEndDay,jdbcType=DATE},</if>
             <if test="refuseReason != null and refuseReason != ''">refuse_reason=#{refuseReason},</if>
             <if test="recallStatus != null and recallStatus != ''">recall_status=#{recallStatus},</if>
             <if test="recallReason != null and recallReason != ''">recall_reason=#{recallReason},</if>
@@ -121,12 +113,10 @@
         insert into business_talent_apply(
         <if test="applyName != null and applyName != ''">apply_name,</if>
         <if test="userStudentid != null and userStudentid != ''">user_studentid,</if>
-        <if test="courseId != null and courseId != 0">course_id,</if>
+        <if test="talentStudentid != null and talentStudentid != ''">talent_studentid,</if>
         <if test="applyContent != null and applyContent != ''">apply_content,</if>
-        <if test="applyAdmin1 != null and applyAdmin1 != ''">apply_admin1,</if>
-        <if test="applyAdmin1Name != null and applyAdmin1Name != ''">apply_admin1_name,</if>
-        <if test="applyAdmin2 != null and applyAdmin2 != ''">apply_admin2,</if>
-        <if test="applyAdmin2Name != null and applyAdmin2Name != ''">apply_admin2_name,</if>
+        <if test="applyStartDay != null">apply_start_day,</if>
+        <if test="applyEndDay != null">apply_end_day,</if>
         <if test="refuseReason != null and refuseReason != ''">refuse_reason,</if>
         <if test="recallStatus != null and recallStatus != ''">recall_status,</if>
         <if test="recallReason != null and recallReason != ''">recall_reason,</if>
@@ -137,10 +127,10 @@
         )values(
         <if test="applyName != null and applyName != ''">#{applyName},</if>
         <if test="userStudentid != null and userStudentid != ''">#{userStudentid},</if>
-        <if test="courseId != null and courseId != 0">#{courseId},</if>
+        <if test="talentStudentid != null and talentStudentid != ''">#{talentStudentid},</if>
         <if test="applyContent != null and applyContent != ''">#{applyContent},</if>
-        <if test="applyAdmin1 != null and applyAdmin1 != ''">#{applyAdmin1},</if>
-        <if test="applyAdmin2 != null and applyAdmin2 != ''">#{applyAdmin2},</if>
+        <if test="applyStartDay != null">#{applyStartDay,jdbcType=DATE},</if>
+        <if test="applyEndDay != null">#{applyEndDay,jdbcType=DATE},</if>
         <if test="refuseReason != null and refuseReason != ''">#{refuseReason},</if>
         <if test="recallStatus != null and recallStatus != ''">#{recallStatus},</if>
         <if test="recallReason != null and recallReason != ''">#{recallReason},</if>
@@ -151,19 +141,11 @@
         )
     </insert>
 
-    <select id="selectByCourseIds" parameterType="Long" resultMap="TalentApplyResult">
-        <include refid="selectTalentApplyVo"/>
-        where ta.course_id  in
-        <foreach collection="array" item="courseId" open="(" separator="," close=")">
-            #{courseId}
-        </foreach>
-        and ta.del_flag='0'
-    </select>
 
     <select id="selectNumberByApply" parameterType="Long" resultType="Int">
         select COUNT(apply_id)
         from business_talent_apply
-        where course_id=#{courseId} and del_flag='0' and status in ('0','1','2')
+        where talent_studentid=#{talentStudentid} and del_flag='0' and status in ('0','2')
     </select>
 
 

@@ -32,6 +32,7 @@ public class TalentApply extends BaseEntity {
     private String recallReason;
     @Excel(name = "可撤销标志",readConverterExp = "0=可撤销,1=不可撤销")
     private String recallStatus;
+    //人才信息
     private SysUser talents;
 
     public SysUser getTalents() {

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.system.mapper.SysReportMapper">
+
+    <resultMap type="com.yizhanshi.system.api.domain.SysReport" id="SysReportResult">
+        <result property="reportId"       column="report_id"       />
+        <result property="reportName"    column="report_Name"    />
+        <result property="userStudentid"     column="user_studentid"     />
+        <result property="reportedName"  column="reported_name"  />
+        <result property="reportedStudentid"  column="reported_studentid"  />
+        <result property="reportContent"  column="report_content"  />
+        <result property="reportPicture"  column="report_picture"  />
+        <result property="reportAdmin"  column="report_admin"  />
+        <result property="reportAdminName"  column="report_admin_name"  />
+        <result property="refuseReason"  column="refuse_reason"  />
+        <result property="handleContent"  column="handle_content"  />
+        <result property="status"         column="status"          />
+        <result property="createBy"       column="create_by"       />
+        <result property="createTime"     column="create_time"     />
+        <result property="updateBy"       column="update_by"       />
+        <result property="updateTime"     column="update_time"     />
+        <result property="remark"         column="remark"          />
+    </resultMap>
+
+    <sql id="selectReportVo">
+        select report_id, report_name, user_studentid,reported_studentid,reported_name,report_content,report_picture,
+        report_admin,report_admin_name,refuse_reason,handle_content,
+        status, create_by, create_time, update_by, update_time, remark
+        from system_report
+    </sql>
+
+    <select id="selectReportById" parameterType="Long" resultMap="SysReportResult">
+        <include refid="selectReportVo"/>
+        where report_id = #{reportId}
+    </select>
+
+    <select id="selectReportList" parameterType="com.yizhanshi.system.api.domain.SysReport" resultMap="SysReportResult">
+        <include refid="selectReportVo"/>
+        <where>
+            <if test="userStudentid != null and userStudentid != ''">
+                AND user_studentid like concat('%', #{userStudentid}, '%')
+            </if>
+            <if test="reportName != null and reportName != ''">
+                AND report_name like concat('%', #{reportName}, '%')
+            </if>
+            <if test="reportedName != null and reportedName != ''">
+                AND reported_name = #{reportedName}
+            </if>
+            <if test="reportedStudentid != null and reportedStudentid != ''">
+                AND reported_studentid = #{reportedStudentid}
+            </if>
+            <if test="reportAdmin != null and reportAdmin != ''">
+                AND report_admin = #{reportAdmin}
+            </if>
+            <if test="reportAdminName != null and reportAdminName != ''">
+                AND report_admin_name = #{reportAdminName}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertReport" parameterType="com.yizhanshi.system.api.domain.SysReport">
+        insert into system_report (
+        <if test="reportName != null and reportName != '' ">report_name, </if>
+        <if test="userStudentid != null and userStudentid != '' ">user_studentid, </if>
+        <if test="reportedName != null and reportedName != '' ">reported_name, </if>
+        <if test="reportedStudentid != null and reportedStudentid != '' ">reported_studentid, </if>
+        <if test="reportContent != null and reportContent != '' ">report_content, </if>
+        <if test="reportPicture != null and reportPicture != '' ">report_picture, </if>
+        <if test="reportAdmin != null and reportAdmin != '' ">report_admin, </if>
+        <if test="reportAdminName != null and reportAdminName != '' ">report_admin_name, </if>
+        <if test="refuseReason != null and refuseReason != '' ">refuse_reason, </if>
+        <if test="handleContent != null and handleContent != '' ">handle_content, </if>
+        <if test="status != null and status != '' ">status, </if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="reportName != null and reportName != '' ">#{reportName}, </if>
+        <if test="userStudentid != null and userStudentid != '' ">#{userStudentid}, </if>
+        <if test="reportedName != null and reportedName != '' ">#{reportedName}, </if>
+        <if test="reportedStudentid != null and reportedStudentid != '' ">#{reportedStudentid}, </if>
+        <if test="reportContent != null and reportContent != '' ">#{reportContent}, </if>
+        <if test="reportPicture != null and reportPicture != '' ">#{reportPicture}, </if>
+        <if test="reportAdmin != null and reportAdmin != '' ">#{reportAdmin}, </if>
+        <if test="reportAdminName != null and reportAdminName != '' ">#{reportAdminName}, </if>
+        <if test="refuseReason != null and refuseReason != '' ">#{refuseReason}, </if>
+        <if test="handleContent != null and handleContent != '' ">#{handleContent}, </if>
+        <if test="status != null and status != ''">#{status}, </if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateReport" parameterType="com.yizhanshi.system.api.domain.SysReport">
+        update system_report
+        <set>
+            <if test="reportName != null and reportName != '' ">report_name=#{reportName}, </if>
+            <if test="userStudentid != null and userStudentid != '' ">user_studentid=#{userStudentid}, </if>
+            <if test="reportedName != null and reportedName != '' ">report_name=#{reportedName}, </if>
+            <if test="reportedStudentid != null and reportedStudentid != '' ">reported_studentid=#{reportedStudentid}, </if>
+            <if test="reportContent != null and reportContent != '' ">report_content=#{reportContent}, </if>
+            <if test="reportPicture != null and reportPicture != '' ">report_picture=#{reportPicture}, </if>
+            <if test="reportAdmin != null and reportAdmin != '' ">report_admin=#{reportAdmin}, </if>
+            <if test="reportAdminName != null and reportAdminName != '' ">report_admin_name=#{reportAdminName}, </if>
+            <if test="refuseReason != null and refuseReason != '' ">refuse_reason=#{refuseReason}, </if>
+            <if test="handleContent != null and handleContent != '' ">handle_content=#{handleContent}, </if>
+            <if test="status != null and status != ''">status = #{status}, </if>
+            <if test="remark != null and remark != ''">remark = #{remark}, </if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where report_id = #{reportId}
+    </update>
+
+
+    <delete id="deleteReportByIds" parameterType="Long">
+        delete from system_report where report_id in
+        <foreach item="reportId" collection="array" open="(" separator="," close=")">
+            #{reportId}
+        </foreach>
+    </delete>
+
+</mapper>
