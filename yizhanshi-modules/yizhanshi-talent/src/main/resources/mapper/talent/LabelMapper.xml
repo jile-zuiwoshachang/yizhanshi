@@ -82,7 +82,7 @@
         </set>
         where label_id = #{labelId}
     </update>
-    <delete id="deleteLabel" parameterType="Long">
+    <delete id="deleteLabel" >
         update business_label set del_flag = '2' where label_id in
         <foreach collection="array" item="labelId" open="(" separator="," close=")">
             #{labelId}

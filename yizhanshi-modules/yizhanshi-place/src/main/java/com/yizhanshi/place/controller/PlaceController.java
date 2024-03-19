@@ -14,14 +14,17 @@ import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import com.yizhanshi.place.domain.vo.AllPlace;
 import com.yizhanshi.place.service.IPlaceApplyService;
+import com.yizhanshi.place.service.IPlaceApplyTimeService;
 import com.yizhanshi.place.service.IPlaceService;
 import com.yizhanshi.system.api.domain.SysCredit;
 import com.yizhanshi.system.api.domain.SysUser;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +46,8 @@ public class PlaceController extends BaseController {
     private IPlaceService placeService;
     @Autowired
     private IPlaceApplyService placeApplyService;
+    @Autowired
+    private IPlaceApplyTimeService placeApplyTimeService;
 
     /**
      * 场地信息-管理员使用
@@ -114,10 +119,6 @@ public class PlaceController extends BaseController {
     @DeleteMapping("/{placeIds}")
     public AjaxResult removePlace(@PathVariable Long[] placeIds)
     {
-        if (!CollectionUtils.isEmpty(placeApplyService.selectByPlaceIds(placeIds)))
-        {
-            return error("存在场地预约记录不可删除");
-        }
         return toAjax(placeService.deletePlace(placeIds));
     }
     /**
@@ -130,17 +131,19 @@ public class PlaceController extends BaseController {
     @GetMapping("/allPlace")
     public TableDataInfo selectAllPlace(@RequestBody Place place){
         startPage();
-        //根据查询条件和分页得到初步的场地信息
+        //先不计算时间，根据查询条件和分页得到初步的场地信息
         List<Place> list = placeService.selectPlaceList(place);
         Long[] placeIdList = list.stream().map(Place::getPlaceId).toArray(Long[]::new);
-
         List<AllPlace> allPlaces=new ArrayList<>();
+        Date chooseDay=new Date();
+        //获得每个placeid的chooseDay那天的场地预约记录
+        if(!ObjectUtils.isEmpty(place.getParams().get("chooseDay")) ){
+            chooseDay=DateUtils.parseDate(place.getParams().get("chooseDay"));
+        }
         for(int i=0;i<placeIdList.length;i++){
-            //获得每个placeid的chooseDay那天的场地预约记录
-            Date chooseDay=DateUtils.parseDate(place.getParams().get("chooseDay"));
             //为转化加上保险
-            List<PlaceApply> placeApplyList= placeApplyService.selectAllPlace(placeIdList[i],  DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,chooseDay));
-            AllPlace allPlace=new AllPlace(list.get(i),placeApplyList);
+            List<PlaceApplyTime> placeApplyTimeList= placeApplyTimeService.selectAllPlace(placeIdList[i],  DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,chooseDay));
+            AllPlace allPlace=new AllPlace(list.get(i),placeApplyTimeList);
             allPlaces.add(allPlace);
         }
         return getDataTable(allPlaces);

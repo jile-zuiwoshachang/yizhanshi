@@ -1,6 +1,7 @@
 package com.yizhanshi.place.service;
 
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import com.yizhanshi.place.controller.PlaceApplyController;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
@@ -14,24 +15,11 @@ import java.util.List;
  * @author hejiale
  */
 public interface IPlaceApplyService {
-    /**
-     * 根据场地id查询场地列表
-     * @param placeIds
-     * @return
-     */
-    public List<PlaceApply> selectByPlaceIds(Long[] placeIds);
+
     /**
      * 根据编号查询具体信息
      */
     public PlaceApply selectPlaceApplyById(Long applyId);
-
-    /**
-     * 查询选择的日期且是这个场地的场地信息
-     * @param placeId
-     * @param chooseDay
-     * @return
-     */
-    public  List<PlaceApply> selectAllPlace(Long placeId, String chooseDay);
 
     /**
      * 用于管理员审核场地预约单
@@ -46,7 +34,7 @@ public interface IPlaceApplyService {
      * @param placeApply
      * @return
      */
-    public int updatePlaceApplyList(List<PlaceApply> placeApply);
+    public void updatePlaceApplyList(List<PlaceApply> placeApply);
     /**
      * 修改场地预约单
      * @param placeApply
@@ -58,18 +46,18 @@ public interface IPlaceApplyService {
      * @param applyIds
      * @return
      */
-    public int deletePlaceApply(Long[] applyIds);
+    public void deletePlaceApply(Long[] applyIds);
 
     /**
      * 新增场地预约，即场地预约
      * @param placeApply
      * @return
      */
-    public int insertPlaceApply(PlaceApply placeApply);
+    public void insertPlaceApply(PlaceApply placeApply);
     /**
      * 判断时间冲突
      */
-    public Boolean timeConflict(List<PlaceApply> dataBase,PlaceApply newApply);
+    public Boolean timeConflict(List<PlaceApplyTime> dataBase,PlaceApplyTime newApply);
     /**
      * 远程调用课程冲突
      */

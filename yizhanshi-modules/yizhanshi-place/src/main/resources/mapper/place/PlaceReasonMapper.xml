@@ -51,7 +51,7 @@
         </set>
         where reason_id = #{reasonId}
     </update>
-    <delete id="deletePlaceReasons" parameterType="Long">
+    <delete id="deletePlaceReasons">
         delete  from business_place_reason  where reason_id in
         <foreach collection="array" item="reasonId" open="(" separator="," close=")">
             #{reasonId}

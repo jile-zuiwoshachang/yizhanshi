@@ -7,7 +7,11 @@ import com.yizhanshi.common.core.exception.ServiceException;
 import com.yizhanshi.course.api.RemoteCourseService;
 import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
+import com.yizhanshi.place.domain.PlaceApplyTimeRelated;
 import com.yizhanshi.place.mapper.PlaceApplyMapper;
+import com.yizhanshi.place.mapper.PlaceApplyTimeMapper;
+import com.yizhanshi.place.mapper.PlaceApplyTimeRelatedMapper;
 import com.yizhanshi.place.service.IPlaceApplyService;
 
 import org.slf4j.Logger;
@@ -34,19 +38,17 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
     private PlaceApplyMapper placeApplyMapper;
     @Autowired
     private  RemoteCourseService  remoteCourseService;
+    @Autowired
+    private PlaceApplyTimeMapper placeApplyTimeMapper;
+    @Autowired
+    private PlaceApplyTimeRelatedMapper placeApplyTimeRelatedMapper;
 
-    @Override
-    public List<PlaceApply> selectByPlaceIds(Long[] placeIds){
-       return  placeApplyMapper.selectByPlaceIds(placeIds);
-    }
+
     @Override
     public  PlaceApply selectPlaceApplyById(Long applyId){
         return placeApplyMapper.selectPlaceApplyById(applyId);
     }
-    @Override
-    public List<PlaceApply> selectAllPlace(Long placeId, String chooseDay){
-        return  placeApplyMapper.selectAllPlace(placeId,chooseDay);
-    }
+
 
     @Override
     public List<PlaceApply> selectPlaceApplyList(PlaceApply placeApply){
@@ -62,17 +64,10 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int updatePlaceApplyList(List<PlaceApply> placeApply){
-        int rows=0;
+    public void updatePlaceApplyList(List<PlaceApply> placeApply){
         for(PlaceApply item:placeApply){
-            int result = placeApplyMapper.updatePlaceApply(item);
-            if (result == 0) {
-                // 当某次更新失败时，抛出异常以触发事务回滚
-                throw new ServiceException("更新失败，事务回滚");
-            }
-            rows += result;
+            placeApplyMapper.updatePlaceApply(item);
         }
-        return rows;
     }
     @Override
     public int updatePlaceApply(PlaceApply placeApply){
@@ -87,41 +82,55 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
      * @return
      */
     @Override
-    public int deletePlaceApply(Long[] applyIds){
-        return  placeApplyMapper.deletePlaceApply(applyIds);
+    @Transactional(rollbackFor = Exception.class)
+    public void deletePlaceApply(Long[] applyIds){
+        placeApplyMapper.deletePlaceApply(applyIds);
+        for(Long applyId:applyIds){
+            Long[] applyTimeIds=placeApplyTimeRelatedMapper.selectApplyTimeIdsByApplyId(applyId).stream().toArray(Long[]::new);
+            placeApplyTimeRelatedMapper.deletePATRelatedByApplyId(applyId);
+            placeApplyTimeMapper.deletePlaceApplyTime(applyTimeIds);
+        }
     }
     @Override
-    public int insertPlaceApply(PlaceApply placeApply){
-        return  placeApplyMapper.insertPlaceApply(placeApply);
+    @Transactional(rollbackFor = Exception.class)
+    public void insertPlaceApply(PlaceApply placeApply){
+         placeApplyMapper.insertPlaceApply(placeApply);
+        //不冲突则添加关联
+        for(PlaceApplyTime placeApplyTime:placeApply.getPlaceApplyTimes()){
+            placeApplyTimeMapper.insertPlaceApplyTime(placeApplyTime);
+            Long applyTimeId=placeApplyTime.getApplyTimeId();
+            Long applyId= placeApply.getApplyId();
+            PlaceApplyTimeRelated patRelated = new PlaceApplyTimeRelated();
+            patRelated.setApplyId(applyId);
+            patRelated.setApplyTimeId(applyTimeId);
+            // 插入关联记录
+            placeApplyTimeRelatedMapper.insertPATRelated(patRelated);
+        }
     }
     /**
      * false不冲突
      * true 冲突
      * 判断时间冲突
      */
-    public Boolean timeConflict(List<PlaceApply> dataBase, PlaceApply newApply){
+    public Boolean timeConflict(List<PlaceApplyTime> dataBase, PlaceApplyTime newApply){
         Boolean flag=Boolean.FALSE;
+        //此时天数和场地已经确定
         for(int i=0;i<dataBase.size();i++){
-            PlaceApply oldApply= dataBase.get(i);
-            //修改信息时，不检查自己的记录
-            if(newApply.getApplyId()!=null && Objects.equals(oldApply.getApplyId(), newApply.getApplyId())){
-                //跳出此次循环
-                break;
+                PlaceApplyTime oldApply= dataBase.get(i);
+                Long startOld = oldApply.getTimeStartId();
+                Long endOld = oldApply.getTimeEndId();
+                Long startNew = newApply.getTimeStartId();
+                Long endNew = newApply.getTimeEndId();
+                //比较id大小
+                if (startOld >= endNew) {
+                    flag = Boolean.FALSE;
+                } else if (endOld <= startNew) {
+                    flag = Boolean.FALSE;
+                } else {
+                    //冲突直接退出
+                    return Boolean.TRUE;
+                }
             }
-            Long startOld=oldApply.getTimeStartId();
-            Long endOld=oldApply.getTimeEndId();
-            Long startNew= newApply.getTimeStartId();
-            Long endNew=newApply.getTimeEndId();
-            //比较id大小
-            if (startOld >= endNew) {
-                flag=Boolean.FALSE;
-            } else if (endOld <= startNew) {
-                flag=Boolean.FALSE;
-            } else {
-                //冲突直接退出
-               return Boolean.TRUE;
-            }
-        }
         return  flag;
     }
     @Override

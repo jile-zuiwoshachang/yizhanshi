@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 场地信息表
@@ -32,8 +33,7 @@ public class PlaceApply extends BaseEntity {
     @Excel(name = "预约人学号")
     private String userStudentid;
 
-    @Excel(name = "场地id", cellType = Excel.ColumnType.NUMERIC)
-    private Long placeId;
+
 
     @Excel(name = "指导老师姓名")
     private String instructorName;
@@ -55,15 +55,7 @@ public class PlaceApply extends BaseEntity {
     private String fudaoOrganization;
     @Excel(name = "辅导员电话")
     private String fudaoPhone;
-    @Excel(name="预约日期",dateFormat = "yyyy-MM-dd")
-    private Date applyDay;
-    private Long timeStartId;
-    private Long timeEndId;
 
-    @Excel(name = "开始时间")
-    private String applyStartTime;
-    @Excel(name = "结束时间")
-    private String applyEndTime;
     @Excel(name = "预约人数", cellType = Excel.ColumnType.NUMERIC)
     private int applyNumber;
     @Excel(name = "预约原因id", cellType = Excel.ColumnType.NUMERIC)
@@ -86,15 +78,14 @@ public class PlaceApply extends BaseEntity {
     private String recallStatus;
     @Excel(name = "撤销理由")
     private String recallReason;
-    /** 状态（0正常 1停用） */
     @Excel(name = "状态", readConverterExp = "0=已预约,1=一级通过,2=二级通过,4=撤销,5=拒绝")
     private String status;
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    private Place places;
-    private PlaceReason placeReasons;
-    private SysUser sysUsers;
+    private List<PlaceApplyTime> placeApplyTimes;
+    private PlaceReason placeReason;
+    private SysUser sysUser;
 
     public Long getApplyId() {
         return applyId;
@@ -103,7 +94,7 @@ public class PlaceApply extends BaseEntity {
     public void setApplyId(Long applyId) {
         this.applyId = applyId;
     }
-
+    @NotNull(message = "预约人姓名不能为空")
     public String getApplyName() {
         return applyName;
     }
@@ -111,7 +102,7 @@ public class PlaceApply extends BaseEntity {
     public void setApplyName(String applyName) {
         this.applyName = applyName;
     }
-
+    @NotNull(message = "预约人学号不能为空")
     public String getUserStudentid() {
         return userStudentid;
     }
@@ -127,30 +118,6 @@ public class PlaceApply extends BaseEntity {
 
     public void setRecallStatus(String recallStatus) {
         this.recallStatus = recallStatus;
-    }
-    @NotNull(message = "预约教室编号不可为null")
-    public Long getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(Long placeId) {
-        this.placeId = placeId;
-    }
-
-    public Long getTimeStartId() {
-        return timeStartId;
-    }
-
-    public void setTimeStartId(Long timeStartId) {
-        this.timeStartId = timeStartId;
-    }
-
-    public Long getTimeEndId() {
-        return timeEndId;
-    }
-
-    public void setTimeEndId(Long timeEndId) {
-        this.timeEndId = timeEndId;
     }
 
     public String getInstructorName() {
@@ -217,36 +184,6 @@ public class PlaceApply extends BaseEntity {
         this.instructorPhone = instructorPhone;
     }
 
-    /**
-     * 格式转化为2024-02-01
-     * @return
-     */
-    @NotNull(message = "预约日期不可为null")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    public Date getApplyDay() {
-        return applyDay;
-    }
-
-    public void setApplyDay(Date applyDay) {
-        this.applyDay = applyDay;
-    }
-
-    public String getApplyStartTime() {
-        return applyStartTime;
-    }
-
-    public void setApplyStartTime(String applyStartTime) {
-        this.applyStartTime = applyStartTime;
-    }
-
-    public String getApplyEndTime() {
-        return applyEndTime;
-    }
-
-    public void setApplyEndTime(String applyEndTime) {
-        this.applyEndTime = applyEndTime;
-    }
-
     public int getApplyNumber() {
         return applyNumber;
     }
@@ -271,7 +208,6 @@ public class PlaceApply extends BaseEntity {
         this.applyOrganization = applyOrganization;
     }
     @Xss(message = "预约内容不能包含脚本字符")
-    @NotBlank(message = "预约内容不能为空")
     @Size(min = 0, max = 100, message = "预约内容不能超过100个字符")
     public String getApplyContent() {
         return applyContent;
@@ -331,30 +267,6 @@ public class PlaceApply extends BaseEntity {
         this.delFlag = delFlag;
     }
 
-    public Place getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(Place places) {
-        this.places = places;
-    }
-
-    public PlaceReason getPlaceReasons() {
-        return placeReasons;
-    }
-
-    public void setPlaceReasons(PlaceReason placeReasons) {
-        this.placeReasons = placeReasons;
-    }
-
-    public SysUser getSysUsers() {
-        return sysUsers;
-    }
-
-    public void setSysUsers(SysUser sysUsers) {
-        this.sysUsers = sysUsers;
-    }
-
     public String getApplyAdmin1Name() {
         return applyAdmin1Name;
     }
@@ -371,13 +283,36 @@ public class PlaceApply extends BaseEntity {
         this.applyAdmin2Name = applyAdmin2Name;
     }
 
+    public List<PlaceApplyTime> getPlaceApplyTimes() {
+        return placeApplyTimes;
+    }
+
+    public void setPlaceApplyTimes(List<PlaceApplyTime> placeApplyTimes) {
+        this.placeApplyTimes = placeApplyTimes;
+    }
+
+    public void setPlaceReason(PlaceReason placeReason) {
+        this.placeReason = placeReason;
+    }
+
+    public void setSysUser(SysUser sysUser) {
+        this.sysUser = sysUser;
+    }
+
+    public PlaceReason getPlaceReason() {
+        return placeReason;
+    }
+
+    public SysUser getSysUser() {
+        return sysUser;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("applyId", applyId)
                 .append("applyName", applyName)
                 .append("userStudentid", userStudentid)
-                .append("placeId", placeId)
                 .append("instructorName", instructorName)
                 .append("instructorStudentid", instructorStudentid)
                 .append("instructorOrganization", instructorOrganization)
@@ -386,11 +321,6 @@ public class PlaceApply extends BaseEntity {
                 .append("fudaoStudentid", fudaoStudentid)
                 .append("fudaoOrganization", fudaoOrganization)
                 .append("fudaoPhone", fudaoPhone)
-                .append("applyDay", applyDay)
-                .append("timeStartId", timeStartId)
-                .append("timeEndId", timeEndId)
-                .append("applyStartTime", applyStartTime)
-                .append("applyEndTime", applyEndTime)
                 .append("applyNumber", applyNumber)
                 .append("reasonId", reasonId)
                 .append("applyOrganization", applyOrganization)
@@ -404,9 +334,9 @@ public class PlaceApply extends BaseEntity {
                 .append("recallReason", recallReason)
                 .append("status", status)
                 .append("delFlag", delFlag)
-                .append("places", places)
-                .append("placeReasons", placeReasons)
-                .append("sysUsers", sysUsers)
+                .append("placeApplyTimes", placeApplyTimes)
+                .append("placeReason", placeReason)
+                .append("sysUser", sysUser)
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())

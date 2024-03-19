@@ -103,7 +103,7 @@
         </set>
         where apply_id = #{applyId}
     </update>
-    <delete id="deleteTalentApply" parameterType="Long">
+    <delete id="deleteTalentApply" >
         update business_talent_apply set del_flag = '2' where apply_id in
         <foreach collection="array" item="applyId" open="(" separator="," close=")">
             #{applyId}

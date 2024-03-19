@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.place.mapper.PlaceApplyTimeRelatedMapper">
+
+    <resultMap type="com.yizhanshi.place.domain.PlaceApplyTimeRelated" id="PlaceApplyTimeRelatedResult">
+        <result     property="applyId"       column="apply_id"      />
+        <result     property="applyTimeId"       column="apply_time_id"/>
+    </resultMap>
+
+    <sql id="selectPlaceApplyTimeRelatedVo">
+        select atr.apply_id,apply_time_id
+        from business_place_apply_time_related atr
+    </sql>
+<select id="selectApplyTimeIdsByApplyId" parameterType="Long" resultType="Long">
+    select apply_time_id from business_place_apply_time_related
+    where apply_id=#{applyId}
+</select>
+    <insert id="insertPATRelated" parameterType="com.yizhanshi.place.domain.PlaceApplyTimeRelated">
+        insert into business_place_apply_time_related(apply_id, apply_time_id) values
+            (#{applyId},#{applyTimeId})
+    </insert>
+
+    <delete id="deletePATRelatedByApplyId" parameterType="Long">
+       delete from  business_place_apply_time_related  where apply_id=#{applyId}
+    </delete>
+    <delete id="deletePATRelatedByApplyTimeId" parameterType="Long">
+        delete from  business_place_apply_time_related  where apply_time_id=#{applyTimeId}
+    </delete>
+    <delete id="deleteTPATRelated" parameterType="com.yizhanshi.place.domain.PlaceApplyTimeRelated">
+        delete from  business_place_apply_time_related  where
+        apply_id=#{applyId} and apply_time_id=#{applyTimeId}
+    </delete>
+    <delete id="deletePATRelateds" >
+        delete from business_place_apply_time_related where apply_id=#{applyId}
+        and apply_time_id in
+        <foreach collection="applyTimeIds" item="applyTimeId" open="(" separator="," close=")">
+            #{applyTimeId}
+        </foreach>
+    </delete>
+
+
+
+
+
+</mapper>

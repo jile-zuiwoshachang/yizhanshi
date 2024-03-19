@@ -8,7 +8,6 @@
         <id     property="applyId"       column="apply_id"      />
         <result property="applyName"       column="apply_name"      />
         <result property="userStudentid"       column="user_studentid"      />
-        <result property="placeId"     column="place_id"    />
         <result property="instructorName"     column="instructor_name"    />
         <result property="instructorOrganization"     column="instructor_organization"    />
         <result property="instructorPhone"     column="instructor_phone"    />
@@ -17,11 +16,6 @@
         <result property="fudaoOrganization"     column="fudao_organization"    />
         <result property="fudaoPhone"     column="fudao_phone"    />
         <result property="fudaoStudentid"     column="fudao_studentid"    />
-        <result property="applyDay"     column="apply_day"    />
-        <result property="timeStartId"     column="time_start_id"    />
-        <result property="timeEndId"        column="time_end_id"        />
-        <result property="applyStartTime"     column="apply_start_time"    />
-        <result property="applyEndTime"        column="apply_end_time"        />
         <result property="applyNumber"        column="apply_number"        />
         <result property="reasonId"        column="reason_id"        />
         <result property="applyOrganization"        column="apply_organization"        />
@@ -40,16 +34,28 @@
         <result property="updateTime"     column="update_time"    />
         <result property="updateBy"     column="update_by"    />
         <result property="remark"     column="remark"    />
-        <collection  property="places"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
-        <collection  property="placeReasons"   javaType="com.yizhanshi.place.api.domain.PlaceReason"  resultMap="PlaceReasonResult" />
+        <collection  property="placeApplyTimes" ofType="com.yizhanshi.place.api.domain.PlaceApplyTime"   javaType="List"  resultMap="PlaceApplyTimeResult" />
+        <collection  property="placeReason"   javaType="com.yizhanshi.place.api.domain.PlaceReason"  resultMap="PlaceReasonResult" />
+        <collection  property="sysUser"   javaType="com.yizhanshi.system.api.domain.SysUser"  resultMap="UserResult" />
     </resultMap>
-    <resultMap id="PlaceResult" type="com.yizhanshi.place.api.domain.Place">
-        <id     property="placeId"       column="place_id"        />
-        <result property="placeName"     column="place_name"      />
-        <result property="placeCampus"      column="place_campus"       />
-        <result property="placeCapacity"     column="place_capacity"      />
-        <result property="status"       column="status"    />
+
+    <resultMap type="com.yizhanshi.place.api.domain.PlaceApplyTime" id="PlaceApplyTimeResult">
+        <id     property="applyTimeId"       column="apply_time_id"      />
+        <result property="placeId"        column="place_id"        />
+        <result property="applyDay"        column="apply_day"        />
+        <result property="timeStartId"        column="time_start_id"        />
+        <result property="applyStartTime"        column="apply_start_time"        />
+        <result property="timeEndId"        column="time_end_id"        />
+        <result property="applyEndTime"        column="apply_end_time"        />
+        <collection  property="place"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
     </resultMap>
+    <resultMap type="com.yizhanshi.place.api.domain.Place" id="PlaceResult">
+        <id     property="placeId"       column="place_id"      />
+        <result property="placeName"       column="place_name"      />
+        <result property="placeCampus"     column="place_campus"    />
+        <result property="placeCapacity"     column="place_capacity"    />
+    </resultMap>
+
     <resultMap id="PlaceReasonResult" type="com.yizhanshi.place.api.domain.PlaceReason">
         <id     property="reasonId"       column="reason_id"        />
         <result property="reasonName"     column="reason_name"      />
@@ -68,17 +74,14 @@
         <result property="userScore"      column="user_score"       />
     </resultMap>
     <sql id="selectPlaceApplyVo">
-        select pa.apply_id, pa.apply_name, pa.user_studentid,pa.place_id,pa.instructor_name,
+        select pa.apply_id, pa.apply_name, pa.user_studentid,pa.instructor_name,
         pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,
-        pa.fudao_name, pa.fudao_studentid,pa.fudao_organization,pa.fudao_phone,pa.apply_day,
-        pa.time_start_id,pa.time_end_id,pa.apply_start_time,pa.apply_end_time,pa.apply_number,pa.reason_id,pa.apply_organization,
+        pa.fudao_name, pa.fudao_studentid,pa.fudao_organization,pa.apply_number,pa.reason_id,pa.apply_organization,
         pa.apply_content,pa.apply_admin1,pa.apply_admin1_name,pa.apply_admin2,pa.apply_admin2_name,pa.refuse_reason,pa.recall_reason,
         pa.recall_status,pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
-        p.place_id,p.place_name,p.place_campus,p.place_description,p.place_capacity,p.status,
         pr.reason_id,pr.reason_name,pr.reason_type,
         u.user_id,u.user_studentid,u.user_name,u.user_organization,u.user_campus,u.user_email,u.user_phone,u.user_qq,u.user_wechat,u.user_score
         from business_place_apply pa
-        left join business_place p on pa.place_id=p.place_id
         left join business_place_reason pr on pa.reason_id=pr.reason_id
         left join system_user u on u.user_studentid=pa.user_studentid
     </sql>
@@ -94,14 +97,11 @@
         <if test="userStudentid != null and userStudentid != ''">
             AND pa.user_studentid like concat('%', #{userStudentid}, '%')
         </if>
-        <if test="params.chooseDay != null and params.chooseDay  != ''">
-            AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
+        <if test="placeReason!=null and placeReason.reasonName != null and placeReason.reasonName != ''">
+            AND pr.reason_name like concat('%', #{placeReason.reasonName}, '%')
         </if>
-        <if test="places!=null and places.placeName != null and places.placeName != ''">
-            AND p.place_name like concat('%', #{places.placeName}, '%')
-        </if>
-        <if test="places!=null and places.placeCampus != null and places.placeCampus != ''">
-            AND p.place_campus like concat('%', #{places.placeCampus}, '%')
+        <if test="placeReason!=null and placeReason.reasonType != null and placeReason.reasonType != ''">
+            AND pr.reason_type like concat('%', #{placeReason.reasonType}, '%')
         </if>
         <if test="status != null and status != ''">
             AND pa.status = #{status}
@@ -124,7 +124,6 @@
     <set>
         <if test="applyName != null and applyName != ''">apply_name=#{applyName},</if>
         <if test="userStudentid != null and userStudentid != ''">user_studentid=#{userStudentid},</if>
-        <if test="placeId != null and placeId != 0">place_id=#{placeId},</if>
         <if test="instructorName != null and instructorName != ''">instructor_name=#{instructorName},</if>
         <if test="instructorStudentid != null and instructorStudentid != ''">instructor_studentid=#{instructorStudentid},</if>
         <if test="instructorOrganization != null and instructorOrganization != ''">instructor_organization=#{instructorOrganization},</if>
@@ -133,11 +132,6 @@
         <if test="fudaoStudentid != null and fudaoStudentid != ''">fudao_studentid=#{fudaoStudentid},</if>
         <if test="fudaoOrganization != null and fudaoOrganization != ''">fudao_organization=#{fudaoOrganization},</if>
         <if test="fudaoPhone != null and fudaoPhone != ''">fudao_phone=#{fudaoPhone},</if>
-        <if test="applyDay != null">apply_day=#{applyDay,jdbcType=DATE},</if>
-        <if test="timeStartId != null and timeStartId != 0">time_start_id=#{timeStartId},</if>
-        <if test="timeEndId != null and timeEndId != 0">time_end_id=#{timeEndId},</if>
-        <if test="applyStartTime != null and applyStartTime != ''">apply_start_time=#{applyStartTime},</if>
-        <if test="applyEndTime != null and applyEndTime != ''">apply_end_time=#{applyEndTime},</if>
         <if test="applyNumber != null and applyNumber != 0">apply_number=#{applyNumber},</if>
         <if test="reasonId != null and reasonId != 0">reason_id=#{reasonId},</if>
         <if test="applyContent != null and applyContent != ''">apply_content=#{applyContent},</if>
@@ -155,7 +149,7 @@
     </set>
         where apply_id = #{applyId}
     </update>
-    <delete id="deletePlaceApply" parameterType="Long">
+    <delete id="deletePlaceApply">
         update business_place_apply set del_flag = '2' where apply_id in
         <foreach collection="array" item="applyId" open="(" separator="," close=")">
             #{applyId}
@@ -166,7 +160,6 @@
             <if test="applyId != null and applyId != 0">apply_id,</if>
             <if test="applyName != null and applyName != ''">apply_name,</if>
             <if test="userStudentid != null and userStudentid != ''">user_studentid,</if>
-            <if test="placeId != null and placeId != 0">place_id,</if>
             <if test="instructorName != null and instructorName != ''">instructor_name,</if>
             <if test="instructorStudentid != null and instructorStudentid != ''">instructor_studentid,</if>
             <if test="instructorOrganization != null and instructorOrganization != ''">instructor_organization,</if>
@@ -175,11 +168,6 @@
         <if test="fudaoStudentid != null and fudaoStudentid != ''">fudao_studentid,</if>
         <if test="fudaoOrganization != null and fudaoOrganization != ''">fudao_organization,</if>
         <if test="fudaoPhone != null and fudaoPhone != ''">fudao_phone,</if>
-            apply_day,
-            <if test="timeStartId != null and timeStartId != 0">time_start_id,</if>
-            <if test="timeEndId != null and timeEndId != 0">time_end_id,</if>
-            <if test="applyStartTime != null and applyStartTime != ''">apply_start_time,</if>
-            <if test="applyEndTime != null and applyEndTime != ''">apply_end_time,</if>
             <if test="applyNumber != null and applyNumber != 0">apply_number,</if>
             <if test="reasonId != null and reasonId != 0">reason_id,</if>
             <if test="applyContent != null and applyContent != ''">apply_content,</if>
@@ -198,7 +186,6 @@
         <if test="applyId != null and applyId != ''">#{applyId},</if>
         <if test="applyName != null and applyName != ''">#{applyName},</if>
         <if test="userStudentid != null and userStudentid != ''">#{userStudentid},</if>
-        <if test="placeId != null and placeId != 0">#{placeId},</if>
         <if test="instructorName != null and instructorName != ''">#{instructorName},</if>
         <if test="instructorStudentid != null and instructorStudentid != ''">#{instructorStudentid},</if>
         <if test="instructorOrganization != null and instructorOrganization != ''">#{instructorOrganization},</if>
@@ -207,11 +194,6 @@
         <if test="fudaoStudentid != null and fudaoStudentid != ''">#{fudaoStudentid},</if>
         <if test="fudaoOrganization != null and fudaoOrganization != ''">#{fudaoOrganization},</if>
         <if test="fudaoPhone != null and fudaoPhone != ''">#{fudaoPhone},</if>
-        #{applyDay, jdbcType=DATE},
-        <if test="timeStartId != null and timeStartId != ''">#{timeStartId},</if>
-        <if test="timeEndId != null and timeEndId != ''">#{timeEndId},</if>
-        <if test="applyStartTime != null and applyStartTime != ''">#{applyStartTime},</if>
-        <if test="applyEndTime != null and applyEndTime != ''">#{applyEndTime},</if>
         <if test="applyNumber != null and applyNumber != 0">#{applyNumber},</if>
         <if test="reasonId != null and reasonId != 0">#{reasonId},</if>
         <if test="applyContent != null and applyContent != ''">#{applyContent},</if>
@@ -229,19 +211,9 @@
         )
     </insert>
 
-    <select id="selectByPlaceIds" parameterType="Long" resultMap="PlaceApplyResult">
-        <include refid="selectPlaceApplyVo"/>
-        where pa.del_flag='0'  and pa.place_id  in
-        <foreach collection="array" item="placeId" open="(" separator="," close=")">
-        #{placeId}
-        </foreach>
-    </select>
 
-    <select id="selectAllPlace" resultMap="PlaceApplyResult">
-        <include refid="selectPlaceApplyVo"/>
-        where pa.place_id  = #{placeId}
-         AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and pa.del_flag='0'
-    </select>
+
+
 
 
 </mapper>

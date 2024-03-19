@@ -4,11 +4,13 @@ import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.place.api.RemotePlaceService;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -23,7 +25,7 @@ public class RemotePlaceFallbackFactory implements FallbackFactory<RemotePlaceSe
         return new RemotePlaceService()
         {
             @Override
-            public R<Boolean> timeConflictByPlace(PlaceApply placeApply , String source)
+            public R<Boolean> timeConflictByPlace(List<PlaceApplyTime> placeApplyTimes , String source)
             {
                 return R.fail("调用场地服务失败:" + throwable.getMessage());
             }

@@ -125,7 +125,7 @@
     </update>
 
 
-    <delete id="deleteReportByIds" parameterType="Long">
+    <delete id="deleteReportByIds" >
         delete from system_report where report_id in
         <foreach item="reportId" collection="array" open="(" separator="," close=")">
             #{reportId}

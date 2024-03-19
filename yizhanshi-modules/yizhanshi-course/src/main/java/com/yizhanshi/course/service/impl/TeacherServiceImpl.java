@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,17 +29,14 @@ public class TeacherServiceImpl implements ITeacherService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int insertTeacher(Teacher teacher){
         return teacherMapper.insertTeacher(teacher);
     }
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int updateTeacher(Teacher teacher){
         return teacherMapper.updateTeacher(teacher);
     }
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int  deleteTeacher(Long[] teacherIds){
         return teacherMapper.deleteTeacher(teacherIds);
     }

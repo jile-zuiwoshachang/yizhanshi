@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class AllPlace {
 
     private Place place;
-     private List<PlaceApply> placeApplies;
+     private List<PlaceApplyTime> placeApplyTimes;
 
 
     public Place getPlace() {
@@ -25,16 +26,16 @@ public class AllPlace {
         this.place = place;
     }
 
-    public List<PlaceApply> getPlaceApplies() {
-        return placeApplies;
+    public List<PlaceApplyTime> getPlaceApplyTimes() {
+        return placeApplyTimes;
     }
 
-    public void setPlaceApplies(List<PlaceApply> placeApplies) {
-        this.placeApplies = placeApplies;
+    public void setPlaceApplyTimes(List<PlaceApplyTime> placeApplyTimes) {
+        this.placeApplyTimes = placeApplyTimes;
     }
 
-    public AllPlace(Place place, List<PlaceApply> placeApplies) {
+    public AllPlace(Place place, List<PlaceApplyTime> placeApplyTimes) {
         this.place = place;
-        this.placeApplies = placeApplies;
+        this.placeApplyTimes = placeApplyTimes;
     }
 }

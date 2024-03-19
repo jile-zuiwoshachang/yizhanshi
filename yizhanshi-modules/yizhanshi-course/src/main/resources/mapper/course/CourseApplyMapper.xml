@@ -125,7 +125,7 @@
     </set>
         where apply_id = #{applyId}
     </update>
-    <delete id="deleteCourseApply" parameterType="Long">
+    <delete id="deleteCourseApply">
         update business_course_apply set del_flag = '2' where apply_id in
         <foreach collection="array" item="applyId" open="(" separator="," close=")">
             #{applyId}
@@ -165,7 +165,7 @@
         )
     </insert>
 
-    <select id="selectByCourseIds" parameterType="Long" resultMap="CourseApplyResult">
+    <select id="selectByCourseIds"  resultMap="CourseApplyResult">
         <include refid="selectCourseApplyVo"/>
         where ca.course_id  in
         <foreach collection="array" item="courseId" open="(" separator="," close=")">

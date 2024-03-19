@@ -8,11 +8,11 @@ import com.yizhanshi.course.mapper.CourseMapper;
 import com.yizhanshi.course.service.ICourseService;
 import com.yizhanshi.place.api.RemotePlaceService;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,17 +39,14 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int insertCourse(Course course){
         return courseMapper.insertCourse(course);
     }
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int updateCourse(Course course){
         return courseMapper.updateCourse(course);
     }
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int  deleteCourse(Long[] courseIds){
         return courseMapper.deleteCourse(courseIds);
     }
@@ -83,8 +80,8 @@ public class CourseServiceImpl implements ICourseService {
         return  courseMapper.selectAllCourse(placeId,chooseDay);
     }
     @Override
-    public Boolean  timeConflictByPlace(PlaceApply placeApply){
-        R<Boolean> booleanR=remotePlaceService.timeConflictByPlace(placeApply, SecurityConstants.INNER);
+    public Boolean  timeConflictByPlace(List<PlaceApplyTime> placeApplyTimes){
+        R<Boolean> booleanR=remotePlaceService.timeConflictByPlace(placeApplyTimes, SecurityConstants.INNER);
             if(R.FAIL == booleanR.getCode()){
             throw new  ServiceException(booleanR.getMsg());
         }

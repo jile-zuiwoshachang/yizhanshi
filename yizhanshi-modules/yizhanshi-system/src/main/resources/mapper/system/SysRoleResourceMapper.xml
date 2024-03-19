@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from system_role_resource where role_id=#{roleId}
 	</delete>
 	
-	<delete id="deleteRoleResource" parameterType="Long">
+	<delete id="deleteRoleResource" >
  		delete from system_role_resource where role_id in
  		<foreach collection="array" item="roleId" open="(" separator="," close=")">
  			#{roleId}

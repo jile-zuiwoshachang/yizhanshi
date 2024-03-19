@@ -23,6 +23,7 @@ import com.yizhanshi.course.service.ICourseService;
 import com.yizhanshi.place.api.RemotePlaceService;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -108,18 +109,17 @@ public class CourseController extends BaseController {
             return error("时间冲突!请查看当天课程信息后修改时间");
         }
         //再远程调用该场地服务，判断时间是否冲突
-        PlaceApply placeApply=new PlaceApply();
-        placeApply.setTimeStartId(course.getTimeStartId());
-        placeApply.setTimeEndId(course.getTimeEndId());
-        placeApply.setApplyStartTime(course.getCourseStartTime());
-        placeApply.setApplyEndTime(course.getCourseEndTime());
-        placeApply.setPlaceId(course.getPlaceId());
-        Map<String,Object> params=new HashMap<>();
-        params.put("chooseDay",str);
-        placeApply.setParams(params);
-        if(courseService.timeConflictByPlace(placeApply)){
-            return error("与场地预约冲突，请检查场地预约时间");
-        }
+//        List<PlaceApplyTime> placeApplyTimes=new PlaceApplyTime();
+//
+//        placeApplyTime.setTimeStartId(course.getTimeStartId());
+//        placeApplyTime.setTimeEndId(course.getTimeEndId());
+//        placeApplyTime.setPlaceId(course.getPlaceId());
+//        Map<String,Object> params=new HashMap<>();
+//        params.put("chooseDay",str);
+//        placeApplyTime.setParams(params);
+//        if(courseService.timeConflictByPlace(placeApplyTimes)){
+//            return error("与场地预约冲突，请检查场地预约时间");
+//        }
         course.setCreateBy(SecurityUtils.getUsername());
         return toAjax(courseService.insertCourse(course));
     }
@@ -142,18 +142,18 @@ public class CourseController extends BaseController {
             return error("时间冲突!请查看当天课程信息后修改时间");
         }
         //再远程调用该场地服务，判断时间是否冲突
-        PlaceApply placeApply=new PlaceApply();
-        placeApply.setTimeStartId(course.getTimeStartId());
-        placeApply.setTimeEndId(course.getTimeEndId());
-        placeApply.setApplyStartTime(course.getCourseStartTime());
-        placeApply.setApplyEndTime(course.getCourseEndTime());
-        placeApply.setPlaceId(course.getPlaceId());
-        Map<String,Object> params=new HashMap<>();
-        params.put("chooseDay",str);
-        placeApply.setParams(params);
-        if(courseService.timeConflictByPlace(placeApply)){
-            return error("与场地预约冲突，请检查场地预约时间");
-        }
+//        PlaceApply placeApply=new PlaceApply();
+//        placeApply.setTimeStartId(course.getTimeStartId());
+//        placeApply.setTimeEndId(course.getTimeEndId());
+//        placeApply.setApplyStartTime(course.getCourseStartTime());
+//        placeApply.setApplyEndTime(course.getCourseEndTime());
+//        placeApply.setPlaceId(course.getPlaceId());
+//        Map<String,Object> params=new HashMap<>();
+//        params.put("chooseDay",str);
+//        placeApply.setParams(params);
+//        if(courseService.timeConflictByPlace(placeApply)){
+//            return error("与场地预约冲突，请检查场地预约时间");
+//        }
         course.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(courseService.updateCourse(course));
 

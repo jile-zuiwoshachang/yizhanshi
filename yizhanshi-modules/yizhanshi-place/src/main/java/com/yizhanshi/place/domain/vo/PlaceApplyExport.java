@@ -15,7 +15,7 @@ public class PlaceApplyExport {
 
     @Excel(name = "预约人学号")
     private String userStudentid;
-    @Excel(name = "场地校区",readConverterExp = "0=北校区,1=南校区")
+    @Excel(name = "场地校区")
     private String placeCampus;
 
     @Excel(name = "场地名称")

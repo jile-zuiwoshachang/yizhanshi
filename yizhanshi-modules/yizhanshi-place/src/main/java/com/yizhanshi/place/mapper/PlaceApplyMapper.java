@@ -42,15 +42,7 @@ public  interface PlaceApplyMapper {
      * @return
      */
     public int insertPlaceApply(PlaceApply placeApply);
-    /**
-     * 查看该场地有多少个被预约记录
-     */
-    public List<PlaceApply> selectByPlaceIds(Long[] placeIds);
 
-    /**
-     * 根据查询条件，获得当天的场地预约记录
-     */
-    public List<PlaceApply> selectAllPlace(@Param("placeId") Long placeId,@Param("chooseDay") String chooseDay);
 
 
 }

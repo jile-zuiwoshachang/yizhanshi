@@ -2,6 +2,7 @@ package com.yizhanshi.course.service;
 
 import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 
 import java.util.List;
 import java.util.Map;
@@ -58,5 +59,5 @@ public interface ICourseService {
     /**
      * 判断与场地的冲突
      */
-    public Boolean  timeConflictByPlace(PlaceApply placeApply);
+    public Boolean  timeConflictByPlace(List<PlaceApplyTime> placeApplyTimes);
 }

@@ -26,7 +26,7 @@ public class Place extends BaseEntity {
     private String placeName;
 
     /** 场地位置（校区） */
-    @Excel(name = "场地位置（校区）",readConverterExp = "0=北校区,1=南校区")
+    @Excel(name = "场地位置（校区）")
     private String placeCampus;
     @Excel(name = "场地描述")
     private String placeDescription;

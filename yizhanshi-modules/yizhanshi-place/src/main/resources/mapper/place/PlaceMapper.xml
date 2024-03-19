@@ -113,7 +113,7 @@
     </set>
         where place_id = #{placeId}
     </update>
-    <delete id="deletePlace" parameterType="Long">
+    <delete id="deletePlace" >
         update business_place set del_flag = '2' where place_id in
         <foreach collection="array" item="placeId" open="(" separator="," close=")">
             #{placeId}

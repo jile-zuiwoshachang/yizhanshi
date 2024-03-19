@@ -107,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from system_config where config_id = #{configId}
     </delete>
     
-    <delete id="deleteConfigByIds" parameterType="Long">
+    <delete id="deleteConfigByIds" >
         delete from system_config where config_id in
         <foreach item="configId" collection="array" open="(" separator="," close=")">
         	#{configId}
