@@ -6,6 +6,7 @@ import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.common.core.exception.ServiceException;
 import com.yizhanshi.course.api.RemoteCourseService;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.place.api.domain.PlaceApply;
 import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import com.yizhanshi.place.domain.PlaceApplyTimeRelated;
@@ -134,8 +135,8 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
         return  flag;
     }
     @Override
-    public Boolean timeConflictByCourse(Course course){
-        R<Boolean> booleanR= remoteCourseService.timeConflictByCourse(course,SecurityConstants.INNER);
+    public Boolean timeConflictByCourse(List<CourseTime> courseTimes){
+        R<Boolean> booleanR= remoteCourseService.timeConflictByCourse(courseTimes,SecurityConstants.INNER);
         if(R.FAIL == booleanR.getCode()){
             throw new ServiceException(booleanR.getMsg());
         }

@@ -4,6 +4,8 @@ import com.yizhanshi.common.core.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotNull;
+
 
 /**
  * 场地信息表
@@ -28,7 +30,7 @@ public class PlaceReason {
     public void setReasonId(Long reasonId) {
         this.reasonId = reasonId;
     }
-
+    @NotNull(message = "原因名称不能为空")
     public String getReasonName() {
         return reasonName;
     }
@@ -36,7 +38,7 @@ public class PlaceReason {
     public void setReasonName(String reasonName) {
         this.reasonName = reasonName;
     }
-
+    @NotNull(message = "原因类型不能为空")
     public String getReasonType() {
         return reasonType;
     }

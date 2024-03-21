@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.course.mapper.CourseTimeRelatedMapper">
+
+    <resultMap type="com.yizhanshi.course.domain.CourseTimeRelated" id="CourseTimeRelatedResult">
+        <result     property="courseId"       column="course_id"      />
+        <result     property="courseTimeId"       column="course_time_id"/>
+    </resultMap>
+
+    <sql id="selectCourseTimeRelatedVo">
+        select ct.course_id,course_time_id
+        from business_course_time_related ct
+    </sql>
+    <select id="selectCourseTimeIdsByCourseId" parameterType="Long" resultType="Long">
+        select course_time_id from business_course_time_related
+        where course_id=#{courseId}
+    </select>
+    <select id="selectCourseIdByCourseTimeId" parameterType="Long" resultType="Long">
+        select course_id from business_course_time_related
+        where course_time_id=#{courseTimeId}
+    </select>
+    <select id="selectCourseIdsByCourseTimeIds"  resultType="Long">
+        select distinct course_id from business_course_time_related
+        where course_time_id in
+        <foreach collection="array" item="courseTimeId" open="(" separator="," close=")">
+            #{courseTimeId}
+        </foreach>
+    </select>
+    <insert id="insertCTRelated" parameterType="com.yizhanshi.course.domain.CourseTimeRelated">
+        insert into business_course_time_related(course_id, course_time_id) values
+        (#{courseId},#{courseTimeId})
+    </insert>
+
+    <delete id="deleteCTRelatedByCourseId" parameterType="Long">
+        delete from  business_course_time_related  where course_id=#{courseId}
+    </delete>
+    <delete id="deleteCTRelatedByCourseTiemId" parameterType="Long">
+        delete from  business_course_time_related  where course_time_id=#{courseTimeId}
+    </delete>
+    <delete id="deleteCTRelated" parameterType="com.yizhanshi.course.domain.CourseTimeRelated">
+        delete from  business_course_time_related  where
+        course_id=#{courseId} and course_time_id=#{courseTimeId}
+    </delete>
+    <delete id="deleteCTRelateds" >
+        delete from business_course_time_related where course_id=#{courseId}
+        and course_time_id in
+        <foreach collection="courseTimeIds" item="applyTimeId" open="(" separator="," close=")">
+            #{courseTimeId}
+        </foreach>
+    </delete>
+
+
+
+
+
+</mapper>

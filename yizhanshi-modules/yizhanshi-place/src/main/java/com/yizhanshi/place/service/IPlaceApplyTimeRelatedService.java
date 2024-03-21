@@ -32,7 +32,7 @@ public interface IPlaceApplyTimeRelatedService {
      * @param placeApplyTimeRelated 预约与时间关联信息
      * @return 结果
      */
-    public int deleteTPATRelated(PlaceApplyTimeRelated placeApplyTimeRelated);
+    public int deletePATRelated(PlaceApplyTimeRelated placeApplyTimeRelated);
 
     /**
      * 批量删除预约和时间关联信息
@@ -41,6 +41,6 @@ public interface IPlaceApplyTimeRelatedService {
      * @param applyTimeIds 预约时间ids
      * @return 结果
      */
-    public int deletePATRelateds(@Param("applyId") Long applyId, @Param("applyTimeIds") Long[] applyTimeIds);
+    public int deletePATRelateds(Long applyId,  Long[] applyTimeIds);
 
 }

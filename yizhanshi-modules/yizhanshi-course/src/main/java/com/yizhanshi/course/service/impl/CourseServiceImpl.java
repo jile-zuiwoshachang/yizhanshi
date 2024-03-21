@@ -5,6 +5,8 @@ import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.common.core.exception.ServiceException;
 import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.course.mapper.CourseMapper;
+import com.yizhanshi.course.mapper.CourseTimeMapper;
+import com.yizhanshi.course.mapper.CourseTimeRelatedMapper;
 import com.yizhanshi.course.service.ICourseService;
 import com.yizhanshi.place.api.RemotePlaceService;
 import com.yizhanshi.place.api.domain.PlaceApply;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,10 @@ public class CourseServiceImpl implements ICourseService {
     private static final Logger log = LoggerFactory.getLogger(CourseServiceImpl.class);
     @Autowired
     private CourseMapper courseMapper;
+    @Autowired
+    private CourseTimeMapper courseTimeMapper;
+    @Autowired
+    private CourseTimeRelatedMapper courseTimeRelatedMapper;
     @Autowired
     private RemotePlaceService remotePlaceService;
 
@@ -47,34 +54,15 @@ public class CourseServiceImpl implements ICourseService {
         return courseMapper.updateCourse(course);
     }
     @Override
-    public int  deleteCourse(Long[] courseIds){
-        return courseMapper.deleteCourse(courseIds);
-    }
-    @Override
-    public  Boolean timeConflict(List<Course> dataBase, Course newCourse){
-        Boolean flag=Boolean.FALSE;
-        for(int i=0;i<dataBase.size();i++){
-            Course oldCourse= dataBase.get(i);
-            if(newCourse.getCourseId()!=null && Objects.equals(oldCourse.getCourseId(), newCourse.getCourseId())){
-                //跳出此次循环
-                break;
-            }
-            Long startOld=oldCourse.getTimeStartId();
-            Long endOld=oldCourse.getTimeEndId();
-            Long startNew= newCourse.getTimeStartId();
-            Long endNew=newCourse.getTimeEndId();
-            //比较id大小
-            if (startOld >= endNew) {
-                flag=Boolean.FALSE;
-            } else if (endOld <= startNew) {
-                flag=Boolean.FALSE;
-            } else {
-                //冲突直接返回
-               return  Boolean.TRUE;
-            }
+    @Transactional(rollbackFor = Exception.class)
+    public void  deleteCourse(Long[] courseIds){
+        for(Long courseId:courseIds){
+            Long[] courseTimeIds=courseTimeRelatedMapper.selectCourseTimeIdsByCourseId(courseId).stream().toArray(Long[]::new);
+            courseTimeRelatedMapper.deleteCTRelatedByCourseId(courseId);
+            courseTimeMapper.deleteCourseTime(courseTimeIds);
         }
-        return  flag;
     }
+
     @Override
     public List<Course> selectAllCourse(Long placeId, String chooseDay){
         return  courseMapper.selectAllCourse(placeId,chooseDay);

@@ -10,6 +10,8 @@ import com.yizhanshi.course.api.domain.Teacher;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotNull;
+
 public class CourseApply extends BaseEntity {
     private static final long serialVersionUID = 1L;
     @Excel(name = "预约序号", cellType = Excel.ColumnType.NUMERIC)
@@ -53,7 +55,7 @@ public class CourseApply extends BaseEntity {
     public void setApplyId(Long applyId) {
         this.applyId = applyId;
     }
-
+    @NotNull(message = "申请人名称不能为空")
     public String getApplyName() {
         return applyName;
     }
@@ -61,7 +63,7 @@ public class CourseApply extends BaseEntity {
     public void setApplyName(String applyName) {
         this.applyName = applyName;
     }
-
+    @NotNull(message = "申请人学号不能为空")
     public String getUserStudentid() {
         return userStudentid;
     }
@@ -69,7 +71,7 @@ public class CourseApply extends BaseEntity {
     public void setUserStudentid(String userStudentid) {
         this.userStudentid = userStudentid;
     }
-
+    @NotNull(message = "课程序号不能为空")
     public Long getCourseId() {
         return courseId;
     }

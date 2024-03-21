@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -67,7 +68,7 @@ public class Place extends BaseEntity {
     public void setPlaceName(String placeName) {
         this.placeName = placeName;
     }
-
+    @NotNull(message = "场地所在校区不能为空")
     public String getPlaceCampus() {
         return placeCampus;
     }
@@ -99,7 +100,7 @@ public class Place extends BaseEntity {
     public void setManagerName(String managerName) {
         this.managerName = managerName;
     }
-    @Size(min = 0, max = 11, message = "用户电话长度不能超过11个字符")
+    @Size(min = 0, max = 11, message = "联系电话长度不能超过11个字符")
     public String getManagerPhone() {
         return managerPhone;
     }

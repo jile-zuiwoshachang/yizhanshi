@@ -74,7 +74,7 @@ public class PlaceApplyTime extends BaseEntity {
     public void setApplyDay(Date applyDay) {
         this.applyDay = applyDay;
     }
-
+    @NotNull(message = "开始时间id不能为空")
     public Long getTimeStartId() {
         return timeStartId;
     }
@@ -82,7 +82,7 @@ public class PlaceApplyTime extends BaseEntity {
     public void setTimeStartId(Long timeStartId) {
         this.timeStartId = timeStartId;
     }
-
+    @NotNull(message = "结束时间id不能为空")
     public Long getTimeEndId() {
         return timeEndId;
     }

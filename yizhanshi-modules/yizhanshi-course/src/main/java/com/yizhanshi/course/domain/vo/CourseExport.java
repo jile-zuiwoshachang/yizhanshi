@@ -5,6 +5,9 @@ import com.yizhanshi.common.core.annotation.Excel;
 
 import java.util.Date;
 
+/**
+ * 导出所有课程
+ */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CourseExport {
     private static final long serialVersionUID = 1L;
@@ -26,19 +29,23 @@ public class CourseExport {
     private String courseEndTime;
     @Excel(name = "场地名称")
     private String placeName;
+    @Excel(name = "场地校区")
+    private String placeCampus;
     @Excel(name = "课程容量", cellType = Excel.ColumnType.NUMERIC)
     private int courseNumber;
-    @Excel(name = "选课状态",readConverterExp = "0=多人选,1=仅限单人")
+    @Excel(name = "选课状态",readConverterExp = "0=独立,1=不独立")
     private  String chooseStatus;
     @Excel(name = "审核类型",readConverterExp = "0=自动通过,1=一级管理员审核, 2=二级管理员审核" )
     private String courseCheck;
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+    @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     public CourseExport() {
     }
 
-    public CourseExport(Long courseId, String courseName, String courseType, String courseDescription, String teacherName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, int courseNumber, String chooseStatus, String courseCheck, String status) {
+    public CourseExport(Long courseId, String courseName, String courseType, String courseDescription, String teacherName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, int courseNumber, String chooseStatus, String courseCheck, String status, Date createTime) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseType = courseType;
@@ -48,10 +55,20 @@ public class CourseExport {
         this.courseStartTime = courseStartTime;
         this.courseEndTime = courseEndTime;
         this.placeName = placeName;
+        this.placeCampus = placeCampus;
         this.courseNumber = courseNumber;
         this.chooseStatus = chooseStatus;
         this.courseCheck = courseCheck;
         this.status = status;
+        this.createTime = createTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Long getCourseId() {
@@ -148,6 +165,14 @@ public class CourseExport {
 
     public void setCourseCheck(String courseCheck) {
         this.courseCheck = courseCheck;
+    }
+
+    public String getPlaceCampus() {
+        return placeCampus;
+    }
+
+    public void setPlaceCampus(String placeCampus) {
+        this.placeCampus = placeCampus;
     }
 
     public String getStatus() {

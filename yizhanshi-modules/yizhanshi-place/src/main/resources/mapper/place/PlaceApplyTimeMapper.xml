@@ -26,13 +26,12 @@
         <result property="placeName"     column="place_name"      />
         <result property="placeCampus"      column="place_campus"       />
         <result property="placeCapacity"     column="place_capacity"      />
-        <result property="status"       column="status"    />
     </resultMap>
     <sql id="selectPlaceApplyTimeVo">
         select pa.apply_time_id,pa.place_id, pa.apply_day,
         pa.time_start_id,pa.time_end_id,pa.apply_start_time,pa.apply_end_time,
         pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
-        p.place_id,p.place_name,p.place_campus,p.place_capacity,p.status
+        p.place_id,p.place_name,p.place_campus,p.place_capacity
         from business_place_apply_time pa
         left join business_place p on pa.place_id=p.place_id
     </sql>
@@ -124,13 +123,7 @@
         )
     </insert>
 
-    <select id="selectByPlaceIds"  resultMap="PlaceApplyTimeResult">
-        <include refid="selectPlaceApplyTimeVo"/>
-        where pa.del_flag='0'  and pa.place_id  in
-        <foreach collection="array" item="placeId" open="(" separator="," close=")">
-            #{placeId}
-        </foreach>
-    </select>
+
     <select id="selectAllPlace" resultMap="PlaceApplyTimeResult">
         <include refid="selectPlaceApplyTimeVo"/>
         where pa.place_id  = #{placeId}

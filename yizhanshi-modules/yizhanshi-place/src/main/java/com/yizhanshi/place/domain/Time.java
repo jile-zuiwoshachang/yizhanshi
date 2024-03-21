@@ -1,6 +1,8 @@
 package com.yizhanshi.place.domain;
 
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 时间信息表
  *
@@ -24,7 +26,7 @@ public class Time {
     public void setTimeId(Long timeId) {
         this.timeId = timeId;
     }
-
+    @NotNull(message = "时间名称不能为空")
     public String getTimeName() {
         return timeName;
     }
@@ -32,7 +34,7 @@ public class Time {
     public void setTimeName(String timeName) {
         this.timeName = timeName;
     }
-
+    @NotNull(message = "时间类型不能为空")
     public String getTimeType() {
         return timeType;
     }

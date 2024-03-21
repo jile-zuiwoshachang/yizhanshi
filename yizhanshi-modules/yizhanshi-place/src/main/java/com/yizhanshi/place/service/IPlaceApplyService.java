@@ -1,6 +1,7 @@
 package com.yizhanshi.place.service;
 
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import com.yizhanshi.place.controller.PlaceApplyController;
 import com.yizhanshi.place.api.domain.Place;
@@ -61,5 +62,5 @@ public interface IPlaceApplyService {
     /**
      * 远程调用课程冲突
      */
-    public Boolean timeConflictByCourse(Course course);
+    public Boolean timeConflictByCourse(List<CourseTime> courseTimes);
 }

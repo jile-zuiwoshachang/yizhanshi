@@ -44,6 +44,8 @@ public class CourseApplyExport {
     private String courseEndTime;
     @Excel(name = "场地名称")
     private String placeName;
+    @Excel(name = "场地校区")
+    private String placeCampus;
     @Excel(name = "老师名称")
     private String teacherName;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
@@ -52,7 +54,7 @@ public class CourseApplyExport {
     public CourseApplyExport() {
     }
 
-    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String teacherName, Date createTime) {
+    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, String teacherName, Date createTime) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -71,6 +73,7 @@ public class CourseApplyExport {
         this.courseStartTime = courseStartTime;
         this.courseEndTime = courseEndTime;
         this.placeName = placeName;
+        this.placeCampus = placeCampus;
         this.teacherName = teacherName;
         this.createTime = createTime;
     }
@@ -81,6 +84,14 @@ public class CourseApplyExport {
 
     public void setApplyId(Long applyId) {
         this.applyId = applyId;
+    }
+
+    public String getPlaceCampus() {
+        return placeCampus;
+    }
+
+    public void setPlaceCampus(String placeCampus) {
+        this.placeCampus = placeCampus;
     }
 
     public String getApplyName() {

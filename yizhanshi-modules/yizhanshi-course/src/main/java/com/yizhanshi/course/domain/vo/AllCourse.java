@@ -2,61 +2,50 @@ package com.yizhanshi.course.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
+import com.yizhanshi.place.api.domain.Place;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.List;
 
 /**
  * 返回给前端用于课程预约的课程列表
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AllCourse {
-    private Course course;
+    private Place place;
     /**
-     * 已选人数
+     * 所在场地的这天的课程时间信息（包括课程信息和时间）
      */
-    private int chooseNumber;
-    /**
-     * 可选课标志
-     * true：可
-     * false: 不可
-     */
-    private  Boolean flag;
+    private List<CourseTime> courseTimes;
 
-    public Course getCourse() {
-        return course;
+
+    public AllCourse(Place  place, List<CourseTime> courseTimes) {
+        this.place = place;
+        this.courseTimes = courseTimes;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public Place getPlace() {
+        return place;
     }
 
-    public int getChooseNumber() {
-        return chooseNumber;
+    public void setPlace(Place place) {
+        this.place = place;
     }
 
-    public void setChooseNumber(int chooseNumber) {
-        this.chooseNumber = chooseNumber;
+    public List<CourseTime> getCourseTimes() {
+        return courseTimes;
     }
 
-    public Boolean getFlag() {
-        return flag;
-    }
-
-    public void setFlag(Boolean flag) {
-        this.flag = flag;
-    }
-
-    public AllCourse(Course course, int chooseNumber, Boolean flag) {
-        this.course = course;
-        this.chooseNumber = chooseNumber;
-        this.flag = flag;
+    public void setCourseTimes(List<CourseTime> courseTimes) {
+        this.courseTimes = courseTimes;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("course", course)
-                .append("chooseNumber", chooseNumber)
-                .append("flag", flag)
+                .append("place", place)
+                .append("courseTimes", courseTimes)
                 .toString();
     }
 }

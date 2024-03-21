@@ -43,12 +43,8 @@ public interface ICourseService {
      * @param courseIds 课程id
      * @return 结果
      */
-    public int deleteCourse(Long[] courseIds);
-    /**
-     * 判断时间冲突
-     * 和场地预约服务的timeConflict原理相同
-     */
-    public Boolean timeConflict(List<Course> dataBase, Course newCourse);
+    public void deleteCourse(Long[] courseIds);
+
     /**
      * 查询选择的日期且是这个场地的课程信息
      * @param placeId
@@ -60,4 +56,5 @@ public interface ICourseService {
      * 判断与场地的冲突
      */
     public Boolean  timeConflictByPlace(List<PlaceApplyTime> placeApplyTimes);
+
 }

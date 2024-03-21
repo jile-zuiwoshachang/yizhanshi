@@ -10,6 +10,7 @@ import com.yizhanshi.common.log.enums.BusinessType;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import com.yizhanshi.place.service.IPlaceApplyService;
@@ -22,9 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 场地预约时间信息 业务处理
@@ -94,33 +93,39 @@ public class PlaceApplyTimeController extends BaseController {
             return error("时间冲突!请查看当天场地预约信息后修改时间");
         }
         //再远程调用课程服务，判断时间是否冲突
-        Course course=new Course();
-        course.setTimeStartId(placeApplyTime.getTimeStartId());
-        course.setTimeEndId(placeApplyTime.getTimeEndId());
-        course.setCourseStartTime(placeApplyTime.getApplyStartTime());
-        course.setCourseEndTime(placeApplyTime.getApplyEndTime());
-        course.setPlaceId(placeApplyTime.getPlaceId());
-        Map<String,Object> params=new HashMap<>();
-        params.put("chooseDay",str);
-        course.setParams(params);
-        if(placeApplyService.timeConflictByCourse(course)) {
-            return error("与课程预约冲突，请检查课程预约时间");
+        //单个对象转化为列表方法
+        if(timeConflict(Collections.singletonList(placeApplyTime), str)){
+            return error("时间冲突！请查看当天课程预约信息后修改时间");
         }
         //不冲突则新增
         placeApplyTime.setCreateBy(SecurityUtils.getUsername());
         placeApplyTimeService.insertPlaceApplyTime(placeApplyTime);
         return success();
     }
+    private Boolean timeConflict(List<PlaceApplyTime> placeApplyTimes, String str) {
+        //再远程调用课程服务，判断时间是否冲突
+        List<CourseTime> courseTimes = new ArrayList<>();
+        for (PlaceApplyTime placeApplyTime : placeApplyTimes) {
+            CourseTime courseTime=new CourseTime();
+            courseTime.setTimeStartId(placeApplyTime.getTimeStartId());
+            courseTime.setTimeEndId(placeApplyTime.getTimeEndId());
+            courseTime.setPlaceId(placeApplyTime.getPlaceId());
+            Map<String, Object> params = new HashMap<>();
+            params.put("chooseDay", str);
+            courseTime.setParams(params);
+        }
+        return placeApplyService.timeConflictByCourse(courseTimes);
+    }
 
     /**
      * 删除场地预约时间信息——管理员使用
      */
     @RequiresPermissions("business:placeTime:remove")
-    @Log(title = "场地管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{placeTimeIds}")
-    public AjaxResult removePlace(@PathVariable Long[] placeTimeIds)
+    @Log(title = "场地预约时间管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{applyTimeIds}")
+    public AjaxResult remove(@PathVariable Long[] applyTimeIds)
     {
-        placeApplyTimeService.deletePlaceApplyTime(placeTimeIds);
+        placeApplyTimeService.deletePlaceApplyTime(applyTimeIds);
         return success();
     }
 }

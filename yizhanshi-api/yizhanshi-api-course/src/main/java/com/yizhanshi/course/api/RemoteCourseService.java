@@ -4,11 +4,13 @@ import com.yizhanshi.common.core.constant.SecurityConstants;
 import com.yizhanshi.common.core.constant.ServiceNameConstants;
 import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.course.api.factory.RemoteCourseFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,11 +23,11 @@ public interface RemoteCourseService {
     /**
      * 获取课程冲突信息
      *
-     * @param  course  场地id  时间 选择天数
+     * @param  courseTimes  场地id  时间 选择天数
      * @param source 请求来源
      * @return 结果
      */
     @PostMapping("/courseInfo/timeConflictByCourse")
-    public R<Boolean> timeConflictByCourse(@RequestBody Course course, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    public R<Boolean> timeConflictByCourse(@RequestBody List<CourseTime> courseTimes, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 
 }

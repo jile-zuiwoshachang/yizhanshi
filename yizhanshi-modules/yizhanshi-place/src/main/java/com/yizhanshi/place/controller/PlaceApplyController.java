@@ -19,6 +19,7 @@ import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.course.api.RemoteCourseService;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
 import com.yizhanshi.place.api.domain.PlaceApplyTime;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,39 +69,38 @@ public class PlaceApplyController extends BaseController {
     private String placeRecallCredit;
 
 
-
     /**
-     *
      * 查看所有场地预约信息-管理员使用
      * places.placeCampus  北校区  南校区
-     * status 0/1审核中 2已通过 5已拒绝 4已撤销
+     * status 0已预约（1） 2已通过 5已拒绝 4已撤销
      */
     @RequiresPermissions("business:placeApply:list")
     @GetMapping("/list")
     public TableDataInfo list(@RequestBody PlaceApply placeApply) {
         startPage();
         List<PlaceApply> list = placeApplyService.selectPlaceApplyList(placeApply);
-       for(PlaceApply placeApplyTemp:list){
-           Long[] applyTimeIds = placeApplyTimeRelatedService.selectApplyTimeIdsByApplyId(placeApplyTemp.getApplyId())
-                   .stream().toArray(Long[]::new);
-           List<PlaceApplyTime> placeApplyTimeList=placeApplyTimeService.selectPlaceApplyTimeByIds(applyTimeIds);
+        for (PlaceApply placeApplyTemp : list) {
+            Long[] applyTimeIds = placeApplyTimeRelatedService.selectApplyTimeIdsByApplyId(placeApplyTemp.getApplyId())
+                    .stream().toArray(Long[]::new);
+            List<PlaceApplyTime> placeApplyTimeList = placeApplyTimeService.selectPlaceApplyTimeByIds(applyTimeIds);
             placeApplyTemp.setPlaceApplyTimes(placeApplyTimeList);
-       }
+        }
         return getDataTable(list);
     }
+
     /**
      * 个人场地预约记录
-     * 参数 userStudentid status
+     * 参数 userStudentid status  0已预约（1） 2已通过 5已拒绝 4已撤销
      */
     @RequiresPermissions("business:placeApply:mylist")
     @GetMapping("/mylist")
     public TableDataInfo mylist(@RequestBody PlaceApply placeApply) {
         startPage();
         List<PlaceApply> list = placeApplyService.selectPlaceApplyList(placeApply);
-        for(PlaceApply placeApplyTemp:list){
+        for (PlaceApply placeApplyTemp : list) {
             Long[] applyTimeIds = placeApplyTimeRelatedService.selectApplyTimeIdsByApplyId(placeApplyTemp.getApplyId())
                     .stream().toArray(Long[]::new);
-            List<PlaceApplyTime> placeApplyTimeList=placeApplyTimeService.selectPlaceApplyTimeByIds(applyTimeIds);
+            List<PlaceApplyTime> placeApplyTimeList = placeApplyTimeService.selectPlaceApplyTimeByIds(applyTimeIds);
             placeApplyTemp.setPlaceApplyTimes(placeApplyTimeList);
         }
         return getDataTable(list);
@@ -107,31 +108,32 @@ public class PlaceApplyController extends BaseController {
 
     /**
      * 根据id查询具体信息
+     *
      * @param applyId
      * @return
      */
     @RequiresPermissions("business:placeApply:query")
     @GetMapping("/{applyId}")
-    public AjaxResult query(@PathVariable Long  applyId) {
-            Long[] applyTimeIds = placeApplyTimeRelatedService.selectApplyTimeIdsByApplyId(applyId)
-                    .stream().toArray(Long[]::new);
-            List<PlaceApplyTime> placeApplyTimeList=placeApplyTimeService.selectPlaceApplyTimeByIds(applyTimeIds);
-            PlaceApply placeApply=placeApplyService.selectPlaceApplyById(applyId);
-            placeApply.setPlaceApplyTimes(placeApplyTimeList);
+    public AjaxResult query(@PathVariable Long applyId) {
+        Long[] applyTimeIds = placeApplyTimeRelatedService.selectApplyTimeIdsByApplyId(applyId)
+                .stream().toArray(Long[]::new);
+        List<PlaceApplyTime> placeApplyTimeList = placeApplyTimeService.selectPlaceApplyTimeByIds(applyTimeIds);
+        PlaceApply placeApply = placeApplyService.selectPlaceApplyById(applyId);
+        placeApply.setPlaceApplyTimes(placeApplyTimeList);
         return success(placeApply);
     }
 
     /**
      * 修改场地预约信息——管理员使用
+     *
      * @param placeApply
      * @return
      */
     @RequiresPermissions("business:placeApply:edit")
     @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult editPlaceApply(@Validated @RequestBody PlaceApply placeApply)
-    {
-       //不可修改时间只能删除
+    public AjaxResult editPlaceApply(@Validated @RequestBody PlaceApply placeApply) {
+        //不可修改时间只能删除
         placeApply.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(placeApplyService.updatePlaceApply(placeApply));
     }
@@ -142,22 +144,21 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:place:remove")
     @Log(title = "场地预约管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{applyIds}")
-    public AjaxResult removePlaceApply(@PathVariable Long[] applyIds)
-    {
+    public AjaxResult removePlaceApply(@PathVariable Long[] applyIds) {
         placeApplyService.deletePlaceApply(applyIds);
         return success();
     }
 
     /**
      * 导出场地预约——一二管理员使用
+     *
      * @param response
      * @param placeApply
      */
     @Log(title = "场地预约管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("business:placeApply:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response,@RequestBody PlaceApply placeApply)
-    {
+    public void export(HttpServletResponse response, @RequestBody PlaceApply placeApply) {
         List<PlaceApply> list = placeApplyService.selectPlaceApplyList(placeApply);
         List<PlaceApplyExport> placeApplyExportList = new ArrayList<>();
 
@@ -175,10 +176,8 @@ public class PlaceApplyController extends BaseController {
                 placeApplyExport.setApplyEndTime(placeApplyTime.getApplyEndTime());
                 placeApplyExport.setPlaceName(placeApplyTime.getPlace().getPlaceName());
                 placeApplyExport.setPlaceCampus(placeApplyTime.getPlace().getPlaceCampus());
-                if (placeApplyTemp.getPlaceReason() != null) { // 防止空指针异常
-                    placeApplyExport.setReasonName(placeApplyTemp.getPlaceReason().getReasonName());
-                    placeApplyExport.setReasonType(placeApplyTemp.getPlaceReason().getReasonType());
-                }
+                placeApplyExport.setReasonName(placeApplyTemp.getPlaceReason().getReasonName());
+                placeApplyExport.setReasonType(placeApplyTemp.getPlaceReason().getReasonType());
                 placeApplyExportList.add(placeApplyExport);
             });
         });
@@ -193,33 +192,40 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:placeApply:add")
     @Log(title = "场地预约管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult addPlaceApply(@Validated @RequestBody PlaceApply placeApply)
-    {
+    public AjaxResult addPlaceApply(@Validated @RequestBody PlaceApply placeApply) {
         //判断时间冲突
         //查询那个场地那天的预约情况 拿出预约时间列表的第一个判断冲突
-        for(PlaceApplyTime placeApplyTime: placeApply.getPlaceApplyTimes()){
-            String str=DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,placeApplyTime.getApplyDay());
+        for (PlaceApplyTime placeApplyTime : placeApply.getPlaceApplyTimes()) {
+            String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, placeApplyTime.getApplyDay());
             List<PlaceApplyTime> dataBasePlaceTimeApplies = placeApplyTimeService.selectAllPlace(placeApplyTime.getPlaceId(), str);
             //先判断所选择天数的所在场地第一天的情况，然后循环判断
-            if(placeApplyService.timeConflict(dataBasePlaceTimeApplies,placeApplyTime)){
+            if (placeApplyService.timeConflict(dataBasePlaceTimeApplies, placeApplyTime)) {
                 return error("时间冲突!请查看当天场地预约信息后修改时间");
             }
             //再远程调用课程服务，判断时间是否冲突
-            Course course=new Course();
-            course.setTimeStartId(placeApplyTime.getTimeStartId());
-            course.setTimeEndId(placeApplyTime.getTimeEndId());
-            course.setPlaceId(placeApplyTime.getPlaceId());
-            Map<String,Object> params=new HashMap<>();
-            params.put("chooseDay",str);
-            course.setParams(params);
-            if(placeApplyService.timeConflictByCourse(course)) {
-                return error("与课程预约冲突，请检查课程预约时间");
+            if(timeConflict(placeApply.getPlaceApplyTimes(), str)){
+                return error("时间冲突！请查看当天课程预约信息后修改时间");
             }
         }
         placeApply.setCreateBy(SecurityUtils.getUsername());
         placeApplyService.insertPlaceApply(placeApply);
-        return  success();
+        return success();
     }
+    private Boolean timeConflict(List<PlaceApplyTime> placeApplyTimes, String str) {
+        //再远程调用课程服务，判断时间是否冲突
+        List<CourseTime> courseTimes = new ArrayList<>();
+        for (PlaceApplyTime placeApplyTime : placeApplyTimes) {
+            CourseTime courseTime=new CourseTime();
+            courseTime.setTimeStartId(placeApplyTime.getTimeStartId());
+            courseTime.setTimeEndId(placeApplyTime.getTimeEndId());
+            courseTime.setPlaceId(placeApplyTime.getPlaceId());
+            Map<String, Object> params = new HashMap<>();
+            params.put("chooseDay", str);
+            courseTime.setParams(params);
+        }
+        return placeApplyService.timeConflictByCourse(courseTimes);
+    }
+
     /**
      * 一级管理员审核场地预约
      * status只能是1 5
@@ -228,14 +234,14 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:placeApply1:check")
     @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check1")
-    public AjaxResult check1(@RequestBody List<PlaceApply> placeApplyList){
-        for(PlaceApply temp:placeApplyList){
-            if(StringUtils.equals(temp.getStatus(), ApplyConstants.YIADMINAGREESTATUS)){
+    public AjaxResult check1(@RequestBody List<PlaceApply> placeApplyList) {
+        for (PlaceApply temp : placeApplyList) {
+            if (StringUtils.equals(temp.getStatus(), ApplyConstants.YIADMINAGREESTATUS)) {
                 //同意预约，则根据原因判断
-                if(StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(),ReasonConstants.SMALLREASON) ){
+                if (StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(), ReasonConstants.SMALLREASON)) {
                     temp.setStatus(ApplyConstants.AGREESTATUS);
                 }
-                if(StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(),ReasonConstants.BIGREASON)){
+                if (StringUtils.equals(placeReasonService.selectReasonById(temp.getReasonId()).getReasonType(), ReasonConstants.BIGREASON)) {
                     temp.setStatus(ApplyConstants.YIADMINAGREESTATUS);
                 }
             }
@@ -247,7 +253,7 @@ public class PlaceApplyController extends BaseController {
             temp.setRecallStatus(ApplyConstants.RECALLNOT);
         }
         placeApplyService.updatePlaceApplyList(placeApplyList);
-        return  success() ;
+        return success();
     }
 
     /**
@@ -257,8 +263,8 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:placeApply2:check")
     @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/check2")
-    public AjaxResult check2(@RequestBody List<PlaceApply> placeApplyList){
-        for(PlaceApply temp:placeApplyList) {
+    public AjaxResult check2(@RequestBody List<PlaceApply> placeApplyList) {
+        for (PlaceApply temp : placeApplyList) {
             //不分大小活动直接通过为2，拒绝为5
             temp.setUpdateBy(SecurityUtils.getUsername());
             temp.setApplyAdmin2(SecurityUtils.getUserStudentid());
@@ -267,8 +273,9 @@ public class PlaceApplyController extends BaseController {
             temp.setRecallStatus(ApplyConstants.RECALLNOT);
         }
         placeApplyService.updatePlaceApplyList(placeApplyList);
-        return  success() ;
+        return success();
     }
+
     /**
      * 用户撤销预约
      * 传递撤销理由和预约单号和status和recallStatus
@@ -278,24 +285,24 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:placeApply:recall")
     @Log(title = "场地预约管理", businessType = BusinessType.UPDATE)
     @PutMapping("/recall")
-    public  AjaxResult applyRecall(@RequestBody  PlaceApply placeApply){
+    public AjaxResult applyRecall(@RequestBody PlaceApply placeApply) {
         //普通撤销
-        if(StringUtils.equals(placeApply.getRecallStatus(),ApplyConstants.RECALLCAN)){
+        if (StringUtils.equals(placeApply.getRecallStatus(), ApplyConstants.RECALLCAN)) {
             placeApply.setUpdateBy(SecurityUtils.getUsername());
-           return  toAjax(placeApplyService.updatePlaceApply(placeApply)) ;
+            return toAjax(placeApplyService.updatePlaceApply(placeApply));
         }
         //强行撤销
-        if(StringUtils.equals(placeApply.getRecallStatus(),ApplyConstants.RECALLNOT)){
+        if (StringUtils.equals(placeApply.getRecallStatus(), ApplyConstants.RECALLNOT)) {
             placeApply.setRecallStatus(ApplyConstants.RECALLCREDIT);
-            SysCredit sysCredit=new SysCredit(null,"用户强行撤销场地预约","自己操作",SecurityUtils.getUserStudentid(), Convert.toInt(placeRecallCredit,-2),null,"0","0");
-            R<Boolean> booleanR= remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
-            if(R.FAIL == booleanR.getCode()){
+            SysCredit sysCredit = new SysCredit(null, "用户强行撤销场地预约", "自己操作", SecurityUtils.getUserStudentid(), Convert.toInt(placeRecallCredit, -2), null, "0", "0");
+            R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
+            if (R.FAIL == booleanR.getCode()) {
                 throw new ServiceException(booleanR.getMsg());
             }
             placeApply.setUpdateBy(SecurityUtils.getUsername());
             return toAjax(placeApplyService.updatePlaceApply(placeApply));
         }
-        return  error("撤销失败或者参数不足");
+        return error("撤销失败或者参数不足");
     }
 
     /**
@@ -307,15 +314,16 @@ public class PlaceApplyController extends BaseController {
     @RequiresPermissions("business:placeApply:credit")
     @Log(title = "场地预约管理", businessType = BusinessType.INSERT)
     @PostMapping("/credit")
-    public AjaxResult credit(@RequestBody SysCredit sysCredit){
+    public AjaxResult credit(@RequestBody SysCredit sysCredit) {
         sysCredit.setCreditSource("管理员操作");
         sysCredit.setAdminName(SecurityUtils.getUsername());
         R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
-        if(R.FAIL == booleanR.getCode()){
+        if (R.FAIL == booleanR.getCode()) {
             throw new ServiceException(booleanR.getMsg());
         }
         return success();
     }
+
     @InnerAuth
     @PostMapping("/timeConflictByPlace")
     public R<Boolean> timeConflictByPlace(@RequestBody List<PlaceApplyTime> placeApplyTimes) {

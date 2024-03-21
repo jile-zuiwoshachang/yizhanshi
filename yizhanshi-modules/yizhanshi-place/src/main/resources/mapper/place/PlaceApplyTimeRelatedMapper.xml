@@ -28,7 +28,7 @@
     <delete id="deletePATRelatedByApplyTimeId" parameterType="Long">
         delete from  business_place_apply_time_related  where apply_time_id=#{applyTimeId}
     </delete>
-    <delete id="deleteTPATRelated" parameterType="com.yizhanshi.place.domain.PlaceApplyTimeRelated">
+    <delete id="deletePATRelated" parameterType="com.yizhanshi.place.domain.PlaceApplyTimeRelated">
         delete from  business_place_apply_time_related  where
         apply_id=#{applyId} and apply_time_id=#{applyTimeId}
     </delete>

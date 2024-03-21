@@ -15,13 +15,17 @@ import com.yizhanshi.common.security.annotation.InnerAuth;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.course.domain.CourseApply;
 import com.yizhanshi.course.domain.constants.ApplyConstants;
 import com.yizhanshi.course.domain.vo.CourseApplyExport;
 import com.yizhanshi.course.domain.vo.CourseExport;
 import com.yizhanshi.course.service.ICourseApplyService;
 import com.yizhanshi.course.service.ICourseService;
+import com.yizhanshi.course.service.ICourseTimeRelatedService;
+import com.yizhanshi.course.service.ICourseTimeService;
 import com.yizhanshi.place.api.domain.PlaceApply;
+import com.yizhanshi.place.api.domain.PlaceApplyTime;
 import com.yizhanshi.system.api.RemoteCreditService;
 import com.yizhanshi.system.api.domain.SysCredit;
 import org.springframework.beans.BeanUtils;
@@ -52,9 +56,13 @@ public class CourseApplyController extends BaseController {
     private ICourseService courseService;
     @Autowired
     private ICourseApplyService courseApplyService;
+    @Autowired
+    private ICourseTimeRelatedService courseTimeRelatedService;
   
     @Autowired
     private RemoteCreditService remoteCreditService;
+    @Autowired
+    private ICourseTimeService courseTimeService;
    
     @Value("${app.courseRecallCredit}")
     private String courseRecallCredit;
@@ -64,7 +72,7 @@ public class CourseApplyController extends BaseController {
     /**
      *
      * 查看所有课程预约信息-管理员使用
-     * userCampus 0 1  status 0/1已预约 2已通过 5已拒绝 4已撤销
+     * userCampus   status 0已预约(1) 2已通过 5已拒绝 4已撤销
      */
     @RequiresPermissions("business:courseApply:list")
     @GetMapping("/list")
@@ -76,7 +84,7 @@ public class CourseApplyController extends BaseController {
 
     /**
      * 个人选课记录查看
-     * userStudentid  status 0/1已预约 2已通过 5已拒绝 4已撤销
+     * userStudentid  status 0已预约(1) 2已通过 5已拒绝 4已撤销
      * @param courseApply
      * @return
      */
@@ -88,6 +96,11 @@ public class CourseApplyController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 根据选课id查询详细信息
+     * @param applyId
+     * @return
+     */
     @RequiresPermissions("business:courseApply:query")
     @GetMapping("/{applyId}")
     public AjaxResult query(@PathVariable Long  applyId) {
@@ -130,19 +143,25 @@ public class CourseApplyController extends BaseController {
     public void export(HttpServletResponse response, @RequestBody CourseApply courseApply)
     {
         List<CourseApply> list = courseApplyService.selectCourseApplyList(courseApply);
-        List<CourseApplyExport> courseApplyExportList = list.stream()
-                .map(courseApplyTemp -> {
-                    CourseApplyExport courseApplyExport = new CourseApplyExport();
-                    BeanUtils.copyProperties(courseApplyTemp, courseApplyExport);
-                    courseApplyExport.setPlaceName(courseApplyTemp.getPlaces().getPlaceName());
-                    courseApplyExport.setTeacherName(courseApplyTemp.getTeachers().getTeacherName());
-                    courseApplyExport.setCourseName(courseApplyTemp.getCourses().getCourseName());
-                    courseApplyExport.setCourseDay(courseApplyTemp.getCourses().getCourseDay());
-                    courseApplyExport.setCourseStartTime(courseApplyTemp.getCourses().getCourseStartTime());
-                    courseApplyExport.setCourseEndTime(courseApplyTemp.getCourses().getCourseEndTime());
-                    return courseApplyExport;
-                })
-                .collect(Collectors.toList());
+        List<CourseApplyExport> courseApplyExportList=new ArrayList<>();
+        list.forEach(courseApplyTemp -> {
+            Long[] courseTimeIds = courseTimeRelatedService.selectCourseTimeIdsByCourseId(courseApplyTemp.getCourseId())
+                    .stream()
+                    .toArray(Long[]::new);
+            List<CourseTime> courseTimeList = courseTimeService.selectCourseTimeByIds(courseTimeIds);
+            courseTimeList.forEach(courseTime -> {
+                CourseApplyExport courseApplyExport = new CourseApplyExport();
+                BeanUtils.copyProperties(courseApplyTemp, courseApplyExport);
+                courseApplyExport.setPlaceName(courseApplyTemp.getPlaces().getPlaceName());
+                courseApplyExport.setPlaceCampus(courseApplyTemp.getPlaces().getPlaceCampus());
+                courseApplyExport.setTeacherName(courseApplyTemp.getTeachers().getTeacherName());
+                courseApplyExport.setCourseName(courseApplyTemp.getCourses().getCourseName());
+                courseApplyExport.setCourseDay(courseTime.getCourseDay());
+                courseApplyExport.setCourseStartTime(courseTime.getCourseStartTime());
+                courseApplyExport.setCourseEndTime(courseTime.getCourseEndTime());
+                courseApplyExportList.add(courseApplyExport);
+            });
+        });
         ExcelUtil<CourseApplyExport> util = new ExcelUtil<CourseApplyExport>(CourseApplyExport.class);
         util.exportExcel(response, courseApplyExportList, "选课数据");
     }

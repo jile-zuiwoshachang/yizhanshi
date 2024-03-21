@@ -103,8 +103,24 @@
         <if test="placeReason!=null and placeReason.reasonType != null and placeReason.reasonType != ''">
             AND pr.reason_type like concat('%', #{placeReason.reasonType}, '%')
         </if>
-        <if test="status != null and status != ''">
-            AND pa.status = #{status}
+        <if test="status != null and status !=''">
+            <choose>
+                <!-- 如果传入的status是0，查询status为0或1的数据 -->
+                <when test="status == '0'">
+                    AND pa.status IN ('0', '1')
+                </when>
+                <when test="status == '1'">
+                    AND pa.status IN ('0', '1')
+                </when>
+                <!-- 如果传入的status是2、3、4，直接使用等于条件 -->
+                <when test="status == '2' or status == '5' or status == '4'">
+                    AND pa.status = #{status}
+                </when>
+                <!-- 其他情况，可以选择不添加任何条件，或者根据需要添加默认行为 -->
+                <otherwise>
+                    <!-- 这里可以留空，或者添加你认为合适的默认SQL条件 -->
+                </otherwise>
+            </choose>
         </if>
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
             AND date_format(pa.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')

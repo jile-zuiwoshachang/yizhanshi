@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.course.mapper.CourseTimeMapper">
+
+    <resultMap type="com.yizhanshi.course.api.domain.CourseTime" id="CourseTimeResult">
+        <id     property="courseTimeId"       column="course_time_id"      />
+        <result property="courseDay"        column="course_day"        />
+        <result property="timeStartId"        column="time_start_id"        />
+        <result property="courseStartTime"        column="vourse_start_time"        />
+        <result property="timeEndId"        column="time_end_id"        />
+        <result property="courseEndTime"        column="course_end_time"        />
+        <result property="placeId"        column="place_id"        />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+        <collection  property="place"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
+    </resultMap>
+    <resultMap id="PlaceResult" type="com.yizhanshi.place.api.domain.Place">
+        <id     property="placeId"       column="place_id"        />
+        <result property="placeName"     column="place_name"      />
+        <result property="placeCampus"      column="place_campus"       />
+        <result property="placeCapacity"     column="place_capacity"      />
+    </resultMap>
+    <sql id="selectCourseTimeVo">
+        select ct.course_time_id,ct.course_day,ct.time_start_id,
+         ct.time_end_id,ct.course_start_time,ct.course_end_time,ct.place_id,
+        ct.status, ct.del_flag,ct.create_by, ct.create_time, ct.remark,
+        p.place_id,p.place_name,p.place_campus,p.place_capacity
+        from business_course_time ct
+        left join business_place p on ct.place_id=p.place_id
+    </sql>
+    <select id="selectCourseTimeList" parameterType="com.yizhanshi.place.api.domain.CourseTime" resultMap="CourseTimeResult">
+        <include refid="selectCourseTimeVo"></include>
+        where ct.del_flag = '0'
+        <if test="courseTimeId != null and courseTimeId != 0">
+            AND ct.course_time_id = #{courseTimeId}
+        </if>
+        <if test="params.chooseDay != null and params.chooseDay  != ''">
+            AND date_format(ct.course_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
+        </if>
+        <if test="places!=null and places.placeName != null and places.placeName != ''">
+            AND p.place_name like concat('%', #{places.placeName}, '%')
+        </if>
+        <if test="places!=null and places.placeCampus != null and places.placeCampus != ''">
+            AND p.place_campus like concat('%', #{places.placeCampus}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND ct.status = #{status}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(ct.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(ct.create_time,'%Y%m%d')  &lt;= date_format(#{params.endTime},'%Y%m%d')
+        </if>
+    </select>
+    <select id="selectCourseTimeById" parameterType="Long" resultMap="CourseTimeResult">
+        <include refid="selectCourseTimeVo"></include>
+        where ct.course_time_id = #{courseTimeId}
+    </select>
+    <select id="selectCourseTimeByIds"  resultMap="CourseTimeResult">
+        <include refid="selectCourseTimeVo"></include>
+        where ct.course_time_id in
+        <foreach item="courseTimeId" collection="array" open="(" separator="," close=")">
+            #{courseTimeId}
+        </foreach>
+    </select>
+
+
+    <update id="updateCourseTime" parameterType="com.yizhanshi.course.api.domain.CourseTime">
+        update business_course_time
+        <set>
+            <if test="placeId != null and placeId != 0">place_id=#{placeId},</if>
+            <if test="courseDay != null">course_day=#{courseDay,jdbcType=DATE},</if>
+            <if test="timeStartId != null and timeStartId != 0">time_start_id=#{timeStartId},</if>
+            <if test="timeEndId != null and timeEndId != 0">time_end_id=#{timeEndId},</if>
+            <if test="courseStartTime != null and courseStartTime != ''">course_start_time=#{courseStartTime},</if>
+            <if test="courseEndTime != null and courseEndTime != ''">course_end_time=#{courseEndTime},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            update_time = sysdate()
+        </set>
+        where course_time_id = #{courseTimeId}
+    </update>
+    <delete id="deleteCourseTime">
+        update business_place_course_time set del_flag = '2' where course_time_id in
+        <foreach collection="array" item="courseTimeId" open="(" separator="," close=")">
+            #{courseTimeId}
+        </foreach>
+    </delete>
+    <insert id="insertCourseTime" parameterType="com.yizhanshi.course.api.domain.CourseTime" useGeneratedKeys="true" keyProperty="courseTimeId">
+        insert into business_place_course_time(
+        <if test="courseTimeId != null and courseTimeId != 0">course_time_id,</if>
+        course_day,
+        <if test="placeId != null and placeId != 0">place_id,</if>
+        <if test="timeStartId != null and timeStartId != 0">time_start_id,</if>
+        <if test="timeEndId != null and timeEndId != 0">time_end_id,</if>
+        <if test="courseStartTime != null and courseStartTime != ''">course_start_time,</if>
+        <if test="courseEndTime != null and courseEndTime != ''">course_end_time,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="courseTimeId != null and courseTimeId != 0">#{applyTimeId},</if>
+        #{applyDay, jdbcType=DATE},
+        <if test="placeId != null and placeId != 0">#{placeId},</if>
+        <if test="timeStartId != null and timeStartId != 0">#{timeStartId},</if>
+        <if test="timeEndId != null and timeEndId !=0">#{timeEndId},</if>
+        <if test="courseStartTime != null and courseStartTime != ''">#{courseStartTime},</if>
+        <if test="courseEndTime != null and courseEndTime != ''">#{courseEndTime},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+
+    <select id="selectAllCourse" resultMap="CourseTimeResult">
+        <include refid="selectCourseTimeVo"/>
+        where ct.place_id  = #{placeId}
+        AND date_format(ct.course_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and ct.del_flag='0'
+    </select>
+
+
+</mapper>

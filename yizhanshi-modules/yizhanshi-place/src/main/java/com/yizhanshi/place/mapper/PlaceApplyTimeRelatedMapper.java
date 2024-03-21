@@ -34,9 +34,9 @@ public interface PlaceApplyTimeRelatedMapper {
      */
     public int deletePATRelatedByApplyId(Long applyId);
     /**
-     * 通过预约单id删除关联
+     * 通过预约时间单id删除关联
      *
-     * @param applyTimeId 需要删除的预约单id
+     * @param applyTimeId 需要删除的预约时间单id
      * @return 结果
      */
     public int deletePATRelatedByApplyTimeId(Long applyTimeId);
@@ -46,7 +46,7 @@ public interface PlaceApplyTimeRelatedMapper {
      * @param placeApplyTimeRelated 预约与时间关联信息
      * @return 结果
      */
-    public int deleteTPATRelated(PlaceApplyTimeRelated placeApplyTimeRelated);
+    public int deletePATRelated(PlaceApplyTimeRelated placeApplyTimeRelated);
 
     /**
      * 批量删除预约和时间关联信息

@@ -46,8 +46,8 @@ public class PlaceApplyTimeRelatedServiceImpl implements IPlaceApplyTimeRelatedS
      * @param placeApplyTimeRelated 预约与时间关联信息
      * @return 结果
      */
-    public int deleteTPATRelated(PlaceApplyTimeRelated placeApplyTimeRelated){
-        return  placeApplyTimeRelatedMapper.deleteTPATRelated(placeApplyTimeRelated);
+    public int deletePATRelated(PlaceApplyTimeRelated placeApplyTimeRelated){
+        return  placeApplyTimeRelatedMapper.deletePATRelated(placeApplyTimeRelated);
     }
 
     /**
@@ -57,7 +57,7 @@ public class PlaceApplyTimeRelatedServiceImpl implements IPlaceApplyTimeRelatedS
      * @param applyTimeIds 预约时间ids
      * @return 结果
      */
-    public int deletePATRelateds(@Param("applyId") Long applyId, @Param("applyTimeIds") Long[] applyTimeIds){
+    public int deletePATRelateds( Long applyId,  Long[] applyTimeIds){
         return placeApplyTimeRelatedMapper.deletePATRelateds(applyId,applyTimeIds);
     }
 

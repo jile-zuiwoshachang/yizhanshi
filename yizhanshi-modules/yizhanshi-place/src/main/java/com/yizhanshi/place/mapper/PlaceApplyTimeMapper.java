@@ -45,10 +45,7 @@ public interface PlaceApplyTimeMapper {
      * @return
      */
     public int insertPlaceApplyTime(PlaceApplyTime placeApplyTime);
-    /**
-     * 查看该场地有多少个被预约记录
-     */
-    public List<PlaceApplyTime> selectByPlaceIds(Long[] placeIds);
+
     /**
      * 根据查询条件，获得当天的场地预约记录
      */

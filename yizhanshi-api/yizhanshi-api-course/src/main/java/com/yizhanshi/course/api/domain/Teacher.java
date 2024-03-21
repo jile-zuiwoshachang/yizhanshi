@@ -3,8 +3,12 @@ package com.yizhanshi.course.api.domain;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.annotation.Excel.ColumnType;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Teacher extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -42,7 +46,7 @@ public class Teacher extends BaseEntity {
     public void setTeacherId(Long teacherId) {
         this.teacherId = teacherId;
     }
-
+    @NotNull(message="老师姓名不能为空")
     public String getTeacherName() {
         return teacherName;
     }
@@ -67,11 +71,11 @@ public class Teacher extends BaseEntity {
         this.teacherAge = teacherAge;
     }
 
-    public String getteacherStudentid() {
+    public String getTeacherStudentid() {
         return teacherStudentid;
     }
 
-    public void setteacherStudentid(String teacherStudentid) {
+    public void setTeacherStudentid(String teacherStudentid) {
         this.teacherStudentid = teacherStudentid;
     }
 
@@ -98,7 +102,7 @@ public class Teacher extends BaseEntity {
     public void setTeacherEmail(String teacherEmail) {
         this.teacherEmail = teacherEmail;
     }
-
+    @Size(min = 0, max = 11, message = "联系电话长度不能超过11个字符")
     public String getTeacherPhone() {
         return teacherPhone;
     }

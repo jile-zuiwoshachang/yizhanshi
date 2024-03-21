@@ -1,5 +1,6 @@
 package com.yizhanshi.place.controller;
 
+import com.yizhanshi.common.core.constant.SecurityConstants;
 import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.common.core.utils.DateUtils;
 import com.yizhanshi.common.core.utils.StringUtils;
@@ -147,5 +148,11 @@ public class PlaceController extends BaseController {
             allPlaces.add(allPlace);
         }
         return getDataTable(allPlaces);
+    }
+    @InnerAuth
+    @GetMapping("/placeInfo/selectList")
+    public R<List<Place>> selectList(@RequestBody Place place){
+        List<Place> list = placeService.selectPlaceList(place);
+        return R.ok(list);
     }
 }
