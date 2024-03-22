@@ -40,8 +40,5 @@ public interface CourseMapper {
      * @return
      */
     public int deleteCourse(Long[] courseIds);
-    /**
-     * 根据查询条件，获得当天的课程预约记录
-     */
-    public List<Course> selectAllCourse(@Param("placeId") Long placeId, @Param("chooseDay") String chooseDay);
+
 }

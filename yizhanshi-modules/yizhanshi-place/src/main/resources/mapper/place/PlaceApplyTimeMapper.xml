@@ -44,11 +44,11 @@
         <if test="params.chooseDay != null and params.chooseDay  != ''">
             AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
         </if>
-        <if test="places!=null and places.placeName != null and places.placeName != ''">
-            AND p.place_name like concat('%', #{places.placeName}, '%')
+        <if test="place!=null and place.placeName != null and place.placeName != ''">
+            AND p.place_name like concat('%', #{place.placeName}, '%')
         </if>
-        <if test="places!=null and places.placeCampus != null and places.placeCampus != ''">
-            AND p.place_campus like concat('%', #{places.placeCampus}, '%')
+        <if test="place!=null and place.placeCampus != null and place.placeCampus != ''">
+            AND p.place_campus like concat('%', #{place.placeCampus}, '%')
         </if>
         <if test="status != null and status != ''">
             AND pa.status = #{status}
@@ -59,6 +59,13 @@
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
             AND date_format(pa.create_time,'%Y%m%d')  &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
+    </select>
+    <select id="selectPlaceApplyTimeByApplyTimeIds" parameterType="Long" resultMap="PlaceApplyTimeResult">
+        <include refid="selectPlaceApplyTimeVo"></include>
+        where pa.apply_time_id in
+        <foreach item="applyTimeId" collection="array" open="(" separator="," close=")">
+            #{applyTimeId}
+        </foreach>
     </select>
     <select id="selectPlaceApplyTimeById" parameterType="Long" resultMap="PlaceApplyTimeResult">
         <include refid="selectPlaceApplyTimeVo"></include>

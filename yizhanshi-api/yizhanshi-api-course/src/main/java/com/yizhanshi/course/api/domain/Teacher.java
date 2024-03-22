@@ -3,7 +3,6 @@ package com.yizhanshi.course.api.domain;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.annotation.Excel.ColumnType;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

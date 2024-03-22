@@ -47,5 +47,4 @@ public class ApplyConstants {
     public static final String COURSECHECKADMIN2 = "2";
 
 
-
 }

@@ -24,9 +24,7 @@
         <result property="updateTime"     column="update_time"    />
         <result property="updateBy"     column="update_by"    />
         <result property="remark"     column="remark"    />
-        <collection  property="courses"   javaType="com.yizhanshi.course.api.domain.Course"  resultMap="CourseResult" />
-        <collection  property="teachers"   javaType="com.yizhanshi.course.api.domain.Teacher"  resultMap="TeacherResult" />
-        <collection  property="places"   javaType="com.yizhanshi.place.api.domain.Place"  resultMap="PlaceResult" />
+        <collection  property="course"   javaType="com.yizhanshi.course.api.domain.Course"  resultMap="CourseResult" />
     </resultMap>
     <resultMap id="CourseResult" type="com.yizhanshi.course.api.domain.Course">
         <id     property="courseId"       column="course_id"        />
@@ -34,30 +32,31 @@
         <result property="courseType"      column="course_type"      />
         <result property="teacherId"      column="teacher_id"      />
         <result property="courseCheck"      column="course_check"      />
-        <result property="chooseStatus"      column="choose_status"      />
         <result property="courseNumber"      column="course_number"      />
+        <collection  property="teacher"   javaType="com.yizhanshi.course.api.domain.Teacher"  resultMap="TeacherResult" />
     </resultMap>
-    <resultMap id="TeacherResult" type="com.yizhanshi.course.api.domain.Teacher">
-        <id     property="teacherId"       column="teacher_id"        />
-        <result property="teacherName"     column="teacher_name"      />
-        <result property="teacherStudentid"      column="teacher_studentid"      />
-    </resultMap>
-    <resultMap id="PlaceResult" type="com.yizhanshi.place.api.domain.Place">
-        <id     property="placeId"       column="place_id"        />
-        <result property="placeName"     column="place_name"      />
-        <result property="placeCampus"      column="place_campus"       />
-        <result property="placeCapacity"     column="place_capacity"      />
+    <resultMap type="com.yizhanshi.course.api.domain.Teacher" id="TeacherResult">
+        <id     property="teacherId"       column="teacher_id"      />
+        <result property="teacherName"     column="teacher_name"    />
+        <result property="teacherSex"     column="teacher_sex"    />
+        <result property="teacherAge"     column="teacher_age"    />
+        <result property="teacherStudentid"       column="teacher_studentid"      />
+        <result property="teacherDescription"     column="teacher_description"    />
+        <result property="teacherPicture"     column="teacher_picture"    />
+        <result property="teacherEmail"     column="teacher_email"    />
+        <result property="teacherPhone"     column="teacher_phone"    />
+        <result property="teacherQq"     column="teacher_qq"    />
+        <result property="teacherWechat"     column="teacher_wechat"    />
     </resultMap>
     <sql id="selectCourseApplyVo">
         select ca.apply_id, ca.apply_name, ca.user_studentid,ca.course_id,ca.apply_content,ca.apply_admin1,ca.apply_admin1_name,ca.apply_admin2,ca.apply_admin2_name,
         ca.refuse_reason,ca.recall_status,ca.recall_reason, ca.status, ca.del_flag,ca.create_by, ca.create_time, ca.remark,
-        c.course_id,c.course_name,c.course_type,c.teacher_id,c.course_check,c.choose_status,c.course_number,
-        t.teacher_id,t.teacher_name,t.teacher_studentid,
-        p.place_id,p.place_name,p.place_campus,p.place_capacity
+        c.course_id,c.course_name,c.course_type,c.teacher_id,c.course_check,c.course_number,
+        t.teacher_id, t.teacher_name, t.teacher_sex,t.teacher_age,t.teacher_studentid,t.teacher_description,
+        t.teacher_picture,t.teacher_email,t.teacher_phone,t.teacher_qq,t.teacher_wechat
         from business_course_apply ca
         left join business_course c on ca.course_id=c.course_id
-        left join business_teacher t on c.teacher_id=t.teacher_id
-        left join business_place p on c.place_id=p.place_id
+        left join business_teacher t on t.teacher_id = c.teacher_id
     </sql>
     <select id="selectCourseApplyList" parameterType="com.yizhanshi.course.domain.CourseApply" resultMap="CourseApplyResult">
        <include refid="selectCourseApplyVo"></include>
@@ -71,39 +70,28 @@
         <if test="userStudentid != null and userStudentid != ''">
             AND ca.user_studentid like concat('%', #{userStudentid}, '%')
         </if>
-        <if test="courses!=null and courses.courseName != null and courses.courseName != ''">
-            AND c.course_name like concat('%', #{courses.courseName}, '%')
+        <if test="course!=null and course.courseName != null and course.courseName != ''">
+            AND c.course_name like concat('%', #{course.courseName}, '%')
         </if>
-        <if test="courses!=null and courses.courseType != null and courses.courseType != ''">
-            AND c.course_type like concat('%', #{courses.courseType}, '%')
+        <if test="course!=null and course.courseType != null and course.courseType != ''">
+            AND c.course_type like concat('%', #{course.courseType}, '%')
         </if>
-        <if test="teachers!=null and teachers.teacherName != null and teachers.teacherName != ''">
-            AND t.teacher_name like concat('%', #{teachers.teacherName}, '%')
-        </if>
-        <if test="teachers!=null and teachers.teacherStudentid != null and teachers.teacherStudentid != ''">
-            AND t.teacher_studentid like concat('%', #{teachers.teacherStudentid}, '%')
-        </if>
-        <if test="places!=null and places.placeName != null and places.placeName != ''">
-            AND p.place_name like concat('%', #{places.placeName}, '%')
-        </if>
-        <if test="places!=null and places.placeCampus != null and places.placeCampus != ''">
-            AND p.place_campus like concat('%', #{places.placeCampus}, '%')
-        </if>
-        <if test="status != null and status !=''">
+        <if test="status != null and status !=''.toString()">
         <choose>
             <!-- 如果传入的status是0，查询status为0或1的数据 -->
-            <when test="status == '0'">
+            <when test="status == '0'.toString() ">
                 AND ca.status IN ('0', '1')
             </when>
-            <when test="status == '1'">
+            <when test="status == '1'.toString()">
                 AND ca.status IN ('0', '1')
             </when>
             <!-- 如果传入的status是2、3、4，直接使用等于条件 -->
-            <when test="status == '2' or status == '5' or status == '4'">
+            <when test="status == '2'.toString() or status == '5'.toString() or status == '4'.toString()">
                 AND ca.status = #{status}
             </when>
             <!-- 其他情况，可以选择不添加任何条件，或者根据需要添加默认行为 -->
             <otherwise>
+                AND ca.status = #{status}
                 <!-- 这里可以留空，或者添加你认为合适的默认SQL条件 -->
             </otherwise>
         </choose>

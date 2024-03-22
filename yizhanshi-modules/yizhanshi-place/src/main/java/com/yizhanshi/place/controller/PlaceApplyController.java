@@ -35,6 +35,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +72,7 @@ public class PlaceApplyController extends BaseController {
 
     /**
      * 查看所有场地预约信息-管理员使用
-     * places.placeCampus  北校区  南校区
+     * place.placeCampus  北校区  南校区
      * status 0已预约（1） 2已通过 5已拒绝 4已撤销
      */
     @RequiresPermissions("business:placeApply:list")
@@ -195,6 +196,9 @@ public class PlaceApplyController extends BaseController {
     public AjaxResult addPlaceApply(@Validated @RequestBody PlaceApply placeApply) {
         //判断时间冲突
         //查询那个场地那天的预约情况 拿出预约时间列表的第一个判断冲突
+        if(CollectionUtils.isEmpty(placeApply.getPlaceApplyTimes())){
+            throw new ServiceException("时间不能为空");
+        }
         for (PlaceApplyTime placeApplyTime : placeApply.getPlaceApplyTimes()) {
             String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, placeApplyTime.getApplyDay());
             List<PlaceApplyTime> dataBasePlaceTimeApplies = placeApplyTimeService.selectAllPlace(placeApplyTime.getPlaceId(), str);
@@ -203,7 +207,7 @@ public class PlaceApplyController extends BaseController {
                 return error("时间冲突!请查看当天场地预约信息后修改时间");
             }
             //再远程调用课程服务，判断时间是否冲突
-            if(timeConflict(placeApply.getPlaceApplyTimes(), str)){
+            if(timeConflict(Collections.singletonList(placeApplyTime), str)){
                 return error("时间冲突！请查看当天课程预约信息后修改时间");
             }
         }

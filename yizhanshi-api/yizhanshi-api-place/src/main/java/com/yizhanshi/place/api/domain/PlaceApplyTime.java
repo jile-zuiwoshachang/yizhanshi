@@ -16,7 +16,6 @@ public class PlaceApplyTime extends BaseEntity {
     /** 预约时间序号 */
     @Excel(name = "预约时间序号", cellType = Excel.ColumnType.NUMERIC)
     private Long applyTimeId;
-    @Excel(name = "场地id", cellType = Excel.ColumnType.NUMERIC)
     private Long placeId;
     @Excel(name="预约日期",dateFormat = "yyyy-MM-dd")
     private Date applyDay;
@@ -37,6 +36,7 @@ public class PlaceApplyTime extends BaseEntity {
      * 仅用于前端传参
      */
     private Long applyId;
+
 
     public Long getApplyId() {
         return applyId;

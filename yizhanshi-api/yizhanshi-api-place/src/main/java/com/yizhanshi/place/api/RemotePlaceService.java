@@ -23,7 +23,7 @@ public interface RemotePlaceService {
     /**
      * 根据place获取分页查询
      */
-    @GetMapping("/placeInfo/selectList")
+    @PostMapping("/placeInfo/selectList")
     public R<List<Place>> selectList(@RequestBody Place place ,
                                @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
     /**

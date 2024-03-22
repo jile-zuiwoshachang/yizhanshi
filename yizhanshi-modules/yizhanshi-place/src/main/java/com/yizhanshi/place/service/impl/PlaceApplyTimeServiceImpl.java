@@ -21,6 +21,11 @@ public class PlaceApplyTimeServiceImpl implements IPlaceApplyTimeService {
     public List<PlaceApplyTime> selectPlaceApplyTimeList(PlaceApplyTime placeApplyTime){
         return placeApplyTimeMapper.selectPlaceApplyTimeList(placeApplyTime);
     }
+    @Override
+    public List<PlaceApplyTime> selectPlaceApplyTimeByApplyId(Long applyId){
+        Long[] applyTimeIds = placeApplyTimeRelatedMapper.selectApplyTimeIdsByApplyId(applyId).stream().toArray(Long[]::new);
+        return placeApplyTimeMapper.selectPlaceApplyTimeByApplyTimeIds(applyTimeIds);
+    }
     /**
      * 根据编号查询具体信息
      */

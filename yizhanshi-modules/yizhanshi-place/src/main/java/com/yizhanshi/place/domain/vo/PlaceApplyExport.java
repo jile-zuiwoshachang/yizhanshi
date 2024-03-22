@@ -76,11 +76,13 @@ public class PlaceApplyExport {
     private String status;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @Excel(name = "创建人")
+    private String createBy;
 
     public PlaceApplyExport() {
     }
 
-    public PlaceApplyExport(Long applyId, String applyName, String userStudentid, String placeCampus, String placeName, String instructorName, String instructorStudentid, String instructorOrganization, String instructorPhone, String fudaoName, String fudaoStudentid, String fudaoOrganization, String fudaoPhone, Date applyDay, String applyStartTime, String applyEndTime, int applyNumber, String reasonName, String reasonType, String applyOrganization, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status,Date createTime) {
+    public PlaceApplyExport(Long applyId, String applyName, String userStudentid, String placeCampus, String placeName, String instructorName, String instructorStudentid, String instructorOrganization, String instructorPhone, String fudaoName, String fudaoStudentid, String fudaoOrganization, String fudaoPhone, Date applyDay, String applyStartTime, String applyEndTime, int applyNumber, String reasonName, String reasonType, String applyOrganization, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, Date createTime, String createBy) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -104,12 +106,22 @@ public class PlaceApplyExport {
         this.applyContent = applyContent;
         this.applyAdmin1 = applyAdmin1;
         this.applyAdmin1Name = applyAdmin1Name;
+        this.applyAdmin2 = applyAdmin2;
         this.applyAdmin2Name = applyAdmin2Name;
         this.refuseReason = refuseReason;
         this.recallStatus = recallStatus;
         this.recallReason = recallReason;
         this.status = status;
         this.createTime = createTime;
+        this.createBy = createBy;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
     public Long getApplyId() {

@@ -8,7 +8,7 @@
         <id     property="courseTimeId"       column="course_time_id"      />
         <result property="courseDay"        column="course_day"        />
         <result property="timeStartId"        column="time_start_id"        />
-        <result property="courseStartTime"        column="vourse_start_time"        />
+        <result property="courseStartTime"        column="course_start_time"        />
         <result property="timeEndId"        column="time_end_id"        />
         <result property="courseEndTime"        column="course_end_time"        />
         <result property="placeId"        column="place_id"        />
@@ -35,7 +35,7 @@
         from business_course_time ct
         left join business_place p on ct.place_id=p.place_id
     </sql>
-    <select id="selectCourseTimeList" parameterType="com.yizhanshi.place.api.domain.CourseTime" resultMap="CourseTimeResult">
+    <select id="selectCourseTimeList" parameterType="com.yizhanshi.course.api.domain.CourseTime" resultMap="CourseTimeResult">
         <include refid="selectCourseTimeVo"></include>
         where ct.del_flag = '0'
         <if test="courseTimeId != null and courseTimeId != 0">
@@ -44,11 +44,11 @@
         <if test="params.chooseDay != null and params.chooseDay  != ''">
             AND date_format(ct.course_day,'%Y%m%d') = date_format(#{params.chooseDay},'%Y%m%d')
         </if>
-        <if test="places!=null and places.placeName != null and places.placeName != ''">
-            AND p.place_name like concat('%', #{places.placeName}, '%')
+        <if test="place!=null and place.placeName != null and place.placeName != ''">
+            AND p.place_name like concat('%', #{place.placeName}, '%')
         </if>
-        <if test="places!=null and places.placeCampus != null and places.placeCampus != ''">
-            AND p.place_campus like concat('%', #{places.placeCampus}, '%')
+        <if test="place!=null and place.placeCampus != null and place.placeCampus != ''">
+            AND p.place_campus like concat('%', #{place.placeCampus}, '%')
         </if>
         <if test="status != null and status != ''">
             AND ct.status = #{status}
@@ -90,13 +90,13 @@
         where course_time_id = #{courseTimeId}
     </update>
     <delete id="deleteCourseTime">
-        update business_place_course_time set del_flag = '2' where course_time_id in
+        update business_course_time set del_flag = '2' where course_time_id in
         <foreach collection="array" item="courseTimeId" open="(" separator="," close=")">
             #{courseTimeId}
         </foreach>
     </delete>
     <insert id="insertCourseTime" parameterType="com.yizhanshi.course.api.domain.CourseTime" useGeneratedKeys="true" keyProperty="courseTimeId">
-        insert into business_place_course_time(
+        insert into business_course_time(
         <if test="courseTimeId != null and courseTimeId != 0">course_time_id,</if>
         course_day,
         <if test="placeId != null and placeId != 0">place_id,</if>
@@ -109,8 +109,8 @@
         <if test="remark != null and remark != ''">remark,</if>
         create_time
         )values(
-        <if test="courseTimeId != null and courseTimeId != 0">#{applyTimeId},</if>
-        #{applyDay, jdbcType=DATE},
+        <if test="courseTimeId != null and courseTimeId != 0">#{courseTimeId},</if>
+        #{courseDay, jdbcType=DATE},
         <if test="placeId != null and placeId != 0">#{placeId},</if>
         <if test="timeStartId != null and timeStartId != 0">#{timeStartId},</if>
         <if test="timeEndId != null and timeEndId !=0">#{timeEndId},</if>

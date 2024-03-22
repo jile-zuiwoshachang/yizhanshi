@@ -18,6 +18,7 @@ import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.course.domain.CourseApply;
+import com.yizhanshi.course.domain.constants.ApplyConstants;
 import com.yizhanshi.course.domain.vo.AllCourse;
 import com.yizhanshi.course.domain.vo.CourseExport;
 import com.yizhanshi.course.service.ICourseApplyService;
@@ -97,8 +98,8 @@ public class CourseController extends BaseController {
             List<CourseTime> courseTimeList = courseTimeService.selectCourseTimeByIds(courseTimeIds);
             courseTimeList.forEach(courseTime -> {
                 CourseExport courseExport = new CourseExport();
-                BeanUtils.copyProperties(courseTime, courseExport); // 先复制PlaceApply的共通属性
-                // 然后设置特定于PlaceApplyTime的属性
+                BeanUtils.copyProperties(courseTemp,courseExport);
+                //不可再使用BeanUtils赋予courseTime
                 courseExport.setCourseDay(courseTime.getCourseDay());
                 courseExport.setCourseStartTime(courseTime.getCourseStartTime());
                 courseExport.setCourseEndTime(courseTime.getCourseEndTime());
@@ -139,6 +140,9 @@ public class CourseController extends BaseController {
     public AjaxResult addCourse(@Validated @RequestBody Course course) {
         //判断时间冲突
         //查询那个场地那天的预约情况
+        if(CollectionUtils.isEmpty(course.getCourseTimes())){
+            throw new ServiceException("时间不能为空");
+        }
         for (CourseTime courseTime : course.getCourseTimes()) {
             String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, courseTime.getCourseDay());
             List<CourseTime> dataBaseCourseTimeApplies = courseTimeService.selectAllCourse(courseTime.getPlaceId(), str);
@@ -147,12 +151,14 @@ public class CourseController extends BaseController {
                 return error("时间冲突!请查看当天课程信息后修改时间");
             }
             //远程调用场地判断
-            if(timeConflict(courseTime.getCourse().getCourseTimes(), str)){
+            if(timeConflict(Collections.singletonList(courseTime), str)){
                 return error("时间冲突！请查看当天场地预约信息后修改时间");
             }
         }
         course.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(courseService.insertCourse(course));
+        courseService.insertCourse(course);
+        return success();
+
     }
 
     private Boolean timeConflict(List<CourseTime> courseTimes,String str) {
@@ -207,7 +213,7 @@ public class CourseController extends BaseController {
     public TableDataInfo selectAllCourse(@RequestBody Place place) {
         startPage();
         //根据查询条件和分页得到初步的课程信息
-        List<Place> list = remotePlaceService.selectList(place, SecurityConstants.INNER).getData();
+        List<Place> list = courseService.selectPlaceList(place);
         if (CollectionUtils.isEmpty(list)) {
             throw new ServiceException("场地列表为空");
         }

@@ -28,8 +28,7 @@ public class Course extends BaseEntity {
     private Long teacherId;
     @Excel(name = "课程容量", cellType = ColumnType.NUMERIC)
     private int courseNumber;
-    @Excel(name = "选课状态",readConverterExp = "0=独立,1=不独立")
-    private  String chooseStatus;
+
     @Excel(name = "审核类型",readConverterExp = "0=自动通过,1=一级管理员审核,2=二级管理员审核" )
     private String courseCheck;
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
@@ -42,12 +41,12 @@ public class Course extends BaseEntity {
      */
     private List<CourseTime> courseTimes;
     /**
-     * 返回前端用
+     * 选课用
      * 已选人数
      */
     private int chooseNumber;
     /**
-     * 返回前端用
+     *  选课用
      * 可选课标志
      * true：可
      * false: 不可
@@ -55,14 +54,13 @@ public class Course extends BaseEntity {
     private  Boolean flag;
 
     public Course(){}
-    public Course(Long courseId, String courseName, String courseType, String courseDescription, Long teacherId, int courseNumber, String chooseStatus, String courseCheck, String status, String delFlag, Teacher teacher) {
+    public Course(Long courseId, String courseName, String courseType, String courseDescription, Long teacherId, int courseNumber,String courseCheck, String status, String delFlag, Teacher teacher) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseType = courseType;
         this.courseDescription = courseDescription;
         this.teacherId = teacherId;
         this.courseNumber = courseNumber;
-        this.chooseStatus = chooseStatus;
         this.courseCheck = courseCheck;
         this.status = status;
         this.delFlag = delFlag;
@@ -101,8 +99,7 @@ public class Course extends BaseEntity {
         this.teacherId = teacherId;
     }
 
-
-
+    @NotNull(message = "课程容量不能为空")
     public int getCourseNumber() {
         return courseNumber;
     }
@@ -119,13 +116,7 @@ public class Course extends BaseEntity {
         this.courseCheck = courseCheck;
     }
 
-    public String getChooseStatus() {
-        return chooseStatus;
-    }
 
-    public void setChooseStatus(String chooseStatus) {
-        this.chooseStatus = chooseStatus;
-    }
 
     public String getCourseType() {
         return courseType;
@@ -192,7 +183,6 @@ public class Course extends BaseEntity {
                 .append("courseType", courseType)
                 .append("teacherId", teacherId)
                 .append("courseNumber", courseNumber)
-                .append("chooseStatus", chooseStatus)
                 .append("courseCheck", courseCheck)
                 .append("status", status)
                 .append("delFlag", delFlag)

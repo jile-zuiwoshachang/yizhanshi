@@ -13,6 +13,10 @@ public interface IPlaceApplyTimeService {
      */
     public List<PlaceApplyTime> selectPlaceApplyTimeList(PlaceApplyTime placeApplyTime);
     /**
+     * 根据预约单编号查询信息
+     */
+    public List<PlaceApplyTime>  selectPlaceApplyTimeByApplyId(Long applyId);
+    /**
      * 根据编号查询具体信息
      */
     public PlaceApplyTime selectPlaceApplyTimeById(Long applyTimeId);

@@ -144,24 +144,15 @@ public class CourseApplyController extends BaseController {
     {
         List<CourseApply> list = courseApplyService.selectCourseApplyList(courseApply);
         List<CourseApplyExport> courseApplyExportList=new ArrayList<>();
+        //根据课程生成选课信息
         list.forEach(courseApplyTemp -> {
-            Long[] courseTimeIds = courseTimeRelatedService.selectCourseTimeIdsByCourseId(courseApplyTemp.getCourseId())
-                    .stream()
-                    .toArray(Long[]::new);
-            List<CourseTime> courseTimeList = courseTimeService.selectCourseTimeByIds(courseTimeIds);
-            courseTimeList.forEach(courseTime -> {
                 CourseApplyExport courseApplyExport = new CourseApplyExport();
                 BeanUtils.copyProperties(courseApplyTemp, courseApplyExport);
-                courseApplyExport.setPlaceName(courseApplyTemp.getPlaces().getPlaceName());
-                courseApplyExport.setPlaceCampus(courseApplyTemp.getPlaces().getPlaceCampus());
-                courseApplyExport.setTeacherName(courseApplyTemp.getTeachers().getTeacherName());
-                courseApplyExport.setCourseName(courseApplyTemp.getCourses().getCourseName());
-                courseApplyExport.setCourseDay(courseTime.getCourseDay());
-                courseApplyExport.setCourseStartTime(courseTime.getCourseStartTime());
-                courseApplyExport.setCourseEndTime(courseTime.getCourseEndTime());
+                courseApplyExport.setTeacherName(courseApplyTemp.getCourse().getTeacher().getTeacherName());
+                courseApplyExport.setCourseName(courseApplyTemp.getCourse().getCourseName());
+                courseApplyExport.setCourseType(courseApplyTemp.getCourse().getCourseType());
                 courseApplyExportList.add(courseApplyExport);
             });
-        });
         ExcelUtil<CourseApplyExport> util = new ExcelUtil<CourseApplyExport>(CourseApplyExport.class);
         util.exportExcel(response, courseApplyExportList, "选课数据");
     }

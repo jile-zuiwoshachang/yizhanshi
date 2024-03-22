@@ -16,6 +16,10 @@ public class CourseApplyExport {
     private String userStudentid;
     @Excel(name = "课程序号", cellType = Excel.ColumnType.NUMERIC)
     private Long courseId;
+    @Excel(name = "课程名称")
+    private String courseName;
+    @Excel(name = "课程类型")
+    private String courseType;
     @Excel(name = "预约内容")
     private String applyContent;
     @Excel(name = "一级管理员学号")
@@ -32,20 +36,8 @@ public class CourseApplyExport {
     private String recallStatus;
     @Excel(name = "撤销原因")
     private String recallReason;
-    @Excel(name = "状态",readConverterExp = "0=已预约,1=一级通过,2=二级通过, 4=撤销, 5=拒绝")
+    @Excel(name = "状态",readConverterExp = "0=已预约,1=一级通过,2=二级通过,4=撤销,5=拒绝")
     private String status;
-    @Excel(name = "课程名称")
-    private String courseName;
-    @Excel(name = "课程日期",dateFormat = "yyyy-MM-dd")
-    private Date courseDay;
-    @Excel(name = "开始时间")
-    private String courseStartTime;
-    @Excel(name = "结束时间")
-    private String courseEndTime;
-    @Excel(name = "场地名称")
-    private String placeName;
-    @Excel(name = "场地校区")
-    private String placeCampus;
     @Excel(name = "老师名称")
     private String teacherName;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
@@ -54,7 +46,7 @@ public class CourseApplyExport {
     public CourseApplyExport() {
     }
 
-    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, String teacherName, Date createTime) {
+    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, String courseType, String teacherName, Date createTime) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -69,11 +61,7 @@ public class CourseApplyExport {
         this.recallReason = recallReason;
         this.status = status;
         this.courseName = courseName;
-        this.courseDay = courseDay;
-        this.courseStartTime = courseStartTime;
-        this.courseEndTime = courseEndTime;
-        this.placeName = placeName;
-        this.placeCampus = placeCampus;
+        this.courseType = courseType;
         this.teacherName = teacherName;
         this.createTime = createTime;
     }
@@ -86,13 +74,6 @@ public class CourseApplyExport {
         this.applyId = applyId;
     }
 
-    public String getPlaceCampus() {
-        return placeCampus;
-    }
-
-    public void setPlaceCampus(String placeCampus) {
-        this.placeCampus = placeCampus;
-    }
 
     public String getApplyName() {
         return applyName;
@@ -182,13 +163,7 @@ public class CourseApplyExport {
         this.courseName = courseName;
     }
 
-    public String getPlaceName() {
-        return placeName;
-    }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
-    }
 
     public String getTeacherName() {
         return teacherName;
@@ -213,31 +188,6 @@ public class CourseApplyExport {
     public void setApplyAdmin2Name(String applyAdmin2Name) {
         this.applyAdmin2Name = applyAdmin2Name;
     }
-
-    public Date getCourseDay() {
-        return courseDay;
-    }
-
-    public void setCourseDay(Date courseDay) {
-        this.courseDay = courseDay;
-    }
-
-    public String getCourseStartTime() {
-        return courseStartTime;
-    }
-
-    public void setCourseStartTime(String courseStartTime) {
-        this.courseStartTime = courseStartTime;
-    }
-
-    public String getCourseEndTime() {
-        return courseEndTime;
-    }
-
-    public void setCourseEndTime(String courseEndTime) {
-        this.courseEndTime = courseEndTime;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -245,4 +195,13 @@ public class CourseApplyExport {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
+    }
 }
+

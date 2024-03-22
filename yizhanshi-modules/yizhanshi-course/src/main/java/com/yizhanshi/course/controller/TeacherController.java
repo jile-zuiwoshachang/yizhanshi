@@ -11,12 +11,11 @@ import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
 
 import com.yizhanshi.course.api.domain.Teacher;
-import com.yizhanshi.teacher.service.ITeacherService;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.Soundbank;
+import  com.yizhanshi.teacher.service.ITeacherService;
 import java.util.List;
 
 

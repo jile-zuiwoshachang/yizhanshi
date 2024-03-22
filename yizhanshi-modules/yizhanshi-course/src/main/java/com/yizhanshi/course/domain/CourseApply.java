@@ -42,11 +42,7 @@ public class CourseApply extends BaseEntity {
     private String status;
     private String delFlag;
 
-    private Course courses;
-
-    private Teacher teachers;
-
-    private Place places;
+    private Course course;
 
     public Long getApplyId() {
         return applyId;
@@ -144,28 +140,12 @@ public class CourseApply extends BaseEntity {
         this.delFlag = delFlag;
     }
 
-    public Course getCourses() {
-        return courses;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourses(Course courses) {
-        this.courses = courses;
-    }
-
-    public Teacher getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(Teacher teachers) {
-        this.teachers = teachers;
-    }
-
-    public Place getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(Place places) {
-        this.places = places;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public String getApplyAdmin1Name() {

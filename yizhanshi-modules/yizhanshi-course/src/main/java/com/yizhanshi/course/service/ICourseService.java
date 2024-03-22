@@ -1,6 +1,8 @@
 package com.yizhanshi.course.service;
 
+import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.course.api.domain.Course;
+import com.yizhanshi.place.api.domain.Place;
 import com.yizhanshi.place.api.domain.PlaceApply;
 import com.yizhanshi.place.api.domain.PlaceApplyTime;
 
@@ -28,7 +30,7 @@ public interface ICourseService {
      * @param course
      * @return 结果
      */
-    public int insertCourse(Course course);
+    public void insertCourse(Course course);
     /**
      * 修改课程信息
      *
@@ -45,16 +47,14 @@ public interface ICourseService {
      */
     public void deleteCourse(Long[] courseIds);
 
-    /**
-     * 查询选择的日期且是这个场地的课程信息
-     * @param placeId
-     * @param chooseDay
-     * @return
-     */
-    public List<Course> selectAllCourse(Long placeId, String chooseDay);
+
     /**
      * 判断与场地的冲突
      */
     public Boolean  timeConflictByPlace(List<PlaceApplyTime> placeApplyTimes);
+    /**
+     * 远程调用场地查询
+     */
+    public List<Place> selectPlaceList(Place place);
 
 }

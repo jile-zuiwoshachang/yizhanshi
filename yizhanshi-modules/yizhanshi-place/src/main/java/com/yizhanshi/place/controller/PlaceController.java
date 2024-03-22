@@ -150,7 +150,7 @@ public class PlaceController extends BaseController {
         return getDataTable(allPlaces);
     }
     @InnerAuth
-    @GetMapping("/placeInfo/selectList")
+    @PostMapping("/selectList")
     public R<List<Place>> selectList(@RequestBody Place place){
         List<Place> list = placeService.selectPlaceList(place);
         return R.ok(list);

@@ -20,6 +20,10 @@ public interface PlaceApplyTimeMapper {
      */
     public List<PlaceApplyTime> selectPlaceApplyTimeList(PlaceApplyTime placeApplyTime);
     /**
+     * 查询所有timeIds的时间信息
+     */
+    public List<PlaceApplyTime> selectPlaceApplyTimeByApplyTimeIds(Long[] applyTimeIds);
+    /**
      * 根据编号查询具体信息
      */
     public PlaceApplyTime  selectPlaceApplyTimeById(Long applyTimeId);
