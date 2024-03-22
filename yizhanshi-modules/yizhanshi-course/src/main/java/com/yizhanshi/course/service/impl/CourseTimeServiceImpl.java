@@ -1,19 +1,16 @@
 package com.yizhanshi.course.service.impl;
 
-import com.yizhanshi.course.api.domain.Course;
+
 import com.yizhanshi.course.api.domain.CourseTime;
 import com.yizhanshi.course.domain.CourseTimeRelated;
 import com.yizhanshi.course.mapper.CourseTimeMapper;
 import com.yizhanshi.course.mapper.CourseTimeRelatedMapper;
 import com.yizhanshi.course.service.ICourseTimeService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.websocket.OnError;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class CourseTimeServiceImpl implements ICourseTimeService {
@@ -30,6 +27,11 @@ public class CourseTimeServiceImpl implements ICourseTimeService {
     @Override
     public List<CourseTime> selectCourseTimeList(CourseTime courseTime){
         return courseTimeMapper.selectCourseTimeList(courseTime);
+    }
+    @Override
+    public List<CourseTime> selectCourseTimeListByCourseId(Long courseId){
+        Long[] longList = courseTimeRelatedMapper.selectCourseTimeIdsByCourseId(courseId).stream().toArray(Long[]::new);
+        return courseTimeMapper.selectCourseTimeByIds(longList);
     }
     /**
      * 根据编号查询具体信息

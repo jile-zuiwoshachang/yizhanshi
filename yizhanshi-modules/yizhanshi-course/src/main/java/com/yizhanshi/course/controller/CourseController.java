@@ -172,6 +172,7 @@ public class CourseController extends BaseController {
             Map<String, Object> params = new HashMap<>();
             params.put("chooseDay", str);
             placeApplyTime.setParams(params);
+            placeApplyTimes.add(placeApplyTime);
         }
         return courseService.timeConflictByPlace(placeApplyTimes);
     }
@@ -259,8 +260,7 @@ public class CourseController extends BaseController {
     public R<Boolean> timeConflictByCourse(@RequestBody List<CourseTime> courseTimes) {
         //str为日期字符串
         for (CourseTime courseTime : courseTimes) {
-            String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, courseTime.getCourseDay());
-            List<CourseTime> dataBasePlaceTimeApplies = courseTimeService.selectAllCourse(courseTime.getPlaceId(), str);
+            List<CourseTime> dataBasePlaceTimeApplies = courseTimeService.selectAllCourse(courseTime.getPlaceId(),  (String) courseTime.getParams().get("chooseDay"));
             //先判断所选择天数的所在场地第一天的情况，然后循环判断
             if (courseTimeService.timeConflict(dataBasePlaceTimeApplies, courseTime)) {
                 return R.fail("时间冲突!请查看当天场地课程信息后修改时间");

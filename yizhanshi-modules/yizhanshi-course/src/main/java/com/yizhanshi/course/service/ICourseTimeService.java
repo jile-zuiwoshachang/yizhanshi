@@ -1,5 +1,6 @@
 package com.yizhanshi.course.service;
 
+import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.course.api.domain.CourseTime;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,6 +14,10 @@ public interface ICourseTimeService {
      * @return 课程信息集合信息
      */
     public List<CourseTime> selectCourseTimeList(CourseTime courseTime);
+    /**
+     * 根据课程id查询课程时间列表
+     */
+    public  List<CourseTime> selectCourseTimeListByCourseId(Long courseId);
     /**
      * 根据编号查询具体信息
      */

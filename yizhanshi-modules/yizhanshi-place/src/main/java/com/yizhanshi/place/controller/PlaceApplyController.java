@@ -333,8 +333,7 @@ public class PlaceApplyController extends BaseController {
     public R<Boolean> timeConflictByPlace(@RequestBody List<PlaceApplyTime> placeApplyTimes) {
         //str为日期字符串
         for (PlaceApplyTime placeApplyTime : placeApplyTimes) {
-            String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, placeApplyTime.getApplyDay());
-            List<PlaceApplyTime> dataBasePlaceTimeApplies = placeApplyTimeService.selectAllPlace(placeApplyTime.getPlaceId(), str);
+            List<PlaceApplyTime> dataBasePlaceTimeApplies = placeApplyTimeService.selectAllPlace(placeApplyTime.getPlaceId(), (String) placeApplyTime.getParams().get("chooseDay"));
             //先判断所选择天数的所在场地第一天的情况，然后循环判断
             if (placeApplyService.timeConflict(dataBasePlaceTimeApplies, placeApplyTime)) {
                 return R.fail("时间冲突!请查看当天场地预约信息后修改时间");

@@ -61,7 +61,7 @@ public class PlaceApplyTimeController extends BaseController {
      */
     @RequiresPermissions("business:placeApplyTime:byApplyId")
     @GetMapping("/byApplyId/{applyId}")
-    public TableDataInfo list(@PathVariable("applyId") Long applyId) {
+    public TableDataInfo byApplyId(@PathVariable("applyId") Long applyId) {
         startPage();
         List<PlaceApplyTime> list = placeApplyTimeService.selectPlaceApplyTimeByApplyId(applyId);
         return getDataTable(list);

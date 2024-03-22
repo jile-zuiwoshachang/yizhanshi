@@ -9,12 +9,15 @@ import com.yizhanshi.common.log.annotation.Log;
 import com.yizhanshi.common.log.enums.BusinessType;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
+import com.yizhanshi.course.api.domain.Course;
 import com.yizhanshi.course.api.domain.CourseTime;
+import com.yizhanshi.course.domain.vo.CourseTimeExport;
 import com.yizhanshi.course.service.ICourseApplyService;
 import com.yizhanshi.course.service.ICourseService;
 import com.yizhanshi.course.service.ICourseTimeRelatedService;
 import com.yizhanshi.course.service.ICourseTimeService;
 import com.yizhanshi.place.api.domain.PlaceApplyTime;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
@@ -50,20 +53,37 @@ public class CourseTimeController extends BaseController {
         List<CourseTime> list = courseTimeService.selectCourseTimeList(courseTime);
         return getDataTable(list);
     }
-
+    /**
+     * 前端请传递courseId,后端返回这个课程的是时间列表
+     */
+    @RequiresPermissions("business:courseTime:byCourseId")
+    @GetMapping("/byCourseId/{courseId}")
+    public TableDataInfo byCourseId(@PathVariable("courseId") Long courseId) {
+        startPage();
+        List<CourseTime> list = courseTimeService.selectCourseTimeListByCourseId(courseId);
+        return getDataTable(list);
+    }
     /**
      * 导出课程时间信息——管理员使用
      * @param response
-     * @param placeAppplyTime
+     * @param courseTime
      */
     @Log(title = "课程时间管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("business:courseTime:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, @RequestBody CourseTime placeAppplyTime)
+    public void export(HttpServletResponse response, @RequestBody CourseTime courseTime)
     {
-        List<CourseTime> list = courseTimeService.selectCourseTimeList(placeAppplyTime);
-        ExcelUtil<CourseTime> util = new ExcelUtil<CourseTime>(CourseTime.class);
-        util.exportExcel(response, list, "课程时间信息数据");
+        List<CourseTime> list = courseTimeService.selectCourseTimeList(courseTime);
+        List<CourseTimeExport> courseTimeExportList=new ArrayList<>();
+        list.forEach(courseTimeTemp -> {
+            CourseTimeExport courseTimeExport = new CourseTimeExport();
+            BeanUtils.copyProperties(courseTimeTemp, courseTimeExport); // 先复制
+            courseTimeExport.setPlaceName(courseTimeTemp.getPlace().getPlaceName());
+            courseTimeExport.setPlaceCampus(courseTimeTemp.getPlace().getPlaceCampus());
+            courseTimeExportList.add(courseTimeExport);
+        });
+        ExcelUtil<CourseTimeExport> util = new ExcelUtil<CourseTimeExport>(CourseTimeExport.class);
+        util.exportExcel(response, courseTimeExportList, "课程时间信息数据");
     }
     /**
      * 根据课程时间编号获取详细信息——管理员使用
@@ -113,6 +133,7 @@ public class CourseTimeController extends BaseController {
             Map<String, Object> params = new HashMap<>();
             params.put("chooseDay", str);
             placeApplyTime.setParams(params);
+            placeApplyTimes.add(placeApplyTime);
         }
         return courseService.timeConflictByPlace(placeApplyTimes);
     }
@@ -120,7 +141,7 @@ public class CourseTimeController extends BaseController {
     /**
      * 删除课程时间信息——管理员使用
      */
-    @RequiresPermissions("business:placeTime:remove")
+    @RequiresPermissions("business:courseTime:remove")
     @Log(title = "课程时间管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{courseTimeIds}")
     public AjaxResult remove(@PathVariable Long[] courseTimeIds)
