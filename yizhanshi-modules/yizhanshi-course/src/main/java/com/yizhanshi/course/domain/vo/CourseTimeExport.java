@@ -5,7 +5,7 @@ import com.yizhanshi.common.core.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class CourseTimeExport {
     private static final long serialVersionUID = 1L;
     @Excel(name = "课程时间序号", cellType = Excel.ColumnType.NUMERIC)

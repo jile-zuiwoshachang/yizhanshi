@@ -28,7 +28,8 @@
 	</resultMap>
 
 	<sql id="selectResourceVo">
-        select resource_id, resource_name, parent_id, order_num, path, component, `query`, is_frame, is_cache, resource_type, visible, status, ifnull(perms,'') as perms, icon, create_time 
+        select resource_id, resource_name, parent_id, order_num, path, component, `query`, is_frame, is_cache,
+		resource_type, visible, status, ifnull(perms,'') as perms, icon, create_time
 		from system_resource
     </sql>
     

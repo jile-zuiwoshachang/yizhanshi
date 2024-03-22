@@ -6,7 +6,7 @@ import com.yizhanshi.place.api.domain.Place;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class PlaceApplyTimeExport {
     private static final long serialVersionUID = 1L;
     @Excel(name = "预约时间序号", cellType = Excel.ColumnType.NUMERIC)

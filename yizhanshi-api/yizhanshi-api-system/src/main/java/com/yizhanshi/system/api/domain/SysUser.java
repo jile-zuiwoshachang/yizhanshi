@@ -3,6 +3,8 @@ package com.yizhanshi.system.api.domain;
 
 import java.util.List;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.yizhanshi.common.core.annotation.Excel;
@@ -16,7 +18,7 @@ import com.yizhanshi.common.core.xss.Xss;
  *
  * @author yizhanshi
  */
-
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

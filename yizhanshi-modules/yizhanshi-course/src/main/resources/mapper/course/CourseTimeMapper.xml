@@ -30,7 +30,7 @@
     <sql id="selectCourseTimeVo">
         select ct.course_time_id,ct.course_day,ct.time_start_id,
          ct.time_end_id,ct.course_start_time,ct.course_end_time,ct.place_id,
-        ct.status, ct.del_flag,ct.create_by, ct.create_time, ct.remark,
+        ct.status, ct.del_flag,ct.create_by, ct.create_time,ct.update_time,ct.update_by, ct.remark,
         p.place_id,p.place_name,p.place_campus,p.place_capacity
         from business_course_time ct
         left join business_place p on ct.place_id=p.place_id

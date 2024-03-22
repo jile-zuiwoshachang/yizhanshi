@@ -5,7 +5,7 @@ import com.yizhanshi.common.core.annotation.Excel;
 
 import java.util.Date;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class CourseApplyExport {
     private static final long serialVersionUID = 1L;
     @Excel(name = "预约序号", cellType = Excel.ColumnType.NUMERIC)

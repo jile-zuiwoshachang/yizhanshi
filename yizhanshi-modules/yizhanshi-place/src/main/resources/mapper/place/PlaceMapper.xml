@@ -27,13 +27,13 @@
     <sql id="selectPlaceVo">
         select p.place_id, p.place_name, p.place_campus, p.place_description, p.place_capacity,
         p.manager_name, p.manager_phone, p.place_picture1, p.place_picture2, p.place_picture3,
-        p.status, p.del_flag,p.create_by, p.create_time, p.remark
+        p.status, p.del_flag,p.create_by, p.create_time,p.update_time,p.update_by, p.remark
         from business_place p 
     </sql>
     <select id="selectPlaceList" parameterType="com.yizhanshi.place.api.domain.Place" resultMap="PlaceResult">
         select p.place_id, p.place_name, p.place_campus, p.place_description, p.place_capacity,
         p.manager_name, p.manager_phone, p.place_picture1, p.place_picture2, p.place_picture3,
-        p.status, p.create_by, p.create_time, p.remark from business_place p
+        p.status, p.create_by, p.create_time,p.update_time,p.update_by, p.remark from business_place p
         where p.del_flag = '0'
         <if test="placeId != null and placeId != 0">
             AND p.place_id = #{placeId}

@@ -20,6 +20,13 @@ public interface ILabelService {
      */
     public Label selectLabelById(Long  labelId);
     /**
+     * 根据标签ids查询
+     *
+     * @param labelIds 标签ids
+     * @return 标签信息信息
+     */
+    public List<Label> selectLabelByIds(Long[]  labelIds);
+    /**
      * 新增标签信息
      * @param label
      * @return

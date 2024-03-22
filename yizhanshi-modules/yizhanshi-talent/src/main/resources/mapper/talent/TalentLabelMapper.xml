@@ -30,39 +30,25 @@
         <result property="userPicture1"     column="user_picture1"     />
         <result property="userPicture2"     column="user_picture2"     />
         <result property="userPicture3"     column="user_picture3"     />
-        <result property="status"     column="status"    />
-        <result property="delFlag"     column="del_flag"    />
-        <result property="createTime"     column="create_time"    />
-        <result property="createBy"     column="create_by"    />
-        <result property="updateTime"     column="update_time"    />
-        <result property="updateBy"     column="update_by"    />
-        <result property="remark"     column="remark"    />
     </resultMap>
 
     <resultMap type="com.yizhanshi.talent.domain.Label" id="LabelResult">
         <id     property="labelId"       column="label_id"      />
         <result property="labelName"       column="label_name"      />
         <result property="labelType"     column="label_type"    />
-        <result property="status"     column="status"    />
-        <result property="delFlag"     column="del_flag"    />
-        <result property="createTime"     column="create_time"    />
-        <result property="createBy"     column="create_by"    />
-        <result property="updateTime"     column="update_time"    />
-        <result property="updateBy"     column="update_by"    />
-        <result property="remark"     column="remark"    />
     </resultMap>
 
 
 
-    <select id="selectLabelByUserStudentid" resultType="com.yizhanshi.talent.domain.TalentLabel">
-        select user_studentid,label_id from business_talent_label
-        where user_studentid=#{userStudentid}
+    <select id="selectLabelIdsByUserStudentid"  parameterType="String" resultType="Long">
+        select label_id from business_talent_label
+        <if test="userStudentid!=null and userStudentid!=0">
+            where user_studentid=#{userStudentid}
+        </if>
     </select>
-    <insert id="insertTalentLabel">
+    <insert id="insertTalentLabel" parameterType="com.yizhanshi.talent.domain.TalentLabel">
         insert into business_talent_label(user_studentid, label_id) values
-        <foreach item="item" index="index" collection="talentLabelList" separator=",">
-            (#{item.userStudentid},#{item.labelId})
-        </foreach>
+            (#{userStudentid},#{labelId})
     </insert>
     <delete id="deleteTalentLabelByUserStudentid" parameterType="String">
         delete from business_talent_label where user_studentid=#{userStudentid}
@@ -84,17 +70,20 @@
         </foreach>
     </delete>
     <sql id="talentSql">
-        select u.user_id, u.user_studentid,u.user_sex, u.user_name, u.user_type,
-        u.user_organization,u.user_campus,u.user_email,  u.user_phone,u.user_qq,u.user_wechat,u.user_score,u.user_description,u.user_picture1,
-        u.user_picture2,u.user_picture3, u.status, u.del_flag, u.create_by, u.create_time, u.remark,
-        l.label_id, l.label_name, l.label_type, l.status, l.del_flag,l.create_by, l.create_time, l.remark
-        from system_user u
-        left join business_talent_label t on t.user_studentid=u.user_studentid
-        left join business_label l on t.label_id=l.label_id
+        SELECT
+        u.user_id, u.user_studentid, u.user_sex, u.user_name, u.user_type,
+        u.user_organization, u.user_campus, u.user_email, u.user_phone, u.user_qq, u.user_wechat,
+        u.user_score, u.user_description, u.user_picture1, u.user_picture2, u.user_picture3
+        FROM
+        system_user u
+        LEFT JOIN
+        business_talent_label t ON t.user_studentid = u.user_studentid
+        LEFT JOIN
+        business_label l ON t.label_id = l.label_id
     </sql>
     <select id="selectTalentList" resultMap="TalentResult">
       <include refid="talentSql"></include>
-        where  u.del_flag = '0' and l.del_flag='0'
+        where  u.del_flag = '0'
         <if test="sysUser!=null and sysUser.userId != null and sysUser.userId != 0">
             AND u.user_id = #{sysUser.userId}
         </if>
@@ -103,6 +92,12 @@
         </if>
         <if test="sysUser!=null and sysUser.userName != null and sysUser.userName != ''">
             AND u.user_name like concat('%', #{sysUser.userName}, '%')
+        </if>
+        <if test="sysUser!=null and sysUser.userCampus != null and sysUser.userCampus != ''">
+            AND u.user_campus like concat('%', #{sysUser.userCampus}, '%')
+        </if>
+        <if test="sysUser!=null and sysUser.userOrganization != null and sysUser.userOrganization != ''">
+            AND u.user_organization like concat('%', #{sysUser.userOrganization}, '%')
         </if>
         <if test="sysUser!=null and sysUser.userDescription != null and sysUser.userDescription != ''">
             AND u.user_description like concat('%', #{sysUser.userDescription}, '%')
@@ -113,6 +108,8 @@
                 #{label.labelName}
             </foreach>
         </if>
+        GROUP BY
+        u.user_id
     </select>
     <update id="updateTalentUser" parameterType="com.yizhanshi.talent.domain.vo.Talent">
             update system_user

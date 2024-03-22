@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
 
 import java.util.Date;
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class PlaceApplyExport {
     private static final long serialVersionUID = 1L;
     /** 预约序号 */

@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 导出所有课程
  */
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class CourseExport {
     private static final long serialVersionUID = 1L;
     @Excel(name = "课程序号", cellType = Excel.ColumnType.NUMERIC)

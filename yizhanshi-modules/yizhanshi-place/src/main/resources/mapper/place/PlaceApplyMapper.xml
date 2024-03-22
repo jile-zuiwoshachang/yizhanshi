@@ -78,7 +78,7 @@
         pa.instructor_studentid,pa.instructor_organization,pa.instructor_phone,
         pa.fudao_name, pa.fudao_studentid,pa.fudao_organization,pa.apply_number,pa.reason_id,pa.apply_organization,
         pa.apply_content,pa.apply_admin1,pa.apply_admin1_name,pa.apply_admin2,pa.apply_admin2_name,pa.refuse_reason,pa.recall_reason,
-        pa.recall_status,pa.status, pa.del_flag,pa.create_by, pa.create_time, pa.remark,
+        pa.recall_status,pa.status, pa.del_flag,pa.create_by, pa.create_time,pa.update_time,pa.update_by, pa.remark,
         pr.reason_id,pr.reason_name,pr.reason_type,
         u.user_id,u.user_studentid,u.user_name,u.user_organization,u.user_campus,u.user_email,u.user_phone,u.user_qq,u.user_wechat,u.user_score
         from business_place_apply pa

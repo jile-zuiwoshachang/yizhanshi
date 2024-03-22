@@ -24,7 +24,7 @@ import java.util.List;
  * @author hejiale
  */
 @RestController
-@RequestMapping("/label")
+@RequestMapping("/labelInfo")
 public class LabelController extends BaseController {
 
     @Autowired

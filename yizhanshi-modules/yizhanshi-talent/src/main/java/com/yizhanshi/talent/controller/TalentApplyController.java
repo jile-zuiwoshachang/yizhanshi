@@ -29,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,11 +60,12 @@ public class TalentApplyController extends BaseController {
     public TableDataInfo list(@RequestBody TalentApply talentApply) {
         startPage();
         List<TalentApply> list = talentApplyService.selectTalentApplyList(talentApply);
+
         return getDataTable(list);
     }
     /**
      * 根据预约编号查询
-     * 人才具体信息
+     * 人才预约具体信息
      */
     @RequiresPermissions("business:talentApply:query")
     @GetMapping("/{applyId}")
@@ -82,15 +84,16 @@ public class TalentApplyController extends BaseController {
     public void export(HttpServletResponse response, @RequestBody TalentApply talentApply)
     {
         List<TalentApply> list = talentApplyService.selectTalentApplyList(talentApply);
-        List<TalentApplyExport> talentApplyExportList = list.stream()
-                .map(talentApplyTemp -> {
-                    TalentApplyExport talentApplyExport = new TalentApplyExport();
-                    BeanUtils.copyProperties(talentApplyTemp, talentApplyExport);
-                    String talentName=remoteUserService.getUserInfo(talentApplyTemp.getTalentStudentid(), SecurityConstants.INNER).getData().getUsername();
-                    talentApplyExport.setTalentName(talentName);
-                    return talentApplyExport;
-                })
-                .collect(Collectors.toList());
+        List<TalentApplyExport> talentApplyExportList = new ArrayList<>();
+        list.forEach(talentApplyTemp -> {
+            TalentApplyExport talentApplyExport = new TalentApplyExport();
+            BeanUtils.copyProperties(talentApplyTemp, talentApplyExport);
+            // 根据数据库查询加入新值
+            String talentName = remoteUserService.getUserInfo(talentApplyTemp.getTalentStudentid(), SecurityConstants.INNER).getData().getUsername();
+            talentApplyExport.setTalentName(talentName);
+            // 添加到新列表
+            talentApplyExportList.add(talentApplyExport);
+        });
         ExcelUtil<TalentApplyExport> util = new ExcelUtil<TalentApplyExport>(TalentApplyExport.class);
         util.exportExcel(response, talentApplyExportList, "人才预约数据");
     }

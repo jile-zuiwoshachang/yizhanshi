@@ -1,6 +1,7 @@
 package com.yizhanshi.talent.service;
 
 import com.yizhanshi.system.api.domain.SysUser;
+import com.yizhanshi.talent.domain.TalentLabel;
 import com.yizhanshi.talent.domain.vo.Talent;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface ITalentService {
     /**
      * 新增用户与标签关联
      */
-    public int insertTalentLabel(Long userStudentid,Long[] labelIds);
+    public int insertTalentLabel(TalentLabel talentLabel);
     /**
      * 人才查询
      */
@@ -21,5 +22,5 @@ public interface ITalentService {
     /**
      * 修改人才
      */
-    public  int updateTalent(Talent talnet);
+    public  void updateTalent(Talent talent);
 }

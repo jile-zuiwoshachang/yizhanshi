@@ -5,6 +5,7 @@ import com.yizhanshi.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class Label extends BaseEntity {
@@ -18,7 +19,7 @@ public class Label extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
     private String delFlag;
-
+    public Label(){}
     public Label(Long labelId, String labelName, String labelType, String status, String delFlag) {
         this.labelId = labelId;
         this.labelName = labelName;
@@ -34,7 +35,7 @@ public class Label extends BaseEntity {
     public void setLabelId(Long labelId) {
         this.labelId = labelId;
     }
-
+    @NotNull(message = "标签名称不可为null")
     public String getLabelName() {
         return labelName;
     }

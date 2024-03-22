@@ -28,15 +28,20 @@ public class LabelServiceImpl implements ILabelService {
      * @param labelId 标签id
      * @return 标签信息信息
      */
+    @Override
     public Label selectLabelById(Long  labelId) {
         return labelMapper.selectLabelById(labelId);
     }
-
+    @Override
+    public List<Label> selectLabelByIds(Long[]  labelIds) {
+        return labelMapper.selectLabelByIds(labelIds);
+    }
     /**
      * 新增标签信息
      * @param label
      * @return
      */
+    @Override
     public int insertLabel(Label label){
         return labelMapper.insertLabel(label);
     }
@@ -45,6 +50,7 @@ public class LabelServiceImpl implements ILabelService {
      * @param label
      * @return
      */
+    @Override
     public int updateLabel(Label label){
         return labelMapper.updateLabel(label);
     }
@@ -54,12 +60,14 @@ public class LabelServiceImpl implements ILabelService {
      * @param labelIds
      * @return
      */
+    @Override
     public int deleteLabel(Long[] labelIds){
         return labelMapper.deleteLabel(labelIds);
     }
     /**
      * 获取所有标签类型
      */
+    @Override
     public List<String> selectAllType( ){
         return labelMapper.selectAllType();
     }

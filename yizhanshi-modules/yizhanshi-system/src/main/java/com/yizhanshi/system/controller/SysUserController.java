@@ -337,9 +337,13 @@ public class SysUserController extends BaseController
     @InnerAuth
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/editByTalent")
-    public AjaxResult editByTalent(@Validated @RequestBody SysUser user)
+    public R<Boolean> editByTalent(@Validated @RequestBody SysUser user)
     {
         user.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(userService.updateUser(user));
+        if(userService.updateUser(user)>0){
+           return R.ok(Boolean.TRUE);
+        }else{
+            return R.fail("修改用户失败");
+        }
     }
 }

@@ -50,7 +50,7 @@
     </resultMap>
     <sql id="selectCourseApplyVo">
         select ca.apply_id, ca.apply_name, ca.user_studentid,ca.course_id,ca.apply_content,ca.apply_admin1,ca.apply_admin1_name,ca.apply_admin2,ca.apply_admin2_name,
-        ca.refuse_reason,ca.recall_status,ca.recall_reason, ca.status, ca.del_flag,ca.create_by, ca.create_time, ca.remark,
+        ca.refuse_reason,ca.recall_status,ca.recall_reason, ca.status, ca.del_flag,ca.create_by, ca.create_time, ca.update_by, ca.update_time,ca.remark,
         c.course_id,c.course_name,c.course_type,c.teacher_id,c.course_check,c.course_number,
         t.teacher_id, t.teacher_name, t.teacher_sex,t.teacher_age,t.teacher_studentid,t.teacher_description,
         t.teacher_picture,t.teacher_email,t.teacher_phone,t.teacher_qq,t.teacher_wechat

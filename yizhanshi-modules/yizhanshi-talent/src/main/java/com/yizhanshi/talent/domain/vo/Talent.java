@@ -1,5 +1,6 @@
 package com.yizhanshi.talent.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.system.api.domain.SysUser;
 import com.yizhanshi.talent.domain.Label;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * 返回给前端的人才类
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Talent {
     private SysUser sysUser;
     private List<Label> labels;

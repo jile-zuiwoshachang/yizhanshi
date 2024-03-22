@@ -12,6 +12,7 @@ import com.yizhanshi.talent.mapper.TalentLabelMapper;
 import com.yizhanshi.talent.service.ITalentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,27 +33,28 @@ public class TalentServiceImpl implements ITalentService {
     }
 
     @Override
-    public int insertTalentLabel(Long userStudentid, Long[] labelIds) {
-       return  talentLabelMapper.deleteTalentLabels(userStudentid, labelIds);
+    public int insertTalentLabel(TalentLabel talentLabel) {
+        return     talentLabelMapper.insertTalentLabel(talentLabel);
     }
     @Override
     public List<Talent> selectTalentList(Talent talent){
         return talentLabelMapper.selectTalentList(talent);
     }
     @Override
-    public int updateTalent(Talent talent){
+    @Transactional(rollbackFor = Exception.class)
+    public void updateTalent(Talent talent){
         //删除该用户拥有的所有标签
-        talentLabelMapper.deleteTalentLabelByUserStudentid(talent.getSysUser().getUserStudentid());
-        List<TalentLabel> list=new ArrayList<>();
         String studentid=talent.getSysUser().getUserStudentid();
+        talentLabelMapper.deleteTalentLabelByUserStudentid(studentid);
+        List<TalentLabel> list=new ArrayList<>();
         List<Label> labels=talent.getLabels();
         for(Label label:labels){
             TalentLabel talentLabel=new TalentLabel();
             talentLabel.setLabelId(label.getLabelId());
             talentLabel.setUserStudentid(studentid);
             list.add(talentLabel);
+            talentLabelMapper.insertTalentLabel(talentLabel);
         }
-        return talentLabelMapper.insertTalentLabel(list);
     }
 
 

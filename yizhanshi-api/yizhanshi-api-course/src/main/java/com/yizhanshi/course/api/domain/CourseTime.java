@@ -60,7 +60,7 @@ public class CourseTime extends BaseEntity {
     public void setCourseDay(Date courseDay) {
         this.courseDay = courseDay;
     }
-
+    @NotNull(message = "课程开始时间序号不可为null")
     public Long getTimeStartId() {
         return timeStartId;
     }
@@ -68,7 +68,7 @@ public class CourseTime extends BaseEntity {
     public void setTimeStartId(Long timeStartId) {
         this.timeStartId = timeStartId;
     }
-
+    @NotNull(message = "课程结束时间序号不可为null")
     public Long getTimeEndId() {
         return timeEndId;
     }

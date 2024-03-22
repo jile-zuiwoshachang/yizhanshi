@@ -6,6 +6,7 @@ import com.yizhanshi.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -93,7 +94,8 @@ public class Teacher extends BaseEntity {
     public void setTeacherPicture(String teacherPicture) {
         this.teacherPicture = teacherPicture;
     }
-
+    @Email(message = "邮箱格式不正确")
+    @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
     public String getTeacherEmail() {
         return teacherEmail;
     }

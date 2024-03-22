@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<sql id="selectCreditVo">
 		select c.credit_id,c.credit_content,c.credit_source,credit_source, c.user_studentid, c.credit_number, c.admin_name,
-		c.status, c.del_flag, c.create_by, c.create_time, c.remark,
+		c.status, c.del_flag, c.create_by, c.create_time,c.update_time,c.update_by, c.remark,
         from system_credit c
     </sql>
     

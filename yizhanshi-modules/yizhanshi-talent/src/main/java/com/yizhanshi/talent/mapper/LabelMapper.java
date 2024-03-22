@@ -21,6 +21,10 @@ public interface LabelMapper {
      */
     public Label selectLabelById(Long  labelId);
     /**
+     * 根据数组主键获取标签列表
+     */
+    public  List<Label> selectLabelByIds(Long[] labelIds);
+    /**
      * 新增标签信息
      * @param label
      * @return

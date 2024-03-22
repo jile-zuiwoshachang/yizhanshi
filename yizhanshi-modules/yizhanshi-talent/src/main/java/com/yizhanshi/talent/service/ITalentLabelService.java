@@ -1,14 +1,11 @@
-package com.yizhanshi.talent.mapper;
+package com.yizhanshi.talent.service;
 
 import com.yizhanshi.talent.domain.TalentLabel;
-import com.yizhanshi.talent.domain.vo.Talent;
 import org.apache.ibatis.annotations.Param;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
 
-public interface TalentLabelMapper {
-
+public interface ITalentLabelService  {
     /**
      * 通过学号查询拥有的标签
      *
@@ -20,10 +17,10 @@ public interface TalentLabelMapper {
     /**
      * 批量新增用户标签信息
      *
-     * @param talentLabel 关联类
+     * @param talentLabelList 用户标签列表
      * @return 结果
      */
-    public int insertTalentLabel(TalentLabel talentLabel);
+    public int insertTalentLabel(TalentLabel talentLabelList);
     /**
      * 通过用户学号删除所有的用户和标签关联
      *
@@ -54,21 +51,5 @@ public interface TalentLabelMapper {
      * @param labelIds 标签ids
      * @return 结果
      */
-    public int deleteTalentLabels(@Param("userStudentid") String userStudentid, @Param("labelIds") Long[] labelIds);
-
-    /**
-     * ************************其他业务*******************************
-     */
-    /**
-     * 人才查询
-     */
-    public List<Talent> selectTalentList(Talent talent);
-    /**
-     * 人才修改-用户修改
-     */
-    public int updateTalentUser(Talent talent);
-    /**
-     * 人才修改-标签修改
-     */
-    public int updateTalentLabel(Talent talent);
+    public int deleteTalentLabels( String userStudentid, Long[] labelIds);
 }

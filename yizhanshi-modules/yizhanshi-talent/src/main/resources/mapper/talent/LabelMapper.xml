@@ -19,7 +19,7 @@
 
     <sql id="selectLabelVo">
         select p.label_id, p.label_name, p.label_type,
-        p.status, p.del_flag,p.create_by, p.create_time, p.remark
+        p.status, p.create_by, p.create_time,p.update_time,p.update_by, p.remark
         from business_label p
     </sql>
     <select id="selectLabelList" parameterType="com.yizhanshi.talent.domain.Label" resultMap="LabelResult">
@@ -48,6 +48,14 @@
         <include refid="selectLabelVo">
         </include>
         where p.label_id=#{labelId}
+    </select>
+    <select id="selectLabelByIds" parameterType="Long" resultMap="LabelResult">
+        <include refid="selectLabelVo">
+        </include>
+        where p.label_id  in
+        <foreach collection="array" item="labelId" open="(" separator="," close=")">
+        #{labelId}
+    </foreach>
     </select>
 
     <insert id="insertLabel" parameterType="com.yizhanshi.talent.domain.Label" useGeneratedKeys="true" keyProperty="labelId">

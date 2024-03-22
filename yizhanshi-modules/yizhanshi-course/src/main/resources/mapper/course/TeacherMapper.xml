@@ -28,7 +28,7 @@
     <sql id="selectTeacherVo">
         select t.teacher_id, t.teacher_name, t.teacher_sex,t.teacher_age,t.teacher_studentid,t.teacher_description,
         t.teacher_picture,t.teacher_email,t.teacher_phone,t.teacher_qq,t.teacher_wechat,
-        t.status, t.del_flag,t.create_by, t.create_time, t.remark
+        t.status, t.del_flag,t.create_by, t.create_time,t.update_time,t.update_by,t.remark
         from business_teacher t
     </sql>
     <select id="selectTeacherList" parameterType="com.yizhanshi.course.api.domain.Teacher" resultMap="TeacherResult">

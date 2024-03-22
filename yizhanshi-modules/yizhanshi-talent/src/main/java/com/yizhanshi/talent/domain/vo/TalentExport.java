@@ -8,10 +8,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import javax.xml.soap.SAAJResult;
-import java.io.PipedReader;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
+
 public class TalentExport {
     private static final long serialVersionUID = 1L;
     /** 用户ID */
