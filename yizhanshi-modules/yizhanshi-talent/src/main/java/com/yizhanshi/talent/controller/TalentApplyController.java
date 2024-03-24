@@ -17,6 +17,7 @@ import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.system.api.RemoteCreditService;
 import com.yizhanshi.system.api.RemoteUserService;
 import com.yizhanshi.system.api.domain.SysCredit;
+import com.yizhanshi.system.api.domain.SysUser;
 import com.yizhanshi.talent.domain.TalentApply;
 import com.yizhanshi.talent.domain.constants.ApplyConstants;
 import com.yizhanshi.talent.domain.vo.Talent;
@@ -52,7 +53,7 @@ public class TalentApplyController extends BaseController {
     @Value("${app.applyNums}")
     private int applyNums;
     /**
-     * 人才预约查询
+     * 人才预约查询——管理员使用
      *
      */
     @RequiresPermissions("business:talentApply:list")
@@ -60,7 +61,28 @@ public class TalentApplyController extends BaseController {
     public TableDataInfo list(@RequestBody TalentApply talentApply) {
         startPage();
         List<TalentApply> list = talentApplyService.selectTalentApplyList(talentApply);
-
+        list.forEach(talentApplyTemp ->{
+           SysUser applyUser=remoteUserService.getUserInfo(talentApplyTemp.getUserStudentid(),SecurityConstants.INNER).getData().getSysUser();
+            applyUser.setUserPassword(null);
+            talentApplyTemp.setApplyUser(applyUser);
+        });
+        return getDataTable(list);
+    }
+    /**
+     * 查看自己的个人预约记录
+     * 需传递用户自己的学号
+     *
+     */
+    @RequiresPermissions("business:talentApply:mylist")
+    @GetMapping("/mylist")
+    public TableDataInfo mylist(@RequestBody TalentApply talentApply) {
+        startPage();
+        List<TalentApply> list = talentApplyService.selectTalentApplyList(talentApply);
+        list.forEach(talentApplyTemp ->{
+            SysUser applyUser=remoteUserService.getUserInfo(talentApplyTemp.getUserStudentid(),SecurityConstants.INNER).getData().getSysUser();
+            applyUser.setUserPassword(null);
+            talentApplyTemp.setApplyUser(applyUser);
+        });
         return getDataTable(list);
     }
     /**
@@ -70,7 +92,11 @@ public class TalentApplyController extends BaseController {
     @RequiresPermissions("business:talentApply:query")
     @GetMapping("/{applyId}")
     public AjaxResult query(@PathVariable Long  applyId) {
-        return success(talentApplyService.selectTalentApplyById(applyId));
+        TalentApply talentApply= talentApplyService.selectTalentApplyById(applyId);
+        SysUser applyUser=remoteUserService.getUserInfo(talentApply.getUserStudentid(),SecurityConstants.INNER).getData().getSysUser();
+        applyUser.setUserPassword(null);
+        talentApply.setApplyUser(applyUser);
+        return success(talentApply);
     }
 
     /**
@@ -89,7 +115,7 @@ public class TalentApplyController extends BaseController {
             TalentApplyExport talentApplyExport = new TalentApplyExport();
             BeanUtils.copyProperties(talentApplyTemp, talentApplyExport);
             // 根据数据库查询加入新值
-            String talentName = remoteUserService.getUserInfo(talentApplyTemp.getTalentStudentid(), SecurityConstants.INNER).getData().getUsername();
+            String talentName = remoteUserService.getUserInfo(talentApplyTemp.getTalentStudentid(), SecurityConstants.INNER).getData().getSysUser().getUserName();
             talentApplyExport.setTalentName(talentName);
             // 添加到新列表
             talentApplyExportList.add(talentApplyExport);
@@ -109,17 +135,18 @@ public class TalentApplyController extends BaseController {
     {
         //判断当天的时间共有几条
         Map<String,Object> params=new HashMap<>();
-        params.put("chooseDay",DateUtils.dateTimeTalent());
+        params.put("beginTime",DateUtils.dateTimeTalent());
         talentApply.setParams(params);
         if(talentApplyService.selectTalentApplyList(talentApply).size()<=applyNums){
             talentApply.setCreateBy(SecurityUtils.getUsername());
             return toAjax(talentApplyService.insertTalentApply(talentApply));
         }else{
-            return error("今天你的预约已经到达上限，请明天再试");
+            return error("今天你的预约已经到达上限"+applyNums+"次，请明天再试");
         }
     }
     /**
-     * 修改预约——都可以使用
+     * 修改预约——管理员使用
+     *
      */
     @Log(title = "人才预约管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -129,6 +156,26 @@ public class TalentApplyController extends BaseController {
         return toAjax(talentApplyService.updateTalentApply(talentApply));
     }
     /**
+     * 审核
+     * 多选同意
+     * 单选删除
+     */
+    @RequiresPermissions("business:talentApply:check")
+    @Log(title = "人才预约管理", businessType = BusinessType.UPDATE)
+    @PutMapping("/check")
+    public AjaxResult check(@RequestBody List<TalentApply> talentApplyList){
+        for(TalentApply temp:talentApplyList) {
+            if (StringUtils.equals(temp.getStatus(), ApplyConstants.AGREESTATUS)) {
+                temp.setStatus(ApplyConstants.AGREESTATUS);
+            }
+            temp.setUpdateBy(SecurityUtils.getUsername());
+            //修改为不可撤销
+            temp.setRecallStatus(ApplyConstants.RECALLNOT);
+        }
+       talentApplyService.updateTalentApplyList(talentApplyList);
+        return success();
+    }
+    /**
      * 删除课程预约——管理员使用
      */
     @RequiresPermissions("business:talentApply:remove")
@@ -136,7 +183,8 @@ public class TalentApplyController extends BaseController {
     @DeleteMapping("/{applyIds}")
     public AjaxResult removeTalentApply(@PathVariable Long[] applyIds)
     {
-        return toAjax(talentApplyService.deleteTalentApply(applyIds));
+        talentApplyService.deleteTalentApply(applyIds);
+        return success();
     }
     /**
      * 用户撤销预约
@@ -157,22 +205,6 @@ public class TalentApplyController extends BaseController {
         }
         return  error("撤销失败或者参数不足");
     }
-    /**
-     * 信誉管理
-     *
-     * @param sysCredit
-     * @return
-     */
-    @RequiresPermissions("business:talentApply:credit")
-    @PostMapping("/credit")
-    public AjaxResult credit(@RequestBody SysCredit sysCredit){
-        sysCredit.setCreditSource("管理员操作");
-        sysCredit.setAdminName(SecurityUtils.getUsername());
-        R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
-        if(R.FAIL == booleanR.getCode()){
-            throw new ServiceException(booleanR.getMsg());
-        }
-        return success();
-    }
+
 
 }

@@ -6,7 +6,7 @@
 
     <resultMap type="com.yizhanshi.talent.domain.TalentComment" id="TalentCommentResult">
         <result property="commentId"     column="comment_id"      />
-        <result property="applyId"     column="apply_id"      />
+        <result property="talentStudentid"     column="talent_studentid"      />
         <result property="commentStar"     column="comment_star"      />
         <result property="commentContent"     column="comment_content"      />
         <result property="status"     column="status"      />
@@ -16,7 +16,7 @@
         <result property="updateTime"     column="update_time"      />
         <result property="updateBy"     column="update_by"      />
         <result property="remark"     column="remark"      />
-        <collection  property="talentApplys"   javaType="com.yizhanshi.talent.domain.TalentApply"  resultMap="TalentApplyResult" />
+        <collection  property="talent"   javaType="com.yizhanshi.talent.domain.TalentApply"  resultMap="TalentApplyResult" />
     </resultMap>
     <resultMap type="com.yizhanshi.talent.domain.TalentApply" id="TalentApplyResult">
     <id     property="applyId"       column="apply_id"      />

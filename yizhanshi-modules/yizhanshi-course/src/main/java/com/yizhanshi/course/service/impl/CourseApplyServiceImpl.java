@@ -45,17 +45,10 @@ public class CourseApplyServiceImpl implements ICourseApplyService {
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public   int updateCourseApplyList(List<CourseApply> courseApplyList){
-        int rows=0;
+    public   void updateCourseApplyList(List<CourseApply> courseApplyList){
         for(CourseApply item:courseApplyList){
-            int result = courseApplyMapper.updateCourseApply(item);
-            if (result == 0) {
-                // 当某次更新失败时，抛出异常以触发事务回滚
-                throw new ServiceException("更新失败，事务回滚");
-            }
-            rows += result;
+            courseApplyMapper.updateCourseApply(item);
         }
-        return rows;
     }
     @Override
     public  int deleteCourseApply(Long[] applyIds){

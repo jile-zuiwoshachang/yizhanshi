@@ -38,5 +38,9 @@ public interface TalentApplyMapper {
      * 查看该人才有多少个被预约记录
      */
     public int selectNumberByApply(String talentStudentid);
+    /**
+     * 获取applyIds的所有评论记录
+     */
+    public Long[] selectAllCommentIdsByApplyIds(Long[] applyIds);
 
 }

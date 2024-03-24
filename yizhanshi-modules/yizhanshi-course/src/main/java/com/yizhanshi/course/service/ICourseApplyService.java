@@ -36,7 +36,7 @@ public interface ICourseApplyService {
     /**
      * 多选修改课程预约信息
      */
-    public  int updateCourseApplyList(List<CourseApply> courseApplyList);
+    public  void updateCourseApplyList(List<CourseApply> courseApplyList);
     /**
      * 删除选课信息
      */

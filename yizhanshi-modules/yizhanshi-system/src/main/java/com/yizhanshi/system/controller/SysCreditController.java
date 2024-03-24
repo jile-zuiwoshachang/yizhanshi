@@ -69,9 +69,37 @@ public class SysCreditController extends BaseController {
      * @return
      */
     @Log(title = "信誉管理", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult addUserCredit(@Validated @RequestBody SysCredit credit) {
+        String userStudentid=credit.getUserStudentid();
+        if(StringUtils.isEmpty(userStudentid)){
+            return error("学号为空，请联系管理员");
+        }
+        SysUser sysUser=userMapper.selectUserByUserStudentid(userStudentid);
+        if(ObjectUtils.isEmpty(sysUser)){
+            return error("该用户不存在");
+        }
+        int newScore=sysUser.getUserScore()+credit.getCreditNumber();
+        if(newScore>100 || newScore<0){
+            return error("该用户信誉已经超过或低于限定范围，请重新修改信誉分");
+        }
+        credit.setCreateBy(SecurityUtils.getUsername());
+        if(creditMapper.insertCredit(credit)>0){
+            userMapper.updateUserScore(newScore,userStudentid);
+            return success();
+        }else{
+            return error("新增信誉失败");
+        }
+    }
+    /**
+     * 新增信誉信息
+     * @param credit
+     * @return
+     */
+    @Log(title = "信誉管理", businessType = BusinessType.INSERT)
     @InnerAuth
     @PostMapping
-    public R<Boolean> addUserCredit(@Validated @RequestBody SysCredit credit) {
+    public R<Boolean> addUserCreditByInner(@Validated @RequestBody SysCredit credit) {
         String userStudentid=credit.getUserStudentid();
         if(StringUtils.isEmpty(userStudentid)){
             return R.fail("学号为空，请联系管理员");
@@ -91,7 +119,6 @@ public class SysCreditController extends BaseController {
             return R.fail("新增信誉失败");
         }
     }
-
     /**
      * 不需要修改函数
      */

@@ -198,7 +198,8 @@ public class CourseApplyController extends BaseController {
             //修改为不可撤销
             temp.setRecallStatus(ApplyConstants.RECALLNOT);
         }
-        return   toAjax(courseApplyService.updateCourseApplyList(courseApplyList));
+        courseApplyService.updateCourseApplyList(courseApplyList);
+        return success();
     }
     /**
      * 二级管理员审核课程预约
@@ -216,7 +217,8 @@ public class CourseApplyController extends BaseController {
             //修改为不可撤销
             temp.setRecallStatus(ApplyConstants.RECALLNOT);
         }
-        return   toAjax(courseApplyService.updateCourseApplyList(courseApplyList));
+        courseApplyService.updateCourseApplyList(courseApplyList);
+        return success();
     }
     /**
      * 用户撤销预约
@@ -245,22 +247,6 @@ public class CourseApplyController extends BaseController {
         return  error("撤销失败或者参数不足");
     }
 
-    /**
-     * 信誉管理
-     *
-     * @param sysCredit
-     * @return
-     */
-    @RequiresPermissions("business:courseApply:credit")
-    @PostMapping("/credit")
-    public AjaxResult credit(@RequestBody SysCredit sysCredit){
-        sysCredit.setCreditSource("管理员操作");
-        sysCredit.setAdminName(SecurityUtils.getUsername());
-        R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
-        if(R.FAIL == booleanR.getCode()){
-            throw new ServiceException(booleanR.getMsg());
-        }
-        return success();
-    }
+
 
 }

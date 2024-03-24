@@ -1,5 +1,6 @@
 package com.yizhanshi.course.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
 
@@ -188,6 +189,7 @@ public class CourseApplyExport {
     public void setApplyAdmin2Name(String applyAdmin2Name) {
         this.applyAdmin2Name = applyAdmin2Name;
     }
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

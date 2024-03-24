@@ -27,9 +27,13 @@ public interface ITalentApplyService {
      */
     public  int updateTalentApply(TalentApply talentApply);
     /**
+     * 多选修改人才预约信息
+     */
+    public void updateTalentApplyList(List<TalentApply> talentApplyList);
+    /**
      * 删除人才预约信息
      */
-    public int deleteTalentApply(Long[] applyIds);
+    public void deleteTalentApply(Long[] applyIds);
     /**
      * 新增人才预约信息
      */

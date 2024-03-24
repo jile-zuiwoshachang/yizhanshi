@@ -12,9 +12,9 @@
         <result property="applyContent"     column="apply_content"    />
         <result property="applyStartDay"        column="apply_start_day"        />
         <result property="applyEndDay"        column="apply_end_day"        />
-        <result property="recallReason"     column="recallReason"    />
-        <result property="refuseReason"     column="refuseReason"    />
-        <result property="recallStatus"     column="recallStatus"    />
+        <result property="recallReason"     column="recall_reason"    />
+        <result property="refuseReason"     column="refuse_reason"    />
+        <result property="recallStatus"     column="recall_status"    />
         <result property="status"     column="status"    />
         <result property="delFlag"     column="del_flag"    />
         <result property="createTime"     column="create_time"    />
@@ -22,7 +22,7 @@
         <result property="updateTime"     column="update_time"    />
         <result property="updateBy"     column="update_by"    />
         <result property="remark"     column="remark"    />
-        <collection  property="talents"   javaType="com.yizhanshi.system.api.domain.SysUser"  resultMap="TalentResult" />
+        <collection  property="talent"   javaType="com.yizhanshi.system.api.domain.SysUser"  resultMap="TalentResult" />
     </resultMap>
     <resultMap id="TalentResult" type="com.yizhanshi.system.api.domain.SysUser">
         <id     property="userId"       column="user_id"      />
@@ -65,8 +65,8 @@
         <if test="talentStudentid != null and talentStudentid != ''">
             AND ta.talent_studentid like concat('%', #{talentStudentid}, '%')
         </if>
-        <if test="talents!=null and talents.userName != null and talents.userName != ''">
-            AND u.user_name like concat('%', #{talents.userName}, '%')
+        <if test="talent!=null and talent.userName != null and talent.userName != ''">
+            AND u.user_name like concat('%', #{talent.userName}, '%')
         </if>
         <if test="status != null and status != ''">
             AND ta.status = #{status}
@@ -147,6 +147,15 @@
         from business_talent_apply
         where talent_studentid=#{talentStudentid} and del_flag='0' and status in ('0','2')
     </select>
+    <select id="selectAllCommentIdsByApplyIds" parameterType="Long" resultType="Long">
+        select comment_id
+        from business_talent_apply
+        where del_flag='0' and  comment_id IS NOT NULL and apply_id in
+        <foreach collection="array" item="applyId" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </select>
+
 
 
 

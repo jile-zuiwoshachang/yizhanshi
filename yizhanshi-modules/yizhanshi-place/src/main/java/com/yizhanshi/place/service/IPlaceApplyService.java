@@ -32,10 +32,10 @@ public interface IPlaceApplyService {
 
     /**
      * 多选修改场地预约单
-     * @param placeApply
+     * @param placeApplyList
      * @return
      */
-    public void updatePlaceApplyList(List<PlaceApply> placeApply);
+    public void updatePlaceApplyList(List<PlaceApply> placeApplyList);
     /**
      * 修改场地预约单
      * @param placeApply

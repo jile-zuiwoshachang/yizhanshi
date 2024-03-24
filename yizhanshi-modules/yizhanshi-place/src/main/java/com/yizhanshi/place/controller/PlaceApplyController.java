@@ -309,24 +309,6 @@ public class PlaceApplyController extends BaseController {
         return error("撤销失败或者参数不足");
     }
 
-    /**
-     * 信誉管理
-     *
-     * @param sysCredit
-     * @return
-     */
-    @RequiresPermissions("business:placeApply:credit")
-    @Log(title = "场地预约管理", businessType = BusinessType.INSERT)
-    @PostMapping("/credit")
-    public AjaxResult credit(@RequestBody SysCredit sysCredit) {
-        sysCredit.setCreditSource("管理员操作");
-        sysCredit.setAdminName(SecurityUtils.getUsername());
-        R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
-        if (R.FAIL == booleanR.getCode()) {
-            throw new ServiceException(booleanR.getMsg());
-        }
-        return success();
-    }
 
     @InnerAuth
     @PostMapping("/timeConflictByPlace")

@@ -65,8 +65,8 @@ public class PlaceApplyServiceImpl implements IPlaceApplyService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updatePlaceApplyList(List<PlaceApply> placeApply){
-        for(PlaceApply item:placeApply){
+    public void updatePlaceApplyList(List<PlaceApply> placeApplyList){
+        for(PlaceApply item:placeApplyList){
             placeApplyMapper.updatePlaceApply(item);
         }
     }

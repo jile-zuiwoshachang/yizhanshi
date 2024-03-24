@@ -1,5 +1,6 @@
 package com.yizhanshi.place.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.place.api.domain.Place;
@@ -109,7 +110,7 @@ public class PlaceApplyTimeExport {
     public void setStatus(String status) {
         this.status = status;
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

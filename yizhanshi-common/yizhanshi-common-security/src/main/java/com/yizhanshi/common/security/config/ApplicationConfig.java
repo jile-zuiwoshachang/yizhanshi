@@ -18,5 +18,6 @@ public class ApplicationConfig
     public Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomization()
     {
         return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.timeZone(TimeZone.getDefault());
+     //   return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.timeZone("GMT+8:00");
     }
 }

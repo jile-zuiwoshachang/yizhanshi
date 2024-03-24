@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * 人才模块
- *
+ * EnableCustomConfig config配置类
  * @author hejiale
  */
 @EnableCustomConfig

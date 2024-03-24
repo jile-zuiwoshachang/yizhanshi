@@ -1,7 +1,9 @@
 package com.yizhanshi.talent.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
 
@@ -34,11 +36,13 @@ public class TalentApplyExport {
     private String recallReason;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @Excel(name = "创建人")
+    private String createBy;
 
     public TalentApplyExport() {
     }
 
-    public TalentApplyExport(Long applyId, String applyName, String userStudentid, String talentStudentid, String talentName, String applyContent, Date applyStartDay, Date applyEndDay, String status, String refuseReason, String recallStatus, String recallReason, Date createTime) {
+    public TalentApplyExport(Long applyId, String applyName, String userStudentid, String talentStudentid, String talentName, String applyContent, Date applyStartDay, Date applyEndDay, String status, String refuseReason, String recallStatus, String recallReason, Date createTime, String createBy) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -52,6 +56,15 @@ public class TalentApplyExport {
         this.recallStatus = recallStatus;
         this.recallReason = recallReason;
         this.createTime = createTime;
+        this.createBy = createBy;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
     public Long getApplyId() {
@@ -149,12 +162,32 @@ public class TalentApplyExport {
     public void setRecallReason(String recallReason) {
         this.recallReason = recallReason;
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("applyId", applyId)
+                .append("applyName", applyName)
+                .append("userStudentid", userStudentid)
+                .append("talentStudentid", talentStudentid)
+                .append("talentName", talentName)
+                .append("applyContent", applyContent)
+                .append("applyStartDay", applyStartDay)
+                .append("applyEndDay", applyEndDay)
+                .append("status", status)
+                .append("refuseReason", refuseReason)
+                .append("recallStatus", recallStatus)
+                .append("recallReason", recallReason)
+                .append("createTime", createTime)
+                .append("createBy", createBy)
+                .toString();
     }
 }

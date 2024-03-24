@@ -1,10 +1,12 @@
 package com.yizhanshi.talent.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
 import com.yizhanshi.system.api.domain.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class TalentApply extends BaseEntity {
@@ -33,14 +35,24 @@ public class TalentApply extends BaseEntity {
     @Excel(name = "可撤销标志",readConverterExp = "0=可撤销,1=不可撤销")
     private String recallStatus;
     //人才信息
-    private SysUser talents;
+    private SysUser talent;
+    //预约人信息
+    private SysUser applyUser;
 
-    public SysUser getTalents() {
-        return talents;
+    public SysUser getApplyUser() {
+        return applyUser;
     }
 
-    public void setTalents(SysUser talents) {
-        this.talents = talents;
+    public void setApplyUser(SysUser applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public SysUser getTalent() {
+        return talent;
+    }
+
+    public void setTalent(SysUser talent) {
+        this.talent = talent;
     }
 
     public Long getApplyId() {
@@ -50,7 +62,7 @@ public class TalentApply extends BaseEntity {
     public void setApplyId(Long applyId) {
         this.applyId = applyId;
     }
-
+    @NotNull(message = "申请人名称不可为null")
     public String getApplyName() {
         return applyName;
     }
@@ -58,7 +70,7 @@ public class TalentApply extends BaseEntity {
     public void setApplyName(String applyName) {
         this.applyName = applyName;
     }
-
+    @NotNull(message = "申请人学号不可为null")
     public String getUserStudentid() {
         return userStudentid;
     }
@@ -66,7 +78,7 @@ public class TalentApply extends BaseEntity {
     public void setUserStudentid(String userStudentid) {
         this.userStudentid = userStudentid;
     }
-
+    @NotNull(message = "人才学号不可为null")
     public String getTalentStudentid() {
         return talentStudentid;
     }
@@ -82,7 +94,7 @@ public class TalentApply extends BaseEntity {
     public void setApplyContent(String applyContent) {
         this.applyContent = applyContent;
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     public Date getApplyStartDay() {
         return applyStartDay;
     }
@@ -90,7 +102,7 @@ public class TalentApply extends BaseEntity {
     public void setApplyStartDay(Date applyStartDay) {
         this.applyStartDay = applyStartDay;
     }
-
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     public Date getApplyEndDay() {
         return applyEndDay;
     }
@@ -154,7 +166,8 @@ public class TalentApply extends BaseEntity {
                 .append("refuseReason", refuseReason)
                 .append("recallReason", recallReason)
                 .append("recallStatus", recallStatus)
-                .append("talents", talents)
+                .append("talent", talent)
+                .append("applyUser", applyUser)
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
