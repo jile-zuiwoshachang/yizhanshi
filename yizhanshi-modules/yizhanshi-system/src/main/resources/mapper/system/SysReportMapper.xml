@@ -126,8 +126,8 @@
 
 
     <delete id="deleteReportByIds" >
-        delete from system_report where report_id in
-        <foreach item="reportId" collection="array" open="(" separator="," close=")">
+        update system_report set del_flag = '2' where report_id in
+        <foreach collection="array" item="reportId" open="(" separator="," close=")">
             #{reportId}
         </foreach>
     </delete>

@@ -1,5 +1,6 @@
 package com.yizhanshi.talent.controller;
 
+import com.yizhanshi.common.core.constant.CacheConstants;
 import com.yizhanshi.common.core.utils.StringUtils;
 import com.yizhanshi.common.core.utils.poi.ExcelUtil;
 import com.yizhanshi.common.core.web.controller.BaseController;
@@ -7,11 +8,13 @@ import com.yizhanshi.common.core.web.domain.AjaxResult;
 import com.yizhanshi.common.core.web.page.TableDataInfo;
 import com.yizhanshi.common.log.annotation.Log;
 import com.yizhanshi.common.log.enums.BusinessType;
+import com.yizhanshi.common.redis.service.RedisService;
 import com.yizhanshi.common.security.annotation.RequiresPermissions;
 import com.yizhanshi.common.security.utils.SecurityUtils;
 import com.yizhanshi.system.api.domain.SysRole;
 import com.yizhanshi.talent.domain.Label;
 import com.yizhanshi.talent.domain.TalentLabel;
+import com.yizhanshi.talent.domain.vo.GoodReview;
 import com.yizhanshi.talent.domain.vo.Talent;
 import com.yizhanshi.talent.domain.vo.TalentExport;
 import com.yizhanshi.talent.service.ILabelService;
@@ -39,6 +42,8 @@ public class TalentController extends BaseController {
     ITalentLabelService talentLabelService;
     @Autowired
     ILabelService labelService;
+    @Autowired
+    RedisService redisService;
 
     /**
      * 人才查询
@@ -50,12 +55,15 @@ public class TalentController extends BaseController {
         startPage();
         List<Talent> list = talentService.selectTalentList(talent);
         list.forEach(talentTemp -> {
-            Long[] labelIds = talentLabelService.selectLabelIdsByUserStudentid(talentTemp.getSysUser().getUserStudentid()).stream().toArray(Long[]::new);
+            String userStudentid=talentTemp.getSysUser().getUserStudentid();
+            Long[] labelIds = talentLabelService.selectLabelIdsByUserStudentid(userStudentid).stream().toArray(Long[]::new);
             List<Label> labelList=new ArrayList<>();
             if(labelIds.length!=0){
                 labelList = labelService.selectLabelByIds(labelIds);
             }
             talentTemp.setLabels(labelList);
+            GoodReview goodReview= redisService.getCacheObject(CacheConstants.BUS_COMMENT_KEY+userStudentid);
+            talentTemp.setGoodReview(goodReview);
         });
         return getDataTable(list);
     }

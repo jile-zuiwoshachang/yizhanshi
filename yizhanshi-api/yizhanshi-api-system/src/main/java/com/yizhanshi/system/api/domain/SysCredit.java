@@ -24,7 +24,7 @@ public class SysCredit extends BaseEntity {
     private Long creditId;
     @Excel(name = "信誉操作原因")
     private String creditContent;
-    @Excel(name = "信誉操作来源", prompt = "自己操作 管理员操作 系统自动操作")
+    @Excel(name = "信誉操作来源", prompt = "0=自己操作,1=管理员操作,2=系统操作")
     private String creditSource;
     /** 学号 */
     @Excel(name = "用户学号", type = Excel.Type.EXPORT)
@@ -36,9 +36,9 @@ public class SysCredit extends BaseEntity {
     @Excel(name = "管理员姓名")
     private String adminName;
 
-    @Excel(name = "状态（0启用 1停用）")
+    @Excel(name = "状态",readConverterExp = "0=启用,1=停用")
     private String status;
-    @Excel(name = "删除标志（0存在 1删除）")
+    @Excel(name = "删除标志（0存在 2删除）")
     private String delFlag;
     public SysCredit()
     {
@@ -84,7 +84,7 @@ public class SysCredit extends BaseEntity {
     public void setCreditSource(String creditSource) {
         this.creditSource = creditSource;
     }
-
+    @NotNull(message = "用户学号不可为空")
     public String getUserStudentid() {
         return userStudentid;
     }

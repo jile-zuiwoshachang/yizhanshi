@@ -53,6 +53,18 @@ public class SysCreditController extends BaseController {
         List<SysCredit> list = creditService.selectCreditList(credit);
         return getDataTable(list);
     }
+    /**
+     * 获取信誉列表
+     * 获取自己的信誉列表
+     */
+    @RequiresPermissions("system:credit:mylist")
+    @GetMapping("/mylist")
+    public TableDataInfo mylist(@RequestBody SysCredit credit)
+    {
+        startPage();
+        List<SysCredit> list = creditService.selectCreditList(credit);
+        return getDataTable(list);
+    }
     @Log(title = "信誉管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:credit:export")
     @PostMapping("/export")
@@ -69,12 +81,10 @@ public class SysCreditController extends BaseController {
      * @return
      */
     @Log(title = "信誉管理", businessType = BusinessType.INSERT)
+    @RequiresPermissions("system:credit:add")
     @PostMapping
     public AjaxResult addUserCredit(@Validated @RequestBody SysCredit credit) {
         String userStudentid=credit.getUserStudentid();
-        if(StringUtils.isEmpty(userStudentid)){
-            return error("学号为空，请联系管理员");
-        }
         SysUser sysUser=userMapper.selectUserByUserStudentid(userStudentid);
         if(ObjectUtils.isEmpty(sysUser)){
             return error("该用户不存在");
@@ -98,7 +108,7 @@ public class SysCreditController extends BaseController {
      */
     @Log(title = "信誉管理", businessType = BusinessType.INSERT)
     @InnerAuth
-    @PostMapping
+    @PostMapping("/addByInner")
     public R<Boolean> addUserCreditByInner(@Validated @RequestBody SysCredit credit) {
         String userStudentid=credit.getUserStudentid();
         if(StringUtils.isEmpty(userStudentid)){
@@ -131,7 +141,8 @@ public class SysCreditController extends BaseController {
     @DeleteMapping("/{creditIds}")
     public AjaxResult remove(@PathVariable Long[] creditIds)
     {
-        return toAjax(creditService.deleteCreditByIds(creditIds));
+        creditService.deleteCreditByIds(creditIds);
+        return success();
     }
 
 }

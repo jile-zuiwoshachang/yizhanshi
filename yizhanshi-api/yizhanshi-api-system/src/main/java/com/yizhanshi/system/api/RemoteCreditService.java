@@ -26,6 +26,6 @@ public interface RemoteCreditService {
      * @param source 请求来源
      * @return 结果
      */
-    @PostMapping("/credit")
-    public R<Boolean> addUserCredit(@RequestBody SysCredit sysCredit, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    @PostMapping("/credit/addByInner")
+    public R<Boolean> addUserCreditByInner(@RequestBody SysCredit sysCredit, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 }

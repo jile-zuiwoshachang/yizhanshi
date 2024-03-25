@@ -33,7 +33,7 @@ public interface ITalentCommentService {
      * @param TalentComment 人才评价信息
      * @return 结果
      */
-    public int insertTalentComment(TalentComment TalentComment);
+    public void insertTalentComment(TalentComment TalentComment);
 
     /**
      * 修改人才评价
@@ -49,5 +49,20 @@ public interface ITalentCommentService {
      * @param commentIds 需要删除的人才评价ID
      * @return 结果
      */
-    public int deleteTalentCommentByIds(Long[] commentIds);
+    public void deleteTalentCommentByIds(Long[] commentIds);
+    /**
+     * 以下是初始化到缓存
+     */
+    /**
+     * 加载好评缓存数据
+     */
+    public void loadingReviewCache();
+    /**
+     * 清空评价类类缓存数据
+     */
+    public void clearReviewCache();
+    /**
+     * 重置评价数据
+     */
+    public void resetConfigCache();
 }

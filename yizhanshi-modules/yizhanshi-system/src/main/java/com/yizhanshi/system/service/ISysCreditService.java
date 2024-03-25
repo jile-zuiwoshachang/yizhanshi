@@ -24,5 +24,5 @@ public interface ISysCreditService {
      * @param creditIds 需要删除的信誉ID
      * @return 结果
      */
-    public int deleteCreditByIds(Long[] creditIds);
+    public void deleteCreditByIds(Long[] creditIds);
 }

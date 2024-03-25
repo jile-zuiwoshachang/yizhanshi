@@ -30,7 +30,7 @@ public class RemoteCreditFallbackFactory implements FallbackFactory<RemoteCredit
         return new RemoteCreditService()
         {
             @Override
-            public R<Boolean> addUserCredit(SysCredit sysCredit, String source)
+            public R<Boolean> addUserCreditByInner(SysCredit sysCredit, String source)
             {
                 return R.fail("修改用户信誉失败:" + throwable.getMessage());
             }

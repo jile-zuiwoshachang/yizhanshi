@@ -41,6 +41,18 @@ public class SysReportController extends BaseController {
         List<SysReport> list = reportService.selectReportList(report);
         return getDataTable(list);
     }
+    /**
+     * 获取举报信息列表
+     * 获取个人举报列表
+     */
+    @RequiresPermissions("system:report:mylist")
+    @GetMapping("/mylist")
+    public TableDataInfo mylist(@RequestBody SysReport report)
+    {
+        startPage();
+        List<SysReport> list = reportService.selectReportList(report);
+        return getDataTable(list);
+    }
 
     /**
      * 根据举报信息编号获取详细信息
@@ -52,8 +64,8 @@ public class SysReportController extends BaseController {
         return success(reportService.selectReportById(reportId));
     }
 
-    @Log(title = "人才预约管理", businessType = BusinessType.EXPORT)
-    @RequiresPermissions("business:talentApply:export")
+    @Log(title = "举报信息", businessType = BusinessType.EXPORT)
+    @RequiresPermissions("system:report:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody SysReport report)
     {
@@ -74,7 +86,7 @@ public class SysReportController extends BaseController {
     }
 
     /**
-     * 修改举报信息
+     * 修改举报信息  管理员功能
      */
     @RequiresPermissions("system:report:edit")
     @Log(title = "举报信息", businessType = BusinessType.UPDATE)

@@ -1,20 +1,29 @@
 package com.yizhanshi.talent.service.impl;
 
+import com.yizhanshi.common.core.constant.CacheConstants;
 import com.yizhanshi.common.core.constant.SecurityConstants;
 import com.yizhanshi.common.core.domain.R;
 import com.yizhanshi.common.core.exception.ServiceException;
+import com.yizhanshi.common.redis.service.RedisService;
 import com.yizhanshi.system.api.RemoteUserService;
 import com.yizhanshi.system.api.domain.SysUser;
 import com.yizhanshi.talent.domain.Label;
+import com.yizhanshi.talent.domain.TalentComment;
 import com.yizhanshi.talent.domain.TalentLabel;
+import com.yizhanshi.talent.domain.vo.GoodReview;
 import com.yizhanshi.talent.domain.vo.Talent;
+import com.yizhanshi.talent.mapper.TalentApplyMapper;
+import com.yizhanshi.talent.mapper.TalentCommentMapper;
 import com.yizhanshi.talent.mapper.TalentLabelMapper;
 import com.yizhanshi.talent.service.ITalentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 @Service
 public class TalentServiceImpl implements ITalentService {
@@ -22,6 +31,8 @@ public class TalentServiceImpl implements ITalentService {
     TalentLabelMapper talentLabelMapper;
     @Autowired
     RemoteUserService remoteUserService;
+
+
 
     @Override
     public Boolean updateUser(SysUser sysUser) {
@@ -56,7 +67,5 @@ public class TalentServiceImpl implements ITalentService {
             talentLabelMapper.insertTalentLabel(talentLabel);
         }
     }
-
-
 
 }

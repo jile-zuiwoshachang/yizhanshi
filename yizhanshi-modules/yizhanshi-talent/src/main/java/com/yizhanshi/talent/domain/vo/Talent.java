@@ -14,6 +14,7 @@ import java.util.List;
 public class Talent {
     private SysUser sysUser;
     private List<Label> labels;
+   private GoodReview goodReview;
 
     public SysUser getSysUser() {
         return sysUser;
@@ -31,11 +32,20 @@ public class Talent {
         this.labels = labels;
     }
 
+    public GoodReview getGoodReview() {
+        return goodReview;
+    }
+
+    public void setGoodReview(GoodReview goodReview) {
+        this.goodReview = goodReview;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("sysUser", sysUser)
                 .append("labels", labels)
+                .append("goodReview", goodReview)
                 .toString();
     }
 }

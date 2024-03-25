@@ -65,6 +65,7 @@ public class TalentCommentController extends BaseController {
     }
     /**
      * 新增人才评价信息
+     * 根据applyId同时新增talentApply表和talentComment表
      */
     @RequiresPermissions("system:talentComment:add")
     @Log(title = "人才评价信息", businessType = BusinessType.INSERT)
@@ -72,7 +73,8 @@ public class TalentCommentController extends BaseController {
     public AjaxResult add(@Validated @RequestBody TalentComment talentComment)
     {
         talentComment.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(talentCommentService.insertTalentComment(talentComment));
+        talentCommentService.insertTalentComment(talentComment);
+        return success();
     }
 
     /**
@@ -95,6 +97,7 @@ public class TalentCommentController extends BaseController {
     @DeleteMapping("/{commentIds}")
     public AjaxResult remove(@PathVariable Long[] commentIds)
     {
-        return toAjax(talentCommentService.deleteTalentCommentByIds(commentIds));
+       talentCommentService.deleteTalentCommentByIds(commentIds);
+       return success();
     }
 }

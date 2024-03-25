@@ -21,15 +21,11 @@ public interface SysCreditMapper
      */
     public List<SysCredit> selectCreditList(SysCredit credit);
 
+
     /**
-     * 通过学号查询用户
-     *
-     * @param userStudentid 用户名
-     * @return 用户对象信息
+     * 根据id获取详细信息
      */
-    public SysUser selectUserByUserStudentid(String userStudentid);
-
-
+    public SysCredit  selectCreditById(Long creditId);
     /**
      * 新增信誉信息
      * 

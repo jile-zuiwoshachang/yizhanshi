@@ -172,11 +172,11 @@
 
     <select id="selectByCourseIds"  resultMap="CourseApplyResult">
         <include refid="selectCourseApplyVo"/>
-        where ca.course_id  in
+        where ca.del_flag='0' and ca.course_id  in
         <foreach collection="array" item="courseId" open="(" separator="," close=")">
         #{courseId}
         </foreach>
-        and ca.del_flag='0'
+
     </select>
 
     <select id="selectNumberByCourse" parameterType="Long" resultType="Int">

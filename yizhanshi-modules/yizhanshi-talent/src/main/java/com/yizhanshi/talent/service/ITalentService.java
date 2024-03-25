@@ -23,4 +23,5 @@ public interface ITalentService {
      * 修改人才
      */
     public  void updateTalent(Talent talent);
+
 }

@@ -4,6 +4,8 @@ import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 举报对象 sys_report
  *
@@ -61,7 +63,7 @@ public class SysReport extends BaseEntity {
     public void setReportId(Long reportId) {
         this.reportId = reportId;
     }
-
+    @NotNull(message = "举报人名称不能为空")
     public String getReportName() {
         return reportName;
     }
@@ -69,7 +71,7 @@ public class SysReport extends BaseEntity {
     public void setReportName(String reportName) {
         this.reportName = reportName;
     }
-
+    @NotNull(message = "举报人学号不能为空")
     public String getUserStudentid() {
         return userStudentid;
     }
@@ -93,7 +95,7 @@ public class SysReport extends BaseEntity {
     public void setReportedStudentid(String reportedStudentid) {
         this.reportedStudentid = reportedStudentid;
     }
-
+    @NotNull(message = "举报内容不能为空")
     public String getReportContent() {
         return reportContent;
     }

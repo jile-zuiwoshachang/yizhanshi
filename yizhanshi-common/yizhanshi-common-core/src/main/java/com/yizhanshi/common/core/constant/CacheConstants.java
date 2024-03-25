@@ -45,7 +45,7 @@ public class CacheConstants
     /**
      * 字典管理 cache key
      */
-    public static final String SYS_DICT_KEY = "sys_dict:";
+    public static final String SYS_DICT_KEY = "system_dict:";
 
     /**
      * 登录账户密码错误次数 redis key
@@ -56,4 +56,8 @@ public class CacheConstants
      * 登录IP黑名单 cache key
      */
     public static final String SYS_LOGIN_BLACKIPLIST = system_config_KEY + "sys.login.blackIPList";
+    /**
+     * 人才评价管理 cache key
+     */
+    public static final String BUS_COMMENT_KEY = "system_comment:";
 }

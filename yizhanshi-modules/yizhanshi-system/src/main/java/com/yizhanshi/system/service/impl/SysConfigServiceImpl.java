@@ -66,6 +66,7 @@ public class SysConfigServiceImpl implements ISysConfigService
         {
             return configValue;
         }
+        //如果从redis没有得到
         SysConfig config = new SysConfig();
         config.setConfigKey(configKey);
         SysConfig retConfig = configMapper.selectConfig(config);

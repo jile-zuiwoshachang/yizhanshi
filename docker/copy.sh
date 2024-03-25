@@ -36,6 +36,9 @@ cp ../target/yizhanshi-place.jar ./yizhanshi/modules/place/jar
 echo "begin copy yizhanshi-course "
 cp ../target/yizhanshi-course.jar ./yizhanshi/modules/course/jar
 
+echo "begin copy yizhanshi-talent "
+cp ../target/yizhanshi-talent.jar ./yizhanshi/modules/talent/jar
+
 echo "begin copy bishe-modules-file "
 cp ../target/bishe-modules-file.jar ./yizhanshi/modules/file/jar
 #

@@ -34,7 +34,9 @@ public class TalentApply extends BaseEntity {
     private String recallReason;
     @Excel(name = "可撤销标志",readConverterExp = "0=可撤销,1=不可撤销")
     private String recallStatus;
-    //人才信息
+    @Excel(name = "评价主键")
+    private Long commentId;
+    //人才信息(从数据库查询)
     private SysUser talent;
     //预约人信息
     private SysUser applyUser;
@@ -151,6 +153,14 @@ public class TalentApply extends BaseEntity {
         this.recallStatus = recallStatus;
     }
 
+    public Long getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -166,6 +176,7 @@ public class TalentApply extends BaseEntity {
                 .append("refuseReason", refuseReason)
                 .append("recallReason", recallReason)
                 .append("recallStatus", recallStatus)
+                .append("commentId", commentId)
                 .append("talent", talent)
                 .append("applyUser", applyUser)
                 .append("createBy", getCreateBy())

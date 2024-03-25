@@ -31,7 +31,7 @@ base(){
 
 # 启动程序模块（必须）
 modules(){
-	docker-compose up -d  yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-visual-monitor
+	docker-compose up -d yizhanshi-modules-file yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-talent yizhanshi-visual-monitor
 }
 
 # 关闭所有环境/模块
@@ -44,7 +44,7 @@ stopNacos(){
 }
 # 关闭业务环境/模块
 stopBusiness(){
-	docker-compose stop yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-visual-monitor
+	docker-compose stop yizhanshi-modules-file yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-talent yizhanshi-visual-monitor
 }
 
 
@@ -58,7 +58,7 @@ rmNacos(){
 }
 # 删除所有环境/模块
 rmBusiness(){
-	docker-compose rm yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-visual-monitor
+	docker-compose rm yizhanshi-modules-file yizhanshi-gateway yizhanshi-auth yizhanshi-modules-system yizhanshi-place yizhanshi-course yizhanshi-talent yizhanshi-visual-monitor
 }
 
 # 根据输入参数，选择执行对应方法，不输入则执行使用说明

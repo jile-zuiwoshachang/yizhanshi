@@ -1,9 +1,12 @@
 package com.yizhanshi.talent.service.impl;
 
+import com.yizhanshi.common.core.utils.StringUtils;
 import com.yizhanshi.talent.domain.TalentApply;
+import com.yizhanshi.talent.domain.constants.ApplyConstants;
 import com.yizhanshi.talent.mapper.TalentApplyMapper;
 import com.yizhanshi.talent.mapper.TalentCommentMapper;
 import com.yizhanshi.talent.service.ITalentApplyService;
+import com.yizhanshi.talent.service.ITalentCommentService;
 import com.yizhanshi.talent.service.ITalentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ public class TalentApplyServiceImpl implements ITalentApplyService {
     private TalentApplyMapper talentApplyMapper;
     @Autowired
     private TalentCommentMapper talentCommentMapper;
+    @Autowired
+    private ITalentCommentService commentService;
 
     @Override
     public  int selectNumberByApply(String talentStudentid){
@@ -41,6 +46,10 @@ public class TalentApplyServiceImpl implements ITalentApplyService {
     public   void updateTalentApplyList(List<TalentApply> talentApplyList){
         for(TalentApply item:talentApplyList){
             talentApplyMapper.updateTalentApply(item);
+        }
+        //同意则重置redis里的接单数缓存
+        if(StringUtils.equals(talentApplyList.get(0).getStatus(), ApplyConstants.AGREESTATUS)){
+            commentService.resetConfigCache();
         }
     }
     @Override

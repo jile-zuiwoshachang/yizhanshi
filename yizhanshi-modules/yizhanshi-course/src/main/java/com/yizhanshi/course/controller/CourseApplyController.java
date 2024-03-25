@@ -237,7 +237,7 @@ public class CourseApplyController extends BaseController {
         if(StringUtils.equals(courseApply.getRecallStatus(),ApplyConstants.RECALLNOT)){
             courseApply.setRecallStatus(ApplyConstants.RECALLCREDIT);
             SysCredit sysCredit=new SysCredit(null,"用户强行撤销课程预约","自己操作",SecurityUtils.getUserStudentid(), Convert.toInt(courseRecallCredit,-2),null,"0","0");
-            R<Boolean> booleanR= remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
+            R<Boolean> booleanR= remoteCreditService.addUserCreditByInner(sysCredit, SecurityConstants.INNER);
             if(R.FAIL == booleanR.getCode()){
                 throw new ServiceException(booleanR.getMsg());
             }

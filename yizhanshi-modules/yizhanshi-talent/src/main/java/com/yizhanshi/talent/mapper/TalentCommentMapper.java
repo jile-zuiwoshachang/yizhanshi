@@ -2,6 +2,7 @@ package com.yizhanshi.talent.mapper;
 
 
 import com.yizhanshi.talent.domain.TalentComment;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -49,4 +50,13 @@ public interface TalentCommentMapper {
      * @return 结果
      */
     public int deleteTalentCommentByIds(Long[] commentIds);
+    /**
+     * 获得好评数
+     */
+    public int selectGoodReviews(@Param("userStudentid") String userStudentid,@Param("stars") String[] stars);
+    /**
+     * 获得所有不重复的人才学号
+     */
+    public List<String> selectAllTalentStudentid();
+
 }

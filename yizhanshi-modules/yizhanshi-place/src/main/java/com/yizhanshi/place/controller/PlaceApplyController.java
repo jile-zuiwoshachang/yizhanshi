@@ -299,7 +299,7 @@ public class PlaceApplyController extends BaseController {
         if (StringUtils.equals(placeApply.getRecallStatus(), ApplyConstants.RECALLNOT)) {
             placeApply.setRecallStatus(ApplyConstants.RECALLCREDIT);
             SysCredit sysCredit = new SysCredit(null, "用户强行撤销场地预约", "自己操作", SecurityUtils.getUserStudentid(), Convert.toInt(placeRecallCredit, -2), null, "0", "0");
-            R<Boolean> booleanR = remoteCreditService.addUserCredit(sysCredit, SecurityConstants.INNER);
+            R<Boolean> booleanR = remoteCreditService.addUserCreditByInner(sysCredit, SecurityConstants.INNER);
             if (R.FAIL == booleanR.getCode()) {
                 throw new ServiceException(booleanR.getMsg());
             }

@@ -26,6 +26,7 @@ import com.yizhanshi.talent.service.ITalentApplyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
  *
  * @author hejiale
  */
+@RefreshScope
 @RestController
 @RequestMapping("/talentApply")
 public class TalentApplyController extends BaseController {
@@ -176,7 +178,7 @@ public class TalentApplyController extends BaseController {
         return success();
     }
     /**
-     * 删除课程预约——管理员使用
+     * 删除人才预约——管理员使用
      */
     @RequiresPermissions("business:talentApply:remove")
     @Log(title = "人才预约管理", businessType = BusinessType.DELETE)

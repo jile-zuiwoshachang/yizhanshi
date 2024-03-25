@@ -17,6 +17,8 @@ services:
       - "9849:9849"
     depends_on:
       - yizhanshi-mysql
+    mem_limit: 500m
+
   yizhanshi-mysql:
     container_name: yizhanshi-mysql
     image: mysql:8.0.30
@@ -39,6 +41,8 @@ services:
     environment:
       MYSQL_DATABASE: 'yizhanshi-system'
       MYSQL_ROOT_PASSWORD: Nwafu_176012
+    mem_limit: 500m
+
   yizhanshi-redis:
     container_name: yizhanshi-redis
     image: redis:7.2
@@ -49,6 +53,8 @@ services:
     volumes:
       - ./redis/redis.conf:/etc/redis/redis.conf
       - ./redis/data:/data
+    mem_limit: 400m
+
 #  yizhanshi-nginx:
 #    container_name: yizhanshi-nginx
 #    image: nginx
@@ -76,6 +82,8 @@ services:
       - yizhanshi-redis
     links:
       - yizhanshi-redis
+    mem_limit: 500m
+
   yizhanshi-auth:
     container_name: yizhanshi-auth
     build:
@@ -87,6 +95,8 @@ services:
       - yizhanshi-redis
     links:
       - yizhanshi-redis
+    mem_limit: 500m
+
   yizhanshi-modules-system:
     container_name: yizhanshi-modules-system
     build:
@@ -100,6 +110,8 @@ services:
     links:
       - yizhanshi-redis
       - yizhanshi-mysql
+    mem_limit: 500m
+
   yizhanshi-place:
     container_name: yizhanshi-place
     build:
@@ -111,6 +123,7 @@ services:
       - yizhanshi-mysql
     links:
       - yizhanshi-mysql
+    mem_limit: 500m
 
   yizhanshi-course:
     container_name: yizhanshi-course
@@ -123,6 +136,22 @@ services:
       - yizhanshi-mysql
     links:
       - yizhanshi-mysql
+    mem_limit: 500m
+
+  yizhanshi-talent:
+    container_name: yizhanshi-talent
+    build:
+      context: ./yizhanshi/modules/talent
+      dockerfile: dockerfile
+    ports:
+      - "9204:9204"
+    depends_on:
+      - yizhanshi-mysql
+      - yizhanshi-redis
+    links:
+      - yizhanshi-mysql
+      - yizhanshi-redis
+    mem_limit: 500m
 
   yizhanshi-modules-file:
     container_name: yizhanshi-modules-file
@@ -131,8 +160,10 @@ services:
       dockerfile: dockerfile
     ports:
       - "9300:9300"
+    mem_limit: 500m
     volumes:
     - ./yizhanshi/uploadPath:/home/yizhanshi/uploadPath
+
   yizhanshi-visual-monitor:
     container_name: yizhanshi-visual-monitor
     build:
@@ -140,3 +171,4 @@ services:
       dockerfile: dockerfile
     ports:
       - "9100:9100"
+    mem_limit: 500m

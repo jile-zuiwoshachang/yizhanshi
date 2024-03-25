@@ -29,6 +29,11 @@ public interface TalentApplyMapper {
      */
     public int deleteTalentApply(Long[] applyIds);
     /**
+     * 根据commentIds删除相应记录
+     * 其实只是更新，将字段设置为空
+     */
+    public int deleteCommentIdsByIds(Long[] commentIds);
+    /**
      * 新增人才申请息
      * @param talentApply
      * @return

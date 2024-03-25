@@ -24,6 +24,19 @@ public class TalentComment extends BaseEntity {
     private String delFlag;
     private SysUser talent;
 
+    /**
+     * 用于人才申请的申请单传参
+     */
+    private Long applyId;
+
+    public Long getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(Long applyId) {
+        this.applyId = applyId;
+    }
+
     public TalentComment() {
     }
 
