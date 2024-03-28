@@ -12,7 +12,7 @@
     <artifactId>yizhanshi-course</artifactId>
 
     <description>
-        yizhanshi-modules-course 课程管理模块
+        yizhanshi-course 课程管理模块
     </description>
     <dependencies>
 

@@ -79,11 +79,14 @@ public class PlaceApplyExport {
     private Date createTime;
     @Excel(name = "创建人")
     private String createBy;
+    @Excel(name = "备注")
+    private String remark;
 
     public PlaceApplyExport() {
     }
 
-    public PlaceApplyExport(Long applyId, String applyName, String userStudentid, String placeCampus, String placeName, String instructorName, String instructorStudentid, String instructorOrganization, String instructorPhone, String fudaoName, String fudaoStudentid, String fudaoOrganization, String fudaoPhone, Date applyDay, String applyStartTime, String applyEndTime, int applyNumber, String reasonName, String reasonType, String applyOrganization, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, Date createTime, String createBy) {
+
+    public PlaceApplyExport(Long applyId, String applyName, String userStudentid, String placeCampus, String placeName, String instructorName, String instructorStudentid, String instructorOrganization, String instructorPhone, String fudaoName, String fudaoStudentid, String fudaoOrganization, String fudaoPhone, Date applyDay, String applyStartTime, String applyEndTime, int applyNumber, String reasonName, String reasonType, String applyOrganization, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, Date createTime, String createBy, String remark) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -115,6 +118,7 @@ public class PlaceApplyExport {
         this.status = status;
         this.createTime = createTime;
         this.createBy = createBy;
+        this.remark = remark;
     }
 
     public String getCreateBy() {
@@ -356,7 +360,7 @@ public class PlaceApplyExport {
     public void setApplyAdmin2(String applyAdmin2) {
         this.applyAdmin2 = applyAdmin2;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -365,5 +369,12 @@ public class PlaceApplyExport {
         this.createTime = createTime;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }
 

@@ -127,7 +127,7 @@
     <select id="selectAllCourse" resultMap="CourseTimeResult">
         <include refid="selectCourseTimeVo"/>
         where ct.place_id  = #{placeId}
-        AND date_format(ct.course_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and ct.del_flag='0'
+        AND date_format(ct.course_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and ct.del_flag='0' and ct.status in ('0','1','2')
     </select>
 
 

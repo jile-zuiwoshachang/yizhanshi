@@ -43,15 +43,18 @@ public class CourseApplyExport {
     private String teacherName;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @Excel(name = "创建人")
+    private String createBy;
+    @Excel(name = "备注")
+    private String remark;
 
-    public CourseApplyExport() {
-    }
-
-    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String courseName, String courseType, String teacherName, Date createTime) {
+    public CourseApplyExport(Long applyId, String applyName, String userStudentid, Long courseId, String courseName, String courseType, String applyContent, String applyAdmin1, String applyAdmin1Name, String applyAdmin2, String applyAdmin2Name, String refuseReason, String recallStatus, String recallReason, String status, String teacherName, Date createTime, String createBy, String remark) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
         this.courseId = courseId;
+        this.courseName = courseName;
+        this.courseType = courseType;
         this.applyContent = applyContent;
         this.applyAdmin1 = applyAdmin1;
         this.applyAdmin1Name = applyAdmin1Name;
@@ -61,11 +64,16 @@ public class CourseApplyExport {
         this.recallStatus = recallStatus;
         this.recallReason = recallReason;
         this.status = status;
-        this.courseName = courseName;
-        this.courseType = courseType;
         this.teacherName = teacherName;
         this.createTime = createTime;
+        this.createBy = createBy;
+        this.remark = remark;
     }
+
+    public CourseApplyExport() {
+    }
+
+
 
     public Long getApplyId() {
         return applyId;
@@ -189,7 +197,7 @@ public class CourseApplyExport {
     public void setApplyAdmin2Name(String applyAdmin2Name) {
         this.applyAdmin2Name = applyAdmin2Name;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -204,6 +212,22 @@ public class CourseApplyExport {
 
     public void setCourseType(String courseType) {
         this.courseType = courseType;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
 

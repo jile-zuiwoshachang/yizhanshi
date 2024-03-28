@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
+import java.util.Date;
 
 
 public class TalentExport {
@@ -63,6 +63,36 @@ public class TalentExport {
     private String userPicture3;
     @Excel(name = "标签")
      private String lableNames;
+    @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    @Excel(name = "创建人")
+    private String createBy;
+    @Excel(name = "备注")
+    private String remark;
+    public TalentExport(){}
+    public TalentExport(Long userId, String userStudentid, String userSex, String userName, String userOrganization, String userCampus, String userType, String userEmail, String userPhone, String userQq, String userWechat, int userScore, String userDescription, String userPicture1, String userPicture2, String userPicture3, String lableNames, Date createTime, String createBy, String remark) {
+        this.userId = userId;
+        this.userStudentid = userStudentid;
+        this.userSex = userSex;
+        this.userName = userName;
+        this.userOrganization = userOrganization;
+        this.userCampus = userCampus;
+        this.userType = userType;
+        this.userEmail = userEmail;
+        this.userPhone = userPhone;
+        this.userQq = userQq;
+        this.userWechat = userWechat;
+        this.userScore = userScore;
+        this.userDescription = userDescription;
+        this.userPicture1 = userPicture1;
+        this.userPicture2 = userPicture2;
+        this.userPicture3 = userPicture3;
+        this.lableNames = lableNames;
+        this.createTime = createTime;
+        this.createBy = createBy;
+        this.remark = remark;
+    }
+
     public Long getUserId()
     {
         return userId;
@@ -89,9 +119,6 @@ public class TalentExport {
     public void setUserStudentid(String userStudentid) {
         this.userStudentid = userStudentid;
     }
-    @Xss(message = "用户姓名不能包含脚本字符")
-    @NotBlank(message = "用户姓名不能为空")
-    @Size(min = 0, max = 100, message = "用户姓名长度不能超过100个字符")
     public String getUserName() {
         return userName;
     }
@@ -123,8 +150,7 @@ public class TalentExport {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-    @Email(message = "邮箱格式不正确")
-    @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
+
     public String getUserEmail() {
         return userEmail;
     }
@@ -132,7 +158,7 @@ public class TalentExport {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
-    @Size(min = 0, max = 11, message = "手机号码长度不能超过11个字符")
+
     public String getUserPhone() {
         return userPhone;
     }
@@ -205,26 +231,27 @@ public class TalentExport {
         this.lableNames = lableNames;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("userId", userId)
-                .append("userStudentid", userStudentid)
-                .append("userSex", userSex)
-                .append("userName", userName)
-                .append("userOrganization", userOrganization)
-                .append("userCampus", userCampus)
-                .append("userType", userType)
-                .append("userEmail", userEmail)
-                .append("userPhone", userPhone)
-                .append("userQq", userQq)
-                .append("userWechat", userWechat)
-                .append("userScore", userScore)
-                .append("userDescription", userDescription)
-                .append("userPicture1", userPicture1)
-                .append("userPicture2", userPicture2)
-                .append("userPicture3", userPicture3)
-                .append("labelNames", lableNames)
-                .toString();
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

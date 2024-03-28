@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhanshi.lost.mapper.LostMapper">
+
+    <resultMap type="com.yizhanshi.lost.domain.Lost" id="LostResult">
+        <id     property="lostId"       column="lost_id"      />
+        <result property="lostName"       column="lost_name"      />
+        <result property="lostDescription"     column="lost_description"    />
+        <result property="lostPicture"     column="lost_picture"    />
+        <result property="lostType"     column="lost_type"    />
+        <result property="pickPlace"        column="pick_place"/>
+        <result property="pickCampus"        column="pick_campus"/>
+        <result property="pickDay"     column="pick_day"    />
+        <result property="pickTime"     column="pick_time"    />
+        <result property="pickStudentid"     column="pick_studentid"    />
+        <result property="pickName"     column="pick_name"    />
+        <result property="pickStorePlace"     column="pick_store_place"    />
+        <result property="status"     column="status"    />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"     column="create_time"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"     column="update_by"    />
+        <result property="remark"     column="remark"    />
+        <collection  property="pick"   javaType="com.yizhanshi.system.api.domain.SysUser"  resultMap="UserResult" />
+    </resultMap>
+    <resultMap id="UserResult" type="com.yizhanshi.system.api.domain.SysUser">
+        <id     property="userId"       column="user_id"        />
+        <result property="userStudentid"      column="user_studentid"       />
+        <result property="userName"     column="user_name"      />
+        <result property="userOrganization"      column="user_organization"       />
+        <result property="userCampus"      column="user_campus"       />
+        <result property="userEmail"      column="user_email"       />
+        <result property="userPhone"      column="user_phone"       />
+        <result property="userQq"      column="user_qq"       />
+        <result property="userWechat"      column="user_wechat"       />
+        <result property="userScore"      column="user_score"       />
+    </resultMap>
+    <sql id="selectLostVo">
+        select l.lost_id,l.lost_name,l.lost_description,l.lost_picture,l.lost_type,l.pick_place,l.pick_campus,
+        l.pick_day,l.pick_time,l.pick_studentid,l.pick_name,l.pick_studentid,l.pick_name,l.pick_store_place,
+        l.status, l.del_flag,l.create_by, l.create_time,l.update_time,l.update_by, l.remark,
+        u.user_id,u.user_studentid,u.user_name,u.user_organization,u.user_campus,u.user_email,u.user_phone,u.user_qq,u.user_wechat,u.user_score
+        from business_lost l
+        left join system_user u on l.pick_studentid = u.user_studentid 
+    </sql>
+    <select id="selectLostList" parameterType="com.yizhanshi.lost.domain.Lost" resultMap="LostResult">
+        <include refid="selectLostVo" />
+        where l.del_flag = '0'
+        <if test="lostId != null and lostId != 0">
+            AND l.lost_id = #{lostId}
+        </if>
+        <if test="lostName != null and lostName != ''">
+            AND l.lost_name like concat('%', #{lostName}, '%')
+        </if>
+        <if test="lostDescription != null and lostDescription != ''">
+            AND l.lost_description like concat('%', #{lostDescription}, '%')
+        </if>
+        <if test="lostType != null and lostType != ''">
+            AND l.lost_type like concat('%', #{lostType}, '%')
+        </if>
+        <if test="pickPlace != null and pickPlace != ''">
+            AND l.pick_place  like concat('%', #{pickPlace}, '%')
+        </if>
+        <if test="pickCampus != null and pickCampus != ''">
+            AND l.pick_campus like concat('%', #{pickCampus}, '%')
+        </if>
+        <if test="pickDay != null and pickDay != ''">
+            AND l.pick_day like concat('%', #{pickDay}, '%')
+        </if>
+        <if test="pickName != null and pickName != ''">
+            AND l.pick_name like concat('%', #{pickName}, '%')
+        </if>
+        <if test="pickStudentid != null and pickStudentid != ''">
+            AND l.pick_studentid like concat('%', #{pickStudentid}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND l.status = #{status}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(l.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(l.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
+        </if>
+    </select>
+    <select id="selectLostById" parameterType="Long" resultMap="LostResult">
+        <include refid="selectLostVo">
+        </include>
+        where l.lost_id=#{lostId}
+    </select>
+
+    <insert id="insertLost" parameterType="com.yizhanshi.lost.domain.Lost" useGeneratedKeys="true" keyProperty="lostId">
+        insert into business_lost (
+        <if test="lostId != null and lostId != 0">lost_id,</if>
+        <if test="lostName != null and lostName != ''">lost_name,</if>
+        <if test="lostDescription != null and lostDescription != ''">lost_description,</if>
+        <if test="lostPicture != null and lostPicture != ''">lost_picture,</if>
+        <if test="lostType != null and lostType != ''">lost_type,</if>
+        <if test="pickPlace != null and pickPlace != ''">pick_place,</if>
+        <if test="pickCampus != null and pickCampus != ''">pick_campus,</if>
+        <if test="pickDay != null">pick_day,</if>
+        <if test="pickTime != null and pickTime != ''">pick_time,</if>
+        <if test="pickStudentid != null and pickStudentid != ''">pick_studentid,</if>
+        <if test="pickName != null and pickName != ''">pick_name,</if>
+        <if test="pickStorePlace != null and pickStorePlace != ''">pick_store_place,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="lostId != null and lostId != 0">#{lostId},</if>
+        <if test="lostName != null and lostName != ''">#{lostName},</if>
+        <if test="lostDescription != null and lostDescription != ''">#{lostDescription},</if>
+        <if test="lostPicture != null and lostPicture != ''">#{lostPicture},</if>
+        <if test="lostType != null and lostType != ''">#{lostType},</if>
+        <if test="pickPlace != null and pickPlace != ''">#{pickPlace},</if>
+        <if test="pickCampus != null and pickCampus != ''">#{pickCampus},</if>
+        <if test="pickDay != null">#{pickDay,javaType=DATE},</if>
+        <if test="pickTime != null and pickTime != ''">#{pickTime},</if>
+        <if test="pickStudentid != null and pickStudentid != ''">#{pickStudentid},</if>
+        <if test="pickName != null and pickName != ''">#{pickName},</if>
+        <if test="pickStorePlace != null and pickStorePlace != ''">#{pickStorePlace},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateLost" parameterType="com.yizhanshi.lost.domain.Lost">
+        update business_lost
+        <set>
+            <if test="lostId != null and lostId != 0">lost_id=#{lostId},</if>
+            <if test="lostName != null and lostName != ''">lost_name=#{lostName},</if>
+            <if test="lostDescription != null and lostDescription != ''">lost_description=#{lostDescription},</if>
+            <if test="lostPicture != null and lostPicture != ''">lost_picture=#{lostPicture},</if>
+            <if test="lostType != null and lostType != ''">lost_type=#{lostType},</if>
+            <if test="pickPlace != null and pickPlace != ''">pick_place=#{pickPlace},</if>
+            <if test="pickCampus != null and pickCampus != ''">pick_campus=#{pickCampus},</if>
+            <if test="pickDay != null">pick_day=#{pickDay,javaType=DATE},</if>
+            <if test="pickTime != null and pickTime != ''">pick_time=#{pickTime},</if>
+            <if test="pickStudentid != null and pickStudentid != ''">pick_studentid=#{pickStudentid},</if>
+            <if test="pickName != null and pickName != ''">pick_name=#{pickName},</if>
+            <if test="pickStorePlace != null and pickStorePlace != ''">pick_store_place=#{pickStorePlace},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            update_time = sysdate()
+        </set>
+        where lost_id = #{lostId}
+    </update>
+    <delete id="deleteLost" parameterType="Long">
+        update business_lost set del_flag = '2' where lost_id in
+        <foreach collection="array" item="lostId" open="(" separator="," close=")">
+            #{lostId}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

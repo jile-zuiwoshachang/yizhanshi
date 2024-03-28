@@ -85,14 +85,10 @@
             <when test="status == '1'.toString()">
                 AND ca.status IN ('0', '1')
             </when>
-            <!-- 如果传入的status是2、3、4，直接使用等于条件 -->
-            <when test="status == '2'.toString() or status == '5'.toString() or status == '4'.toString()">
-                AND ca.status = #{status}
-            </when>
+            <!-- 如果传入的status是2、4、5，直接使用等于条件 -->
             <!-- 其他情况，可以选择不添加任何条件，或者根据需要添加默认行为 -->
             <otherwise>
                 AND ca.status = #{status}
-                <!-- 这里可以留空，或者添加你认为合适的默认SQL条件 -->
             </otherwise>
         </choose>
         </if>

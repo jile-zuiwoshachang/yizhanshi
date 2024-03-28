@@ -1,5 +1,6 @@
 package com.yizhanshi.course.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,9 +27,11 @@ public class CourseTimeExport {
     private Date createTime;
     @Excel(name = "创建人")
     private String createBy;
+    @Excel(name = "备注")
+    private String remark;
     public CourseTimeExport(){}
 
-    public CourseTimeExport(Long courseTimeId, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, String status, Date createTime, String createBy) {
+    public CourseTimeExport(Long courseTimeId, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, String status, Date createTime, String createBy, String remark) {
         this.courseTimeId = courseTimeId;
         this.courseDay = courseDay;
         this.courseStartTime = courseStartTime;
@@ -38,6 +41,7 @@ public class CourseTimeExport {
         this.status = status;
         this.createTime = createTime;
         this.createBy = createBy;
+        this.remark = remark;
     }
 
     public Long getCourseTimeId() {
@@ -112,18 +116,11 @@ public class CourseTimeExport {
         this.createBy = createBy;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("courseTimeId", courseTimeId)
-                .append("courseDay", courseDay)
-                .append("courseStartTime", courseStartTime)
-                .append("courseEndTime", courseEndTime)
-                .append("placeName", placeName)
-                .append("placeCampus", placeCampus)
-                .append("status", status)
-                .append("createTime", createTime)
-                .append("createBy", createBy)
-                .toString();
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

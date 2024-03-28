@@ -38,11 +38,14 @@ public class TalentApplyExport {
     private Date createTime;
     @Excel(name = "创建人")
     private String createBy;
+    @Excel(name = "备注")
+    private String remark;
 
     public TalentApplyExport() {
     }
 
-    public TalentApplyExport(Long applyId, String applyName, String userStudentid, String talentStudentid, String talentName, String applyContent, Date applyStartDay, Date applyEndDay, String status, String refuseReason, String recallStatus, String recallReason, Date createTime, String createBy) {
+
+    public TalentApplyExport(Long applyId, String applyName, String userStudentid, String talentStudentid, String talentName, String applyContent, Date applyStartDay, Date applyEndDay, String status, String refuseReason, String recallStatus, String recallReason, Date createTime, String createBy, String remark) {
         this.applyId = applyId;
         this.applyName = applyName;
         this.userStudentid = userStudentid;
@@ -57,6 +60,7 @@ public class TalentApplyExport {
         this.recallReason = recallReason;
         this.createTime = createTime;
         this.createBy = createBy;
+        this.remark = remark;
     }
 
     public String getCreateBy() {
@@ -162,7 +166,7 @@ public class TalentApplyExport {
     public void setRecallReason(String recallReason) {
         this.recallReason = recallReason;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -171,23 +175,11 @@ public class TalentApplyExport {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("applyId", applyId)
-                .append("applyName", applyName)
-                .append("userStudentid", userStudentid)
-                .append("talentStudentid", talentStudentid)
-                .append("talentName", talentName)
-                .append("applyContent", applyContent)
-                .append("applyStartDay", applyStartDay)
-                .append("applyEndDay", applyEndDay)
-                .append("status", status)
-                .append("refuseReason", refuseReason)
-                .append("recallStatus", recallStatus)
-                .append("recallReason", recallReason)
-                .append("createTime", createTime)
-                .append("createBy", createBy)
-                .toString();
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -11,12 +11,14 @@ import com.yizhanshi.talent.mapper.TalentCommentMapper;
 import com.yizhanshi.talent.service.ITalentCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
+@RefreshScope
 @Service
 public class TalentCommentServiceImpl implements ITalentCommentService {
     @Autowired

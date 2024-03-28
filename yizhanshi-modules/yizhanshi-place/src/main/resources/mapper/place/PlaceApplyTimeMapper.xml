@@ -134,7 +134,7 @@
     <select id="selectAllPlace" resultMap="PlaceApplyTimeResult">
         <include refid="selectPlaceApplyTimeVo"/>
         where pa.place_id  = #{placeId}
-         AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and pa.del_flag='0'
+         AND date_format(pa.apply_day,'%Y%m%d') = date_format(#{chooseDay},'%Y%m%d') and pa.del_flag='0' and pa.status in ('0','1','2')
     </select>
 
 

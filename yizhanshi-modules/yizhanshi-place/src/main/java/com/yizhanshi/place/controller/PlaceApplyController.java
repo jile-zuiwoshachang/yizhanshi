@@ -200,9 +200,15 @@ public class PlaceApplyController extends BaseController {
             throw new ServiceException("时间不能为空");
         }
         for (PlaceApplyTime placeApplyTime : placeApply.getPlaceApplyTimes()) {
+            //最先判断所传的时间本身是否冲突
+            if (placeApplyService.timeConflict(placeApply.getPlaceApplyTimes(), placeApplyTime)) {
+                return error("时间冲突!请修改所填预约的场地预约时间");
+            }
+        }
+        for (PlaceApplyTime placeApplyTime : placeApply.getPlaceApplyTimes()) {
             String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, placeApplyTime.getApplyDay());
             List<PlaceApplyTime> dataBasePlaceTimeApplies = placeApplyTimeService.selectAllPlace(placeApplyTime.getPlaceId(), str);
-            //先判断所选择天数的所在场地第一天的情况，然后循环判断
+            //再判断和数据库的是否冲突，所选择天数的所在场地第一天的情况，然后循环判断
             if (placeApplyService.timeConflict(dataBasePlaceTimeApplies, placeApplyTime)) {
                 return error("时间冲突!请查看当天场地预约信息后修改时间");
             }

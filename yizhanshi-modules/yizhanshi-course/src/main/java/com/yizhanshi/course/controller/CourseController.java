@@ -144,9 +144,15 @@ public class CourseController extends BaseController {
             throw new ServiceException("时间不能为空");
         }
         for (CourseTime courseTime : course.getCourseTimes()) {
+            //最先判断所传的时间本身是否冲突
+            if (courseTimeService.timeConflict(course.getCourseTimes(), courseTime)) {
+                return error("时间冲突!请修改所填课程信息的课程时间");
+            }
+        }
+        for (CourseTime courseTime : course.getCourseTimes()) {
             String str = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, courseTime.getCourseDay());
             List<CourseTime> dataBaseCourseTimeApplies = courseTimeService.selectAllCourse(courseTime.getPlaceId(), str);
-            //先判断所选择天数的所在场地第一天的情况，然后循环判断
+            //再判断所选择天数的所在场地第一天的情况，然后循环判断
             if (courseTimeService.timeConflict(dataBaseCourseTimeApplies, courseTime)) {
                 return error("时间冲突!请查看当天课程信息后修改时间");
             }

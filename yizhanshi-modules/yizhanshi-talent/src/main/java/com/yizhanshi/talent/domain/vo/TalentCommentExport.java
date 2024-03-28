@@ -25,8 +25,22 @@ public class TalentCommentExport {
     private Date createTime;
     @Excel(name = "创建人")
     private String createBy;
+    @Excel(name = "备注")
+    private String remark;
 
     public TalentCommentExport() {
+    }
+
+    public TalentCommentExport(Long commentId, String talentStudentid, String talentName, String commentStar, String commentContent, String status, Date createTime, String createBy, String remark) {
+        this.commentId = commentId;
+        this.talentStudentid = talentStudentid;
+        this.talentName = talentName;
+        this.commentStar = commentStar;
+        this.commentContent = commentContent;
+        this.status = status;
+        this.createTime = createTime;
+        this.createBy = createBy;
+        this.remark = remark;
     }
 
     public Long getCommentId() {
@@ -76,7 +90,7 @@ public class TalentCommentExport {
     public void setStatus(String status) {
         this.status = status;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -93,17 +107,11 @@ public class TalentCommentExport {
         this.createBy = createBy;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("commentId", commentId)
-                .append("talentStudentid", talentStudentid)
-                .append("talentName", talentName)
-                .append("commentStar", commentStar)
-                .append("commentContent", commentContent)
-                .append("status", status)
-                .append("createTime", createTime)
-                .append("createBy", createBy)
-                .toString();
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

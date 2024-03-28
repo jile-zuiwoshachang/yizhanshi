@@ -51,7 +51,7 @@ public interface PlaceApplyTimeMapper {
     public int insertPlaceApplyTime(PlaceApplyTime placeApplyTime);
 
     /**
-     * 根据查询条件，获得当天的场地预约记录
+     * 根据查询条件，获得当天的场地预约记录(排除45，即需要判断冲突的仅限0 1 2 )
      */
     public List<PlaceApplyTime> selectAllPlace(@Param("placeId") Long placeId, @Param("chooseDay") String chooseDay);
 }

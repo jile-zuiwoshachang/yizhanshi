@@ -6,6 +6,7 @@ import com.yizhanshi.common.core.annotation.Excel;
 import com.yizhanshi.place.api.domain.Place;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class PlaceApplyTimeExport {
@@ -30,8 +31,10 @@ public class PlaceApplyTimeExport {
     private Date createTime;
     @Excel(name = "创建人")
     private String createBy;
+    @Excel(name = "备注")
+    private String remark;
 
-    public PlaceApplyTimeExport(Long applyTimeId, String placeName, String placeCampus, Date applyDay, String applyStartTime, String applyEndTime, String status, Date createTime, String createBy) {
+    public PlaceApplyTimeExport(Long applyTimeId, String placeName, String placeCampus, Date applyDay, String applyStartTime, String applyEndTime, String status, Date createTime, String createBy, String remark) {
         this.applyTimeId = applyTimeId;
         this.placeName = placeName;
         this.placeCampus = placeCampus;
@@ -41,6 +44,7 @@ public class PlaceApplyTimeExport {
         this.status = status;
         this.createTime = createTime;
         this.createBy = createBy;
+        this.remark = remark;
     }
 
     public String getCreateBy() {
@@ -110,7 +114,7 @@ public class PlaceApplyTimeExport {
     public void setStatus(String status) {
         this.status = status;
     }
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -119,18 +123,11 @@ public class PlaceApplyTimeExport {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("applyTimeId", applyTimeId)
-                .append("placeName", placeName)
-                .append("placeCampus", placeCampus)
-                .append("applyDay", applyDay)
-                .append("applyStartTime", applyStartTime)
-                .append("applyEndTime", applyEndTime)
-                .append("status", status)
-                .append("createTime", createTime)
-                .append("createBy", createBy)
-                .toString();
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

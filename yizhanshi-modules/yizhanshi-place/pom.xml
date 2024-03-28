@@ -12,7 +12,7 @@
     <artifactId>yizhanshi-place</artifactId>
 
     <description>
-        yizhanshi-modules-place 场地管理模块
+        yizhanshi-place 场地管理模块
     </description>
     <dependencies>
 

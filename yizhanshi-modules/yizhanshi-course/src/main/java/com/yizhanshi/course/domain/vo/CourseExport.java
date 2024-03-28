@@ -1,5 +1,6 @@
 package com.yizhanshi.course.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yizhanshi.common.core.annotation.Excel;
 
@@ -41,11 +42,14 @@ public class CourseExport {
     private String status;
     @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
+    @Excel(name = "创建人")
+    private String createBy;
+    @Excel(name = "备注")
+    private String remark;
     public CourseExport() {
     }
 
-    public CourseExport(Long courseId, String courseName, String courseType, String courseDescription, String teacherName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, int courseNumber, String chooseStatus, String courseCheck, String status, Date createTime) {
+    public CourseExport(Long courseId, String courseName, String courseType, String courseDescription, String teacherName, Date courseDay, String courseStartTime, String courseEndTime, String placeName, String placeCampus, int courseNumber, String chooseStatus, String courseCheck, String status, Date createTime, String createBy, String remark) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseType = courseType;
@@ -61,6 +65,8 @@ public class CourseExport {
         this.courseCheck = courseCheck;
         this.status = status;
         this.createTime = createTime;
+        this.createBy = createBy;
+        this.remark = remark;
     }
 
     public Date getCreateTime() {
@@ -181,5 +187,21 @@ public class CourseExport {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
